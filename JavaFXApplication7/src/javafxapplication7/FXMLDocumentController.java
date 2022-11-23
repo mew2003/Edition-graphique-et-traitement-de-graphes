@@ -15,12 +15,54 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 
 /**
  *
  * @author sebastien.dasilvaoli
  */
 public class FXMLDocumentController implements Initializable{
+    
+    @FXML
+    private RadioButton noeud;
+
+    @FXML
+    private MenuButton menuAide;
+
+    @FXML
+    private AnchorPane zoneDessin;
+
+    @FXML
+    private RadioButton arc;
+
+    @FXML
+    private RadioButton selection;
+
+    @FXML
+    private MenuButton menuEdition;
+
+    @FXML
+    private MenuButton menuTraitement;
+
+    @FXML
+    private AnchorPane palette;
+
+    @FXML
+    private ToggleGroup boutonsPalette;
+
+    @FXML
+    private AnchorPane editionProprietes;
+
+    @FXML
+    private MenuButton menuGraphe;
+
+    @FXML
+    void getMousePosition(ActionEvent event) {
+
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
