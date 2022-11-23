@@ -10,13 +10,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
+import javafxapplication7.source.GrapheSimpleNonOriente;
+import javafxapplication7.source.Noeud;
 
 /**
  *
@@ -60,17 +65,22 @@ public class FXMLDocumentController implements Initializable{
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+        
+    }
+    
+    GrapheSimpleNonOriente graphe = new GrapheSimpleNonOriente();
     
     @FXML
     public void dessin(MouseEvent evt) {
-        Circle circle = new Circle(evt.getX(), evt.getY(), RADIUS);
-        circle.setFill(Color.TRANSPARENT);
-        circle.setStroke(Color.BLACK);
-        zoneDessin.getChildren().add(circle);
-        
-        System.out.println(evt.getX());
-        System.out.println(evt.getY());
+        if (noeud.isSelected()) {
+            Circle circle = new Circle(evt.getX(), evt.getY(), RADIUS);
+            circle.setFill(Color.TRANSPARENT);
+            circle.setStroke(Color.BLACK);
+            zoneDessin.getChildren().add(circle);
+            graphe.ajouterNoeud("rond", "default", evt.getX(), evt.getY());
+        }
+        if (selection.isSelected()) {
+            System.out.println(graphe.toString());
+        }
     }
 }

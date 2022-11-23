@@ -10,25 +10,25 @@
 <top>
       <Pane prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <MenuButton layoutY="2.0" mnemonicParsing="false" text="Graphe">
+            <MenuButton fx:id="menuGraphe" layoutY="2.0" mnemonicParsing="false" text="Graphe">
               <items>
                 <MenuItem mnemonicParsing="false" text="Action 1" />
                 <MenuItem mnemonicParsing="false" text="Action 2" />
               </items>
             </MenuButton>
-            <MenuButton layoutX="75.0" layoutY="2.0" mnemonicParsing="false" text="Edition">
+            <MenuButton fx:id="menuEdition" layoutX="75.0" layoutY="2.0" mnemonicParsing="false" text="Edition">
                <items>
                   <MenuItem mnemonicParsing="false" text="Action 1" />
                   <MenuItem mnemonicParsing="false" text="Action 2" />
                </items>
             </MenuButton>
-            <MenuButton layoutX="147.0" layoutY="2.0" mnemonicParsing="false" text="Traitement">
+            <MenuButton fx:id="menuTraitement" layoutX="147.0" layoutY="2.0" mnemonicParsing="false" text="Traitement">
                <items>
                   <MenuItem mnemonicParsing="false" text="Action 1" />
                   <MenuItem mnemonicParsing="false" text="Action 2" />
                </items>
             </MenuButton>
-            <MenuButton layoutX="239.0" layoutY="2.0" mnemonicParsing="false" text="Aide">
+            <MenuButton fx:id="menuAide" layoutX="239.0" layoutY="2.0" mnemonicParsing="false" text="Aide">
                <items>
                   <MenuItem mnemonicParsing="false" text="Action 1" />
                   <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -46,8 +46,20 @@
    <left>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="185.0" prefWidth="200.0" />
-            <AnchorPane layoutY="187.0" prefHeight="185.0" prefWidth="200.0" />
+            <AnchorPane fx:id="palette" prefHeight="185.0" prefWidth="200.0" style="-fx-border-color: grey;">
+               <children>
+                  <RadioButton fx:id="noeud" layoutX="56.0" layoutY="45.0" mnemonicParsing="false" text="Noeud">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="boutonsPalette" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="arc" layoutX="56.0" layoutY="75.0" mnemonicParsing="false" text="Arc" toggleGroup="$boutonsPalette" />
+                  <RadioButton fx:id="selection" layoutX="56.0" layoutY="103.0" mnemonicParsing="false" text="Selection" toggleGroup="$boutonsPalette" />
+               </children></AnchorPane>
+            <AnchorPane fx:id="editionProprietes" layoutY="187.0" prefHeight="185.0" prefWidth="200.0">
+               <children>
+                  <ComboBox fx:id="test" layoutX="25.0" layoutY="80.0" prefWidth="150.0" />
+               </children></AnchorPane>
          </children>
       </AnchorPane>
    </left>

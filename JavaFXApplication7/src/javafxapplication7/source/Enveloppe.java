@@ -10,23 +10,23 @@ package javafxapplication7.source;
  */
 public class Enveloppe {
     
-    int x;
-    int y;
+    double x;
+    double y;
     int w;
     int h;
     
-    public Enveloppe(int x, int y, int w, int h) {
+    public Enveloppe(double x, double y) {
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
+        this.w = 0;
+        this.h = 0;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
