@@ -1,7 +1,9 @@
+import java.awt.Graphics;
+
 public class LienSimple extends Lien {
     public  LienSimple creerLien(Enveloppe enveloppe) {
         LienSimple l = new LienSimple();
-        l.enveloppe = Noeud.creerNoeud.enveloppe;
+        l.enveloppe = enveloppe;
         return l;
     } 
     public void dessiner(Graphics g) {

@@ -1,5 +1,7 @@
+import java.awt.Graphics;
+
 /* Enveloppe rectangulaire qui sert à créer des noeuds et des liens */
-protected class Enveloppe extends Noeud {
+public class Enveloppe {
     /* position x de l'enveloppe */
     public int x;
     /* position y de l'enveloppe */

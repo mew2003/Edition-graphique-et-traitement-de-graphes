@@ -1,15 +1,14 @@
-import java.lang.Math.*;
+import java.awt.Graphics;
 
 public class NoeudRond extends Noeud {
     /* Construit un cercle de diamètre égal au plus petit côté de l'enveloppe */
     public NoeudRond creerNoeud(Enveloppe enveloppe) {
         NoeudRond n =  new NoeudRond();
-        enveloppe.w = enveloppe.h = min(enveloppe.w, enveloppe.h);
+        enveloppe.w = enveloppe.h = Math.min(enveloppe.w, enveloppe.h);
         n.enveloppe = enveloppe;
         return n;
     }
     public void dessiner(Graphics g) {
         g.drawOval(enveloppe.x, enveloppe.y, enveloppe.w, enveloppe.w);
     }
-
 }
