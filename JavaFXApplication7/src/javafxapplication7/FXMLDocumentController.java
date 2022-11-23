@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -66,9 +67,13 @@ public class FXMLDocumentController implements Initializable{
     @FXML
     public void dessin(MouseEvent evt) {
         Circle circle = new Circle(evt.getX(), evt.getY(), RADIUS);
+        Label nomNoeud = new Label();
+        nomNoeud.setText("yo");
+        nomNoeud.setLayoutX(evt.getX());
+        nomNoeud.setLayoutY(evt.getY());
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.BLACK);
-        zoneDessin.getChildren().add(circle);
+        zoneDessin.getChildren().addAll(circle, nomNoeud);
         
         System.out.println(evt.getX());
         System.out.println(evt.getY());
