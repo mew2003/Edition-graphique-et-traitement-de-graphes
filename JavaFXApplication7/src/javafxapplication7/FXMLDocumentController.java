@@ -64,11 +64,7 @@ public class FXMLDocumentController implements Initializable{
     }    
     
     @FXML
-    private AnchorPane zoneDessin;
-    
-    @FXML
     public void dessin(MouseEvent evt) {
-        
         Circle circle = new Circle(evt.getX(), evt.getY(), RADIUS);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.BLACK);
