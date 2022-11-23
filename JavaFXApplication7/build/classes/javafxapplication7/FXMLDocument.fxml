@@ -56,7 +56,10 @@
                   <RadioButton fx:id="arc" layoutX="56.0" layoutY="75.0" mnemonicParsing="false" text="Arc" toggleGroup="$boutonsPalette" />
                   <RadioButton fx:id="selection" layoutX="56.0" layoutY="103.0" mnemonicParsing="false" text="Selection" toggleGroup="$boutonsPalette" />
                </children></AnchorPane>
-            <AnchorPane fx:id="editionProprietes" layoutY="187.0" prefHeight="185.0" prefWidth="200.0" />
+            <AnchorPane fx:id="editionProprietes" layoutY="187.0" prefHeight="185.0" prefWidth="200.0">
+               <children>
+                  <ComboBox fx:id="test" layoutX="25.0" layoutY="80.0" prefWidth="150.0" />
+               </children></AnchorPane>
          </children>
       </AnchorPane>
    </left>

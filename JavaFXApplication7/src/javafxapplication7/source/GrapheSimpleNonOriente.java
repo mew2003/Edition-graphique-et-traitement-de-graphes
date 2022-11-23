@@ -20,18 +20,18 @@ public class GrapheSimpleNonOriente {
         listeLiens = new ArrayList<>();
     }
     
-    public boolean ajouterNoeud(String type, String nom , int x, int y, int w, int h) {
+    public boolean ajouterNoeud(String type, String nom , double x, double y) {
         Noeud noeud;
         try {
             noeud = new NoeudRond(type, nom);
             listeNoeuds.add(noeud);
-            noeud.creerNoeud(new Enveloppe(x, y, w, h));
+            noeud.creerNoeud(new Enveloppe(x, y));
             return true;
         } catch (Exception e) {}
         try {
             noeud = new NoeudRectangle(type, nom);
             listeNoeuds.add(noeud);
-            noeud.creerNoeud(new Enveloppe(x, y, w, h));
+            noeud.creerNoeud(new Enveloppe(x, y));
             return true;
         } catch (Exception e) {}
         return false;

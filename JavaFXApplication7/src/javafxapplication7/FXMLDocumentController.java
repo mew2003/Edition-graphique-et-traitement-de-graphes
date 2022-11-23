@@ -18,6 +18,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
+import javafxapplication7.source.GrapheSimpleNonOriente;
 
 /**
  *
@@ -61,21 +62,27 @@ public class FXMLDocumentController implements Initializable{
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+        
+    }
+    
+    GrapheSimpleNonOriente graphe = new GrapheSimpleNonOriente();
     
     @FXML
     public void dessin(MouseEvent evt) {
-        Circle circle = new Circle(evt.getX(), evt.getY(), RADIUS);
-        Label nomNoeud = new Label();
-        nomNoeud.setText("yo");
-        nomNoeud.setLayoutX(evt.getX());
-        nomNoeud.setLayoutY(evt.getY());
-        circle.setFill(Color.TRANSPARENT);
-        circle.setStroke(Color.BLACK);
-        zoneDessin.getChildren().addAll(circle, nomNoeud);
         
-        System.out.println(evt.getX());
-        System.out.println(evt.getY());
+        if (noeud.isSelected()) {
+            Circle circle = new Circle(evt.getX(), evt.getY(), RADIUS);
+            Label nomNoeud = new Label();
+            nomNoeud.setText("yo");
+            nomNoeud.setLayoutX(evt.getX());
+            nomNoeud.setLayoutY(evt.getY());
+            circle.setFill(Color.TRANSPARENT);
+            circle.setStroke(Color.BLACK);
+            zoneDessin.getChildren().addAll(circle, nomNoeud);
+            graphe.ajouterNoeud("rond", "default", evt.getX(), evt.getY());
+        }
+        if (selection.isSelected()) {
+            System.out.println(graphe.toString());
+        }
     }
 }
