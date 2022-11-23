@@ -11,9 +11,12 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 
 /**
  *
@@ -21,6 +24,39 @@ import javafx.scene.shape.*;
  */
 public class FXMLDocumentController implements Initializable{
     final int RADIUS = 20;
+    
+    @FXML
+    private RadioButton noeud;
+
+    @FXML
+    private MenuButton menuAide;
+
+    @FXML
+    private AnchorPane zoneDessin;
+
+    @FXML
+    private RadioButton arc;
+
+    @FXML
+    private RadioButton selection;
+
+    @FXML
+    private MenuButton menuEdition;
+
+    @FXML
+    private MenuButton menuTraitement;
+
+    @FXML
+    private AnchorPane palette;
+
+    @FXML
+    private ToggleGroup boutonsPalette;
+
+    @FXML
+    private AnchorPane editionProprietes;
+
+    @FXML
+    private MenuButton menuGraphe;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
