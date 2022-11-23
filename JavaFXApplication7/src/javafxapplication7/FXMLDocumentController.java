@@ -5,6 +5,10 @@
  */
 package javafxapplication7;
 
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -16,20 +20,17 @@ import javafx.scene.control.Label;
  *
  * @author sebastien.dasilvaoli
  */
-public class FXMLDocumentController implements Initializable {
-    
-    @FXML
-    private Label label;
-    
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
+public class FXMLDocumentController implements Initializable{
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
     
+    @FXML
+    public void getMousePosition() {
+        Point p = MouseInfo.getPointerInfo().getLocation();
+        System.out.println(p.getX());
+        System.out.println(p.getY());
+    }
 }
