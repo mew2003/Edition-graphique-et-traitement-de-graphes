@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication7.FXMLDocumentController">
+<BorderPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication7.FXMLDocumentController">
 <top>
       <Pane prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -39,7 +39,7 @@
    <center>
       <ScrollPane prefHeight="441.0" prefWidth="537.0" BorderPane.alignment="CENTER">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="460.0" prefWidth="513.0" style="-fx-background-color: light-grey;" />
+          <AnchorPane fx:id="zoneDessin" minHeight="0.0" minWidth="0.0" onMouseClicked="#dessin" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: light-grey;" />
         </content>
       </ScrollPane>
    </center>

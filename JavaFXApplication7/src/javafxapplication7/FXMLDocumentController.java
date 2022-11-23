@@ -5,22 +5,22 @@
  */
 package javafxapplication7;
 
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 
 /**
  *
  * @author sebastien.dasilvaoli
  */
 public class FXMLDocumentController implements Initializable{
+    final int RADIUS = 20;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -28,9 +28,17 @@ public class FXMLDocumentController implements Initializable{
     }    
     
     @FXML
-    public void getMousePosition() {
-        Point p = MouseInfo.getPointerInfo().getLocation();
-        System.out.println(p.getX());
-        System.out.println(p.getY());
+    private AnchorPane zoneDessin;
+    
+    @FXML
+    public void dessin(MouseEvent evt) {
+        
+        Circle circle = new Circle(evt.getX(), evt.getY(), RADIUS);
+        circle.setFill(Color.TRANSPARENT);
+        circle.setStroke(Color.BLACK);
+        zoneDessin.getChildren().add(circle);
+        
+        System.out.println(evt.getX());
+        System.out.println(evt.getY());
     }
 }

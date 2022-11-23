@@ -39,7 +39,7 @@
    <center>
       <ScrollPane prefHeight="441.0" prefWidth="537.0" BorderPane.alignment="CENTER">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" onMouseClicked="#getMousePosition" prefHeight="460.0" prefWidth="513.0" style="-fx-background-color: light-grey;" />
+          <AnchorPane fx:id="zoneDessin" minHeight="0.0" minWidth="0.0" onMouseClicked="#dessin" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: light-grey;" />
         </content>
       </ScrollPane>
    </center>
