@@ -1,5 +1,8 @@
 import java.util.HashMap;
 import java.util.Set;
+import javafxapplication7.source.Noeud;
+import javafxapplication7.source.NoeudRectangle;
+import javafxapplication7.source.NoeudRond;
 
 public class FactoryGraphes {
     private HashMap<String, Noeud> noeudsTypes;

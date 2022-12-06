@@ -11,8 +11,8 @@ package javafxapplication7.source;
 public class main {
     public static void main(String[] args) {
         GrapheSimpleNonOriente graphe = new GrapheSimpleNonOriente();
-        graphe.ajouterNoeud("rond", "Noeud1",0, 0, 0, 0);
-        graphe.ajouterNoeud("rectangle", "Noeud2", 0, 0, 0, 0);
+        graphe.ajouterNoeud("rond", "Noeud1",0, 0);
+        graphe.ajouterNoeud("rectangle", "Noeud2", 0, 0);
         System.out.println(graphe);
     }
 }
