@@ -33,6 +33,6 @@ public abstract class Noeud {
     public void dessinerNoeud() {
     }
 
-    public Noeud(String nom, List<Double> pos, double radius);
+    public abstract Noeud creerNoeud(String nom, double[] pos, double radius);
 
 }

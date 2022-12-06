@@ -1,20 +1,29 @@
 package v1;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class FactoryGrapheManager {
     
-    private List<FactoryGraphe> factories = new ArrayList<FactoryGraphe> ();
+    private HashMap<String, FactoryGraphe> factories;
 
-    private List<FactoryGrapheManager> instance = new ArrayList<FactoryGrapheManager> ();
+    private static FactoryGrapheManager instance = new FactoryGrapheManager();
 
     private FactoryGrapheManager() {
+        factories = new HashMap<>();
+        factories.put("GrapheNonOriente", new FactoryGrapheNonOriente());
     }
 
     public static FactoryGrapheManager getInstance() {
         // Automatically generated method. Please delete this comment before entering specific code.
-        return this.instance;
+        return instance;
+    }
+    
+    public FactoryGraphe creerFactory(String type) {
+        if (factories.get(type) != null) {
+            return factories.get(type);
+        } else {
+            return null;
+        }
     }
 
 }

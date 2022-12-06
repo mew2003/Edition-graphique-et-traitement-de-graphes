@@ -1,19 +1,42 @@
 package v1;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Set;
 
 public class FactoryGrapheNonOriente extends FactoryGraphe {
     
-    private static List<FactoryGrapheNonOriente> instance = new ArrayList<FactoryGrapheNonOriente> ();
+    private static FactoryGrapheNonOriente instance = new FactoryGrapheNonOriente();
+    
+    private HashMap<String, Noeud> typesNoeuds;
 
     public static FactoryGrapheNonOriente getInstance() {
+        return instance;
+    }
+    
+    FactoryGrapheNonOriente() {
+        typesNoeuds = new HashMap<>();
+        typesNoeuds.put("NoeudNonOriente", new NoeudNonOriente());
+    }
+    
+    public Set<String> getTypesNoeuds() {
+        return typesNoeuds.keySet();
     }
 
-    public Noeud creerNoeud(String nom, double posX, double posY, double radius) {
+    public Noeud creerNoeud(String type, String nom, double[] pos, double radius) {
+        if (typesNoeuds.get(type) != null) {
+            return typesNoeuds.get(type).creerNoeud(nom, pos, radius);
+        } else {
+            return null;
+        }
     }
 
-    public Lien creerLien(List<Noeud> noeuds) {
+    @Override
+    public Lien creerLien(Noeud[] noeuds) {
+    }
+    
+    @Override
+    public String toString() {
+        return "NoeudNonOriente";
     }
 
 }
