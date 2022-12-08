@@ -1,5 +1,9 @@
 package v1;
 
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 public class NoeudNonOriente extends Noeud {
 
     private String nom;
@@ -8,15 +12,15 @@ public class NoeudNonOriente extends Noeud {
 
     private double radius;
     
+    private Circle circle;
+    
     public NoeudNonOriente(String nom, double[] pos, double radius) {
         this.nom = nom;
         this.pos = pos;
         this.radius = radius;
     }
     
-    public NoeudNonOriente() {
-        
-    }
+    public NoeudNonOriente() {}
     
     @Override
     public double[] getPositions() {
@@ -54,13 +58,20 @@ public class NoeudNonOriente extends Noeud {
     }
 
     @Override
-    public void dessinerNoeud() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void dessinerNoeud(AnchorPane zoneDessin) {
+        this.circle = new Circle(pos[0], pos[1], radius);
+        circle.setFill(Color.TRANSPARENT);
+        circle.setStroke(Color.BLACK);
+        zoneDessin.getChildren().addAll(circle);
     }
     
     @Override
     public String toString() {
         return "Nom : " +  nom + " positions : [" + pos[0] + " , " + pos[1] + "] radius : " + radius;
+    }
+    
+    public Circle getCircle() {
+        return circle;
     }
 
 }

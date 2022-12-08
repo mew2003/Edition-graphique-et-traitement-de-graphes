@@ -1,5 +1,8 @@
 package v1;
 
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
+
 public abstract class Noeud {
 
     public abstract String getNom();
@@ -14,8 +17,10 @@ public abstract class Noeud {
 
     public abstract void setRadius(double radius);
 
-    public abstract void dessinerNoeud();
+    public abstract void dessinerNoeud(AnchorPane zoneDessin);
 
     public abstract Noeud creerNoeud(String nom, double[] pos, double radius);
+    
+    public abstract Circle getCircle();
 
 }
