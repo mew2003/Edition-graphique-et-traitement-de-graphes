@@ -24,6 +24,10 @@ public class FactoryGrapheNonOriente extends FactoryGraphe {
     public Set<String> getTypesNoeuds() {
         return typesNoeuds.keySet();
     }
+    
+    public Set<String> getTypesLiens() {
+        return typesLiens.keySet();
+    }
 
     @Override
     public Noeud creerNoeud(String type, String nom, double[] pos, double radius) {

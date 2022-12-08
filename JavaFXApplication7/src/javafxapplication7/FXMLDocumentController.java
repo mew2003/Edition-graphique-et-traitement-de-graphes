@@ -18,7 +18,6 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
-import javafxapplication7.source.GrapheSimpleNonOriente;
 
 /**
  *
@@ -65,8 +64,6 @@ public class FXMLDocumentController implements Initializable{
         
     }
     
-    GrapheSimpleNonOriente graphe = new GrapheSimpleNonOriente();
-    
     @FXML
     public void dessin(MouseEvent evt) {
         
@@ -79,10 +76,6 @@ public class FXMLDocumentController implements Initializable{
             circle.setFill(Color.TRANSPARENT);
             circle.setStroke(Color.BLACK);
             zoneDessin.getChildren().addAll(circle, nomNoeud);
-            graphe.ajouterNoeud("rond", "default", evt.getX(), evt.getY());
-        }
-        if (selection.isSelected()) {
-            System.out.println(graphe.toString());
         }
     }
 }
