@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication7.FXMLDocumentController">
+<BorderPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication7.FXMLDocumentController">
 <top>
       <Pane prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -44,11 +45,11 @@
       </ScrollPane>
    </center>
    <left>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="690.0" prefWidth="232.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane fx:id="palette" prefHeight="185.0" prefWidth="200.0" style="-fx-border-color: grey;">
+            <AnchorPane fx:id="palette" prefHeight="206.0" prefWidth="232.0" style="-fx-border-color: grey;">
                <children>
-                  <RadioButton fx:id="noeud" layoutX="13.0" layoutY="41.0" mnemonicParsing="false">
+                  <RadioButton fx:id="noeud" layoutX="31.0" layoutY="64.0" mnemonicParsing="false">
                      <toggleGroup>
                         <ToggleGroup fx:id="boutonsPalette" />
                      </toggleGroup>
@@ -56,13 +57,71 @@
                         <ComboBox fx:id="listeNoeuds" prefWidth="150.0" />
                      </graphic>
                   </RadioButton>
-                  <RadioButton fx:id="lien" layoutX="13.0" layoutY="81.0" mnemonicParsing="false" toggleGroup="$boutonsPalette">
+                  <RadioButton fx:id="lien" layoutX="31.0" layoutY="105.0" mnemonicParsing="false" toggleGroup="$boutonsPalette">
                      <graphic>
                         <ComboBox fx:id="listeLiens" prefWidth="150.0" />
                      </graphic></RadioButton>
-                  <RadioButton fx:id="selection" layoutX="69.0" layoutY="121.0" mnemonicParsing="false" text="Selection" toggleGroup="$boutonsPalette" />
+                  <RadioButton fx:id="selection" layoutX="80.0" layoutY="154.0" mnemonicParsing="false" text="Selection" toggleGroup="$boutonsPalette" />
+                  <Label layoutX="94.0" layoutY="13.0" text="Palette">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                </children></AnchorPane>
-            <AnchorPane fx:id="editionProprietes" layoutY="187.0" prefHeight="185.0" prefWidth="200.0" />
+            <ComboBox fx:id="listeElements" layoutY="206.0" prefHeight="25.0" prefWidth="232.0" />
+            <AnchorPane fx:id="editionProprietesNoeud" layoutY="204.0" prefHeight="485.0" prefWidth="232.0" visible="false">
+               <children>
+                  <Label layoutX="51.0" layoutY="39.0" text="Edition de propriétés">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="RIGHT" layoutX="26.0" layoutY="94.0" text="Nom">
+                     <graphic>
+                        <TextField fx:id="nomNoeud" />
+                     </graphic>
+                  </Label>
+                  <Label contentDisplay="RIGHT" layoutX="23.0" layoutY="133.0" text="Pos X">
+                     <graphic>
+                        <TextField fx:id="posXNoeud" />
+                     </graphic>
+                  </Label>
+                  <Label contentDisplay="RIGHT" layoutX="24.0" layoutY="173.0" text="Pos Y">
+                     <graphic>
+                        <TextField fx:id="posYNoeud" />
+                     </graphic>
+                  </Label>
+                  <Label contentDisplay="RIGHT" layoutX="17.0" layoutY="212.0" text="Radius">
+                     <graphic>
+                        <TextField fx:id="radiusNoeud" />
+                     </graphic>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="editionProprietesLien" layoutY="207.0" prefHeight="485.0" prefWidth="232.0" visible="false">
+               <children>
+                  <Label layoutX="51.0" layoutY="39.0" text="Edition de propriétés">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="RIGHT" layoutX="27.0" layoutY="91.0" text="Valeur">
+                     <graphic>
+                        <TextField fx:id="valeurLien" />
+                     </graphic>
+                  </Label>
+                  <Label contentDisplay="RIGHT" layoutX="15.0" layoutY="132.0" text="Noeud 1">
+                     <graphic>
+                        <TextField fx:id="noeud1Lien" />
+                     </graphic>
+                  </Label>
+                  <Label contentDisplay="RIGHT" layoutX="15.0" layoutY="173.0" text="Noeud 2">
+                     <graphic>
+                        <TextField fx:id="noeud2Lien" />
+                     </graphic>
+                  </Label>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </left>

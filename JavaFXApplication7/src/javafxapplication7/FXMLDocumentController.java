@@ -6,6 +6,7 @@
 package javafxapplication7;
 
 
+import java.awt.TextField;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -33,6 +34,36 @@ import v1.Noeud;
  */
 public class FXMLDocumentController implements Initializable{
     
+       @FXML
+    private javafx.scene.control.TextField noeud1Lien;
+
+    @FXML
+    private AnchorPane zoneDessin;
+
+    @FXML
+    private MenuButton menuEdition;
+
+    @FXML
+    private AnchorPane editionProprietesLien;
+
+    @FXML
+    private ComboBox<?> listeLiens;
+
+    @FXML
+    private javafx.scene.control.TextField posXNoeud;
+
+    @FXML
+    private javafx.scene.control.TextField valeurLien;
+
+    @FXML
+    private MenuButton menuGraphe;
+
+    @FXML
+    private AnchorPane editionProprietesNoeud;
+
+    @FXML
+    private javafx.scene.control.TextField posYNoeud;
+
     @FXML
     private AnchorPane zoneDessin;
 
@@ -52,10 +83,19 @@ public class FXMLDocumentController implements Initializable{
     private MenuButton menuAide;
 
     @FXML
+    private javafx.scene.control.TextField nomNoeud;
+
+    @FXML
     private RadioButton lien;
 
     @FXML
     private RadioButton selection;
+
+    @FXML
+    private javafx.scene.control.TextField radiusNoeud;
+
+    @FXML
+    private javafx.scene.control.TextField noeud2Lien;
 
     @FXML
     private MenuButton menuTraitement;
@@ -67,10 +107,13 @@ public class FXMLDocumentController implements Initializable{
     private ToggleGroup boutonsPalette;
 
     @FXML
-    private AnchorPane editionProprietes;
+    private ComboBox<?> listeNoeuds;
 
     @FXML
     private ComboBox<String> listeNoeuds;
+
+    @FXML
+    private ComboBox<?> listeElements;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
