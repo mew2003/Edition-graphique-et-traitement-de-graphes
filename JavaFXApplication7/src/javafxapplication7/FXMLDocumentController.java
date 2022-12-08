@@ -34,29 +34,17 @@ import v1.Noeud;
  */
 public class FXMLDocumentController implements Initializable{
     
-       @FXML
+    @FXML
     private javafx.scene.control.TextField noeud1Lien;
 
     @FXML
-    private AnchorPane zoneDessin;
-
-    @FXML
-    private MenuButton menuEdition;
-
-    @FXML
     private AnchorPane editionProprietesLien;
-
-    @FXML
-    private ComboBox<?> listeLiens;
 
     @FXML
     private javafx.scene.control.TextField posXNoeud;
 
     @FXML
     private javafx.scene.control.TextField valeurLien;
-
-    @FXML
-    private MenuButton menuGraphe;
 
     @FXML
     private AnchorPane editionProprietesNoeud;
@@ -105,9 +93,6 @@ public class FXMLDocumentController implements Initializable{
 
     @FXML
     private ToggleGroup boutonsPalette;
-
-    @FXML
-    private ComboBox<?> listeNoeuds;
 
     @FXML
     private ComboBox<String> listeNoeuds;
