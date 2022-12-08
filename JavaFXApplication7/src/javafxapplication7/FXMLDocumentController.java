@@ -29,7 +29,7 @@ public class FXMLDocumentController implements Initializable{
     final int RADIUS = 20;
     
        @FXML
-    private TextField noeud1Lien;
+    private javafx.scene.control.TextField noeud1Lien;
 
     @FXML
     private AnchorPane zoneDessin;
@@ -44,10 +44,10 @@ public class FXMLDocumentController implements Initializable{
     private ComboBox<?> listeLiens;
 
     @FXML
-    private TextField posXNoeud;
+    private javafx.scene.control.TextField posXNoeud;
 
     @FXML
-    private TextField valeurLien;
+    private javafx.scene.control.TextField valeurLien;
 
     @FXML
     private MenuButton menuGraphe;
@@ -56,7 +56,7 @@ public class FXMLDocumentController implements Initializable{
     private AnchorPane editionProprietesNoeud;
 
     @FXML
-    private TextField posYNoeud;
+    private javafx.scene.control.TextField posYNoeud;
 
     @FXML
     private RadioButton noeud;
@@ -65,7 +65,7 @@ public class FXMLDocumentController implements Initializable{
     private MenuButton menuAide;
 
     @FXML
-    private TextField nomNoeud;
+    private javafx.scene.control.TextField nomNoeud;
 
     @FXML
     private RadioButton lien;
@@ -74,10 +74,10 @@ public class FXMLDocumentController implements Initializable{
     private RadioButton selection;
 
     @FXML
-    private TextField radiusNoeud;
+    private javafx.scene.control.TextField radiusNoeud;
 
     @FXML
-    private TextField noeud2Lien;
+    private javafx.scene.control.TextField noeud2Lien;
 
     @FXML
     private MenuButton menuTraitement;
