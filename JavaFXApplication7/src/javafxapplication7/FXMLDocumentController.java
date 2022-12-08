@@ -6,10 +6,12 @@
 package javafxapplication7;
 
 
+import java.awt.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -26,6 +28,36 @@ import javafx.scene.layout.AnchorPane;
 public class FXMLDocumentController implements Initializable{
     final int RADIUS = 20;
     
+       @FXML
+    private TextField noeud1Lien;
+
+    @FXML
+    private AnchorPane zoneDessin;
+
+    @FXML
+    private MenuButton menuEdition;
+
+    @FXML
+    private AnchorPane editionProprietesLien;
+
+    @FXML
+    private ComboBox<?> listeLiens;
+
+    @FXML
+    private TextField posXNoeud;
+
+    @FXML
+    private TextField valeurLien;
+
+    @FXML
+    private MenuButton menuGraphe;
+
+    @FXML
+    private AnchorPane editionProprietesNoeud;
+
+    @FXML
+    private TextField posYNoeud;
+
     @FXML
     private RadioButton noeud;
 
@@ -33,7 +65,7 @@ public class FXMLDocumentController implements Initializable{
     private MenuButton menuAide;
 
     @FXML
-    private AnchorPane zoneDessin;
+    private TextField nomNoeud;
 
     @FXML
     private RadioButton lien;
@@ -42,7 +74,10 @@ public class FXMLDocumentController implements Initializable{
     private RadioButton selection;
 
     @FXML
-    private MenuButton menuEdition;
+    private TextField radiusNoeud;
+
+    @FXML
+    private TextField noeud2Lien;
 
     @FXML
     private MenuButton menuTraitement;
@@ -54,10 +89,10 @@ public class FXMLDocumentController implements Initializable{
     private ToggleGroup boutonsPalette;
 
     @FXML
-    private AnchorPane editionProprietes;
+    private ComboBox<?> listeNoeuds;
 
     @FXML
-    private MenuButton menuGraphe;
+    private ComboBox<?> listeElements;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
