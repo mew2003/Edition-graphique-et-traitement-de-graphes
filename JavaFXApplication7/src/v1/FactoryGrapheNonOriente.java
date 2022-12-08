@@ -8,6 +8,7 @@ public class FactoryGrapheNonOriente extends FactoryGraphe {
     private static FactoryGrapheNonOriente instance = new FactoryGrapheNonOriente();
     
     private HashMap<String, Noeud> typesNoeuds;
+    private HashMap<String, Lien> typesLiens;
 
     public static FactoryGrapheNonOriente getInstance() {
         return instance;
@@ -15,13 +16,16 @@ public class FactoryGrapheNonOriente extends FactoryGraphe {
     
     FactoryGrapheNonOriente() {
         typesNoeuds = new HashMap<>();
+        typesLiens = new HashMap<>();
         typesNoeuds.put("NoeudNonOriente", new NoeudNonOriente());
+        typesLiens.put("LienNonOriente", new LienNonOriente());
     }
     
     public Set<String> getTypesNoeuds() {
         return typesNoeuds.keySet();
     }
 
+    @Override
     public Noeud creerNoeud(String type, String nom, double[] pos, double radius) {
         if (typesNoeuds.get(type) != null) {
             return typesNoeuds.get(type).creerNoeud(nom, pos, radius);
@@ -31,7 +35,12 @@ public class FactoryGrapheNonOriente extends FactoryGraphe {
     }
 
     @Override
-    public Lien creerLien(Noeud[] noeuds) {
+    public Lien creerLien(String type, Noeud[] noeuds) {
+        if (typesLiens.get(type) != null) {
+            return typesLiens.get(type).creerLien(noeuds);
+        } else {
+            return null;
+        }
     }
     
     @Override

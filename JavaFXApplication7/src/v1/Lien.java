@@ -2,21 +2,12 @@ package v1;
 
 public abstract class Lien {
 
-    private Noeud[] noeuds = new Noeud[2];
+    public abstract Noeud[] getNoeuds();
 
-    public Noeud[] getNoeuds() {
-        // Automatically generated method. Please delete this comment before entering specific code.
-        return this.noeuds;
-    }
+    public abstract void setNoeuds(Noeud[] value);
 
-    public void setNoeuds(Noeud[] value) {
-        // Automatically generated method. Please delete this comment before entering specific code.
-        this.noeuds = value;
-    }
+    public abstract void dessinerLien();
 
-    public void dessinerLien() {
-    }
-
-    public Lien(List<Noeud> noeuds);
+    public abstract Lien creerLien(Noeud[] noeuds);
 
 }

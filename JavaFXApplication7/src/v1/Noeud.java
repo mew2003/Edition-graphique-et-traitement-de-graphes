@@ -2,36 +2,19 @@ package v1;
 
 public abstract class Noeud {
 
-    private String nom;
+    public abstract String getNom();
 
-    private double[] pos;
-
-    private double radius;
-
-    public String getNom() {
-        // Automatically generated method. Please delete this comment before entering specific code.
-        return this.nom;
-    }
-
-    public void setNom(String value) {
-        // Automatically generated method. Please delete this comment before entering specific code.
-        this.nom = value;
-    }
+    public abstract void setNom(String value);
  
-    public List<Double> getPositions() {
-    }
+    public abstract double[] getPositions();
 
-    public void setPositions(List<Double> positions) {
-    }
+    public abstract void setPositions(double[] positions);
 
-    public double getRadius() {
-    }
+    public abstract double getRadius();
 
-    public void setRadius(double radius) {
-    }
+    public abstract void setRadius(double radius);
 
-    public void dessinerNoeud() {
-    }
+    public abstract void dessinerNoeud();
 
     public abstract Noeud creerNoeud(String nom, double[] pos, double radius);
 
