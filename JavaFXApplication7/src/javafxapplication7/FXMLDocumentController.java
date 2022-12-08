@@ -36,7 +36,7 @@ public class FXMLDocumentController implements Initializable{
     private AnchorPane zoneDessin;
 
     @FXML
-    private RadioButton arc;
+    private RadioButton lien;
 
     @FXML
     private RadioButton selection;

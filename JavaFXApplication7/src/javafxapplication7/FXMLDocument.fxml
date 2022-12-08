@@ -48,13 +48,19 @@
          <children>
             <AnchorPane fx:id="palette" prefHeight="185.0" prefWidth="200.0" style="-fx-border-color: grey;">
                <children>
-                  <RadioButton fx:id="noeud" layoutX="56.0" layoutY="45.0" mnemonicParsing="false" text="Noeud">
+                  <RadioButton fx:id="noeud" layoutX="13.0" layoutY="41.0" mnemonicParsing="false">
                      <toggleGroup>
                         <ToggleGroup fx:id="boutonsPalette" />
                      </toggleGroup>
+                     <graphic>
+                        <ComboBox fx:id="listeNoeuds" prefWidth="150.0" />
+                     </graphic>
                   </RadioButton>
-                  <RadioButton fx:id="arc" layoutX="56.0" layoutY="75.0" mnemonicParsing="false" text="Arc" toggleGroup="$boutonsPalette" />
-                  <RadioButton fx:id="selection" layoutX="56.0" layoutY="103.0" mnemonicParsing="false" text="Selection" toggleGroup="$boutonsPalette" />
+                  <RadioButton fx:id="lien" layoutX="13.0" layoutY="81.0" mnemonicParsing="false" toggleGroup="$boutonsPalette">
+                     <graphic>
+                        <ComboBox fx:id="listeLiens" prefWidth="150.0" />
+                     </graphic></RadioButton>
+                  <RadioButton fx:id="selection" layoutX="69.0" layoutY="121.0" mnemonicParsing="false" text="Selection" toggleGroup="$boutonsPalette" />
                </children></AnchorPane>
             <AnchorPane fx:id="editionProprietes" layoutY="187.0" prefHeight="185.0" prefWidth="200.0" />
          </children>
