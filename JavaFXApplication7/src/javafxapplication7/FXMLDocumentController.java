@@ -100,7 +100,9 @@ public class FXMLDocumentController implements Initializable{
     private ComboBox<String> listeNoeuds;
 
     @FXML
-    private ComboBox<?> listeElements;
+    private ComboBox<String> listeElements;
+    
+    @FXML
     private MenuItem enregistrerSous;
     
     @FXML 
@@ -140,7 +142,9 @@ public class FXMLDocumentController implements Initializable{
         if (noeud.isSelected()) {
             double[] positions = {evt.getX(), evt.getY()};
             graphesNoeuds.add(f.creerNoeud(listeNoeuds.getSelectionModel().getSelectedItem(), DEFAULT_NAME + indexNoeud++, positions, DEFAULT_RADIUS));
-            graphesNoeuds.get(graphesNoeuds.size() - 1).dessinerNoeud(zoneDessin);
+            Noeud nouveauNoeud = graphesNoeuds.get(graphesNoeuds.size() - 1);
+            nouveauNoeud.dessinerNoeud(zoneDessin);
+            listeElements.getItems().addAll(nouveauNoeud.toString());
         } else if (lien.isSelected()) {
             
         } else {
