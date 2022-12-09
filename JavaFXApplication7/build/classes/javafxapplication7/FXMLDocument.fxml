@@ -102,7 +102,7 @@
                         <TextField fx:id="radiusNoeud" />
                      </graphic>
                   </Label>
-                  <Button fx:id="validerModifNoeud" layoutX="90.0" layoutY="271.0" mnemonicParsing="false" onAction="#modifElement" text="Valider" />
+                  <Button fx:id="validerModifNoeud" layoutX="90.0" layoutY="271.0" mnemonicParsing="false" onAction="#modifNoeud" text="Valider" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="editionProprietesLien" layoutY="259.0" prefHeight="433.0" prefWidth="232.0" visible="false">

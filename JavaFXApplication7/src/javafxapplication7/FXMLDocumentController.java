@@ -154,6 +154,7 @@ public class FXMLDocumentController implements Initializable{
     int indexNoeud = 1;
     final double DEFAULT_RADIUS = 20.0;
     Noeud[] noeudARelier = new Noeud[2];
+    Object selectedObject;
     
     @FXML
     public void dessin(MouseEvent evt) {
@@ -212,6 +213,7 @@ public class FXMLDocumentController implements Initializable{
                         posXNoeud.setText("" + no.getPositions()[0]);
                         posYNoeud.setText("" + no.getPositions()[1]);
                         radiusNoeud.setText("" + no.getRadius());
+                        selectedObject = no;
                         return no;
                     }
                 }
@@ -225,8 +227,10 @@ public class FXMLDocumentController implements Initializable{
         return mouseX > noeud.getPositions()[0] - noeud.getRadius() && mouseX < noeud.getPositions()[0] + noeud.getRadius()
                && mouseY > noeud.getPositions()[1] - noeud.getRadius() && mouseY < noeud.getPositions()[1] + noeud.getRadius();
     }
-    public Object modifElement() {
+    public Object modifNoeud() {
         System.out.println("test");
+        Noeud noeud = (Noeud) selectedObject;
+        noeud.setNom(nomNoeud.getText());
         return null; // stub
     }
 }
