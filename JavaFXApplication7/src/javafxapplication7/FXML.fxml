@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="javafxapplication7.FXMLController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication7.FXMLController">
    <children>
       <ComboBox fx:id="typesGraphes" layoutX="225.0" layoutY="188.0" prefWidth="150.0" />
       <Label layoutX="234.0" layoutY="163.0" text="Choisissez votre graphe :" />
@@ -17,5 +17,6 @@
             <Font size="24.0" />
          </font>
       </Label>
+      <Button fx:id="valider" layoutX="274.0" layoutY="247.0" mnemonicParsing="false" onAction="#switchToMain" text="Valider" />
    </children>
 </AnchorPane>
