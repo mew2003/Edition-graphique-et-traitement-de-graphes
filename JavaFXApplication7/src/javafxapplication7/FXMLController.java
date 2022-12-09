@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +19,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
+import v1.FactoryGraphe;
+import v1.FactoryGrapheManager;
 
 /**
  * FXML Controller class
@@ -27,6 +30,10 @@ import javafx.stage.Stage;
 
 
 public class FXMLController implements Initializable {
+    
+    private static FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
+    
+    private static FactoryGraphe factory;
     
     private Stage primaryStage;
 
@@ -45,16 +52,19 @@ public class FXMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        Set<String> listeNoeuds = manager.getRegiteredFactories();
+        typesGraphes.getItems().addAll(listeNoeuds);
+        typesGraphes.getSelectionModel().selectFirst();
+        factory = manager.creerFactory(typesGraphes.getSelectionModel().getSelectedItem());
     }
     
     @FXML
     private void switchToMain(javafx.event.ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-         primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-         scene = new Scene(root);
-         primaryStage.setScene(scene);
-         primaryStage.show(); 
+        primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.show(); 
     }
     
 }
