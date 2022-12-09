@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -130,6 +131,10 @@ public class FXMLDocumentController implements Initializable{
     private Scene scene;
 
     private Parent root;
+    @FXML
+    private Button validerModifNoeud;
+    @FXML
+    private Button validerModifLien;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -183,17 +188,28 @@ public class FXMLDocumentController implements Initializable{
         for (Node n : children) {
             for (Noeud no : graphesNoeuds) {
                 if (no.getCircle().equals(n)) {
-                    if (isNodeClicked(mouseX, mouseY, no)) { 
+                    if (isNodeClicked(mouseX, mouseY, no)) {
+                        editionProprietesLien.setVisible(false);
+                        editionProprietesNoeud.setVisible(true);
+                        nomNoeud.setText(no.getNom());
+                        posXNoeud.setText("" + no.getPositions()[0]);
+                        posYNoeud.setText("" + no.getPositions()[1]);
+                        radiusNoeud.setText("" + no.getRadius());
                         return no;
                     }
                 }
             }
         }
+        editionProprietesNoeud.setVisible(false);
         return null;
     }
     
     public boolean isNodeClicked(double mouseX, double mouseY, Noeud noeud) {
         return mouseX > noeud.getPositions()[0] - noeud.getRadius() && mouseX < noeud.getPositions()[0] + noeud.getRadius()
                && mouseY > noeud.getPositions()[1] - noeud.getRadius() && mouseY < noeud.getPositions()[1] + noeud.getRadius();
+    }
+    public Object modifElement() {
+        System.out.println("test");
+        return null; // stub
     }
 }

@@ -75,57 +75,59 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <AnchorPane fx:id="editionProprietesNoeud" layoutY="205.0" prefHeight="485.0" prefWidth="232.0" visible="false">
+            <AnchorPane fx:id="editionProprietesNoeud" layoutY="258.0" prefHeight="432.0" prefWidth="232.0" visible="false">
                <children>
-                  <Label layoutX="51.0" layoutY="126.0" text="Edition de propriétés">
+                  <Label layoutX="51.0" layoutY="57.0" text="Edition de propriétés">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label contentDisplay="RIGHT" layoutX="26.0" layoutY="181.0" text="Nom">
+                  <Label contentDisplay="RIGHT" layoutX="26.0" layoutY="112.0" text="Nom">
                      <graphic>
                         <TextField fx:id="nomNoeud" />
                      </graphic>
                   </Label>
-                  <Label contentDisplay="RIGHT" layoutX="23.0" layoutY="220.0" text="Pos X">
+                  <Label contentDisplay="RIGHT" layoutX="23.0" layoutY="151.0" text="Pos X">
                      <graphic>
                         <TextField fx:id="posXNoeud" />
                      </graphic>
                   </Label>
-                  <Label contentDisplay="RIGHT" layoutX="24.0" layoutY="260.0" text="Pos Y">
+                  <Label contentDisplay="RIGHT" layoutX="24.0" layoutY="191.0" text="Pos Y">
                      <graphic>
                         <TextField fx:id="posYNoeud" />
                      </graphic>
                   </Label>
-                  <Label contentDisplay="RIGHT" layoutX="17.0" layoutY="299.0" text="Radius">
+                  <Label contentDisplay="RIGHT" layoutX="17.0" layoutY="230.0" text="Radius">
                      <graphic>
                         <TextField fx:id="radiusNoeud" />
                      </graphic>
                   </Label>
+                  <Button fx:id="validerModifNoeud" layoutX="90.0" layoutY="271.0" mnemonicParsing="false" onAction="#modifElement" text="Valider" />
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="editionProprietesLien" layoutY="207.0" prefHeight="485.0" prefWidth="232.0" visible="false">
+            <AnchorPane fx:id="editionProprietesLien" layoutY="259.0" prefHeight="433.0" prefWidth="232.0" visible="false">
                <children>
-                  <Label layoutX="51.0" layoutY="125.0" text="Edition de propriétés">
+                  <Label layoutX="51.0" layoutY="56.0" text="Edition de propriétés">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label contentDisplay="RIGHT" layoutX="27.0" layoutY="177.0" text="Valeur">
+                  <Label contentDisplay="RIGHT" layoutX="27.0" layoutY="108.0" text="Valeur">
                      <graphic>
                         <TextField fx:id="valeurLien" />
                      </graphic>
                   </Label>
-                  <Label contentDisplay="RIGHT" layoutX="15.0" layoutY="218.0" text="Noeud 1">
+                  <Label contentDisplay="RIGHT" layoutX="15.0" layoutY="149.0" text="Noeud 1">
                      <graphic>
                         <TextField fx:id="noeud1Lien" />
                      </graphic>
                   </Label>
-                  <Label contentDisplay="RIGHT" layoutX="15.0" layoutY="259.0" text="Noeud 2">
+                  <Label contentDisplay="RIGHT" layoutX="15.0" layoutY="190.0" text="Noeud 2">
                      <graphic>
                         <TextField fx:id="noeud2Lien" />
                      </graphic>
                   </Label>
+                  <Button fx:id="validerModifLien" layoutX="88.0" layoutY="237.0" mnemonicParsing="false" text="Valider" />
                </children>
             </AnchorPane>
          </children>
