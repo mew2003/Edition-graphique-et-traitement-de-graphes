@@ -1,6 +1,7 @@
 package v1;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class FactoryGrapheManager {
     
@@ -11,6 +12,10 @@ public class FactoryGrapheManager {
     private FactoryGrapheManager() {
         factories = new HashMap<>();
         factories.put("GrapheNonOriente", new FactoryGrapheNonOriente());
+    }
+    
+    public Set<String> getRegiteredFactories() {
+        return factories.keySet();
     }
 
     public static FactoryGrapheManager getInstance() {
