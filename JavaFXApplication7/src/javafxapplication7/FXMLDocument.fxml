@@ -11,7 +11,7 @@
 <top>
       <Pane prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <MenuButton fx:id="menuGraphe" layoutY="2.0" mnemonicParsing="false" text="Graphe">
+            <MenuButton fx:id="menuGraphe" layoutY="2.0" mnemonicParsing="false" onAction="#switchToNew" text="Graphe">
               <items>
                 <MenuItem fx:id="nouveau" mnemonicParsing="false" text="Nouveau" />
                 <MenuItem fx:id="ouvrir" mnemonicParsing="false" text="Ouvrir" />
