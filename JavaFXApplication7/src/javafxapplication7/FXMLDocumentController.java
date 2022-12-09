@@ -157,18 +157,8 @@ public class FXMLDocumentController implements Initializable{
         } else if (lien.isSelected()) {
             
         } else {
-            ObservableList<Node> children = zoneDessin.getChildren();
-            for (Node n : children) {
-                for (Noeud no : graphesNoeuds) {
-                    if (no.getCircle().equals(n)) {
-                        if (isElementClicked(evt.getX(), evt.getY(), no)) {  
-                            System.out.println(n + " | " + no.toString());
-                            return;
-                        }
-                    }
-                }
-            }
-            
+            Object o = elementClicked(evt.getX(), evt.getY());
+            if (o != null) System.out.println(o.toString());
         }   
 //            Label nomNoeud = new Label();
 //            nomNoeud.setText("yo");
@@ -182,7 +172,23 @@ public class FXMLDocumentController implements Initializable{
          scene = new Scene(root);
          primaryStage.setScene(scene);
          primaryStage.show(); 
-    public boolean isElementClicked(double mouseX, double mouseY, Noeud noeud) {
+    }
+    
+    public Object elementClicked(double mouseX, double mouseY) {
+        ObservableList<Node> children = zoneDessin.getChildren();
+        for (Node n : children) {
+            for (Noeud no : graphesNoeuds) {
+                if (no.getCircle().equals(n)) {
+                    if (isNodeClicked(mouseX, mouseY, no)) { 
+                        return no;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    public boolean isNodeClicked(double mouseX, double mouseY, Noeud noeud) {
         return mouseX > noeud.getPositions()[0] - noeud.getRadius() && mouseX < noeud.getPositions()[0] + noeud.getRadius()
                && mouseY > noeud.getPositions()[1] - noeud.getRadius() && mouseY < noeud.getPositions()[1] + noeud.getRadius();
     }
