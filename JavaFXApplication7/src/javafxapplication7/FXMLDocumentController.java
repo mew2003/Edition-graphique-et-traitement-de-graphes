@@ -234,13 +234,6 @@ public class FXMLDocumentController implements Initializable{
     }
     
     public boolean isNodeClicked(double mouseX, double mouseY, Noeud noeud) {
-        primaryStage = (Stage)((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();  
-    }
-    
-    public boolean isElementClicked(double mouseX, double mouseY, Noeud noeud) {
         return mouseX > noeud.getPositions()[0] - noeud.getRadius() && mouseX < noeud.getPositions()[0] + noeud.getRadius()
                && mouseY > noeud.getPositions()[1] - noeud.getRadius() && mouseY < noeud.getPositions()[1] + noeud.getRadius();
     }
