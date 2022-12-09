@@ -7,14 +7,18 @@ package javafxapplication7;
 
 
 import java.awt.TextField;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -29,6 +33,7 @@ import v1.Noeud;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
 
 /**
  *
@@ -117,6 +122,12 @@ public class FXMLDocumentController implements Initializable{
     @FXML
     private MenuItem FAQ;
     
+    private Stage primaryStage;
+
+    private Scene scene;
+
+    private Parent root;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Set<String> typesNoeuds = f.getTypesNoeuds();
@@ -163,5 +174,13 @@ public class FXMLDocumentController implements Initializable{
 //            nomNoeud.setText("yo");
 //            nomNoeud.setLayoutX(evt.getX());
 //            nomNoeud.setLayoutY(evt.getY());
+    }
+    
+    private void switchToMain(javafx.event.ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("FXML.fxml"));
+         primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
+         scene = new Scene(root);
+         primaryStage.setScene(scene);
+         primaryStage.show(); 
     }
 }
