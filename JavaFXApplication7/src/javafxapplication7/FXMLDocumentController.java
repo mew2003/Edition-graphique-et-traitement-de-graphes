@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -131,6 +132,10 @@ public class FXMLDocumentController implements Initializable{
     
 
     private Parent root;
+    @FXML
+    private Button validerModifNoeud;
+    @FXML
+    private Button validerModifLien;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -149,20 +154,37 @@ public class FXMLDocumentController implements Initializable{
     final String DEFAULT_NAME = "default";
     int indexNoeud = 1;
     final double DEFAULT_RADIUS = 20.0;
+    Noeud[] noeudARelier = new Noeud[2];
     
     @FXML
     public void dessin(MouseEvent evt) {
+        double[] positions = {evt.getX(), evt.getY()};
         
         if (noeud.isSelected()) {
-            double[] positions = {evt.getX(), evt.getY()};
+            noeudARelier = new Noeud[2];
+            
             graphesNoeuds.add(f.creerNoeud(listeNoeuds.getSelectionModel().getSelectedItem(), DEFAULT_NAME + indexNoeud++, positions, DEFAULT_RADIUS));
             Noeud nouveauNoeud = graphesNoeuds.get(graphesNoeuds.size() - 1);
             nouveauNoeud.dessinerNoeud(zoneDessin);
             listeElements.getItems().addAll(nouveauNoeud.toString());
         } else if (lien.isSelected()) {
-            
+            try {
+                if (noeudARelier[0] == null) {
+                    noeudARelier[0] = (Noeud) elementClicked(positions[0], positions[1]);
+                } else {
+                    noeudARelier[1] = (Noeud) elementClicked(positions[0], positions[1]);
+                }
+            } catch (Exception e) {}
+            if (noeudARelier[1] != null) {
+                graphesLiens.add(f.creerLien(listeLiens.getSelectionModel().getSelectedItem(), noeudARelier));
+                graphesLiens.get(graphesLiens.size() - 1).dessinerLien(zoneDessin);
+                
+                noeudARelier = new Noeud[2];
+            }
         } else {
-            Object o = elementClicked(evt.getX(), evt.getY());
+            noeudARelier = new Noeud[2];
+            
+            Object o = elementClicked(positions[0], positions[1]);
             if (o != null) System.out.println(o.toString());
         }   
 //            Label nomNoeud = new Label();
@@ -193,12 +215,19 @@ public class FXMLDocumentController implements Initializable{
         for (Node n : children) {
             for (Noeud no : graphesNoeuds) {
                 if (no.getCircle().equals(n)) {
-                    if (isNodeClicked(mouseX, mouseY, no)) { 
+                    if (isNodeClicked(mouseX, mouseY, no)) {
+                        editionProprietesLien.setVisible(false);
+                        editionProprietesNoeud.setVisible(true);
+                        nomNoeud.setText(no.getNom());
+                        posXNoeud.setText("" + no.getPositions()[0]);
+                        posYNoeud.setText("" + no.getPositions()[1]);
+                        radiusNoeud.setText("" + no.getRadius());
                         return no;
                     }
                 }
             }
         }
+        editionProprietesNoeud.setVisible(false);
         return null;
     }
     
@@ -212,5 +241,9 @@ public class FXMLDocumentController implements Initializable{
     public boolean isElementClicked(double mouseX, double mouseY, Noeud noeud) {
         return mouseX > noeud.getPositions()[0] - noeud.getRadius() && mouseX < noeud.getPositions()[0] + noeud.getRadius()
                && mouseY > noeud.getPositions()[1] - noeud.getRadius() && mouseY < noeud.getPositions()[1] + noeud.getRadius();
+    }
+    public Object modifElement() {
+        System.out.println("test");
+        return null; // stub
     }
 }
