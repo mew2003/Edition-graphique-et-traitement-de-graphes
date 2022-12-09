@@ -128,6 +128,7 @@ public class FXMLDocumentController implements Initializable{
     private Stage primaryStage;
 
     private Scene scene;
+    
 
     private Parent root;
     
@@ -170,12 +171,21 @@ public class FXMLDocumentController implements Initializable{
 //            nomNoeud.setLayoutY(evt.getY());
     }
     
-    private void switchToMain(javafx.event.ActionEvent event) throws IOException {
+    /**
+     * Ouvre l'interface de création de graphique au clic
+     * sur l'option nouveau du menu Graphe
+     * @param event permet de gérer le clic
+     * @throws IOException s'il y a un problème d'entrée-sortie
+     */
+    @FXML
+    private void switchToNew(javafx.event.ActionEvent event) throws IOException {
+        
+        // charge la fenêtre d'accueil pour créer un nouveau graphe
         root = FXMLLoader.load(getClass().getResource("FXML.fxml"));
-         primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-         scene = new Scene(root);
-         primaryStage.setScene(scene);
-         primaryStage.show(); 
+        primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.show(); 
     }
     
     public Object elementClicked(double mouseX, double mouseY) {
@@ -193,6 +203,13 @@ public class FXMLDocumentController implements Initializable{
     }
     
     public boolean isNodeClicked(double mouseX, double mouseY, Noeud noeud) {
+        primaryStage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.show();  
+    }
+    
+    public boolean isElementClicked(double mouseX, double mouseY, Noeud noeud) {
         return mouseX > noeud.getPositions()[0] - noeud.getRadius() && mouseX < noeud.getPositions()[0] + noeud.getRadius()
                && mouseY > noeud.getPositions()[1] - noeud.getRadius() && mouseY < noeud.getPositions()[1] + noeud.getRadius();
     }
