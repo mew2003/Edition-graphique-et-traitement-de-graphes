@@ -130,6 +130,7 @@ public class FXMLDocumentController implements Initializable{
     FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
     FactoryGraphe f = manager.creerFactory("GrapheNonOriente");
     ArrayList<Noeud> graphesNoeuds = new ArrayList<>();
+    ArrayList<Lien> graphesLiens = new ArrayList<>();
     final String DEFAULT_NAME = "default";
     int indexNoeud = 1;
     final double DEFAULT_RADIUS = 20.0;
@@ -146,22 +147,25 @@ public class FXMLDocumentController implements Initializable{
         } else {
             ObservableList<Node> children = zoneDessin.getChildren();
             for (Node n : children) {
-                //if (evt.getX() > n.getLayoutX() - n.getScaleX())
                 for (Noeud no : graphesNoeuds) {
                     if (no.getCircle().equals(n)) {
-                        if (evt.getX() > no.getPositions()[0] - no.getRadius() && evt.getX() < no.getPositions()[0] + no.getRadius()
-                            && evt.getY() > no.getPositions()[1] - no.getRadius() && evt.getY() < no.getPositions()[1] + no.getRadius()) {  
+                        if (isElementClicked(evt.getX(), evt.getY(), no)) {  
                             System.out.println(n + " | " + no.toString());
+                            return;
                         }
                     }
                 }
             }
             
-        } 
-        
+        }   
 //            Label nomNoeud = new Label();
 //            nomNoeud.setText("yo");
 //            nomNoeud.setLayoutX(evt.getX());
 //            nomNoeud.setLayoutY(evt.getY());
+    }
+    
+    public boolean isElementClicked(double mouseX, double mouseY, Noeud noeud) {
+        return mouseX > noeud.getPositions()[0] - noeud.getRadius() && mouseX < noeud.getPositions()[0] + noeud.getRadius()
+               && mouseY > noeud.getPositions()[1] - noeud.getRadius() && mouseY < noeud.getPositions()[1] + noeud.getRadius();
     }
 }
