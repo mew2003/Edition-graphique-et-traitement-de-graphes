@@ -20,13 +20,15 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import v1.FactoryGraphe;
 import v1.FactoryGrapheManager;
 import v1.Noeud;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 
 /**
  *
@@ -99,6 +101,21 @@ public class FXMLDocumentController implements Initializable{
 
     @FXML
     private ComboBox<?> listeElements;
+    private MenuItem enregistrerSous;
+    
+    @FXML 
+    private MenuItem nouveau;
+    
+    @FXML
+    private MenuItem ouvrir;
+    @FXML
+    private MenuItem annuler;
+    @FXML
+    private MenuItem retablir;
+    @FXML
+    private MenuItem obtenirDeLAide;
+    @FXML
+    private MenuItem FAQ;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
