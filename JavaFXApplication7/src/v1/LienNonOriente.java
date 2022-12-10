@@ -4,17 +4,31 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
+/**
+ * Lien non orienté
+ * Pour rappel, un lien non orienté doit respecter les principes suivants :
+ * - Il est représenter par un ligne allant d'un noeud à un autre
+ * - Un lien ne peut pas partir d'un noeud pour aller vers ce même noeud
+ * @author Mewen
+ */
 public class LienNonOriente extends Lien {
 
+    // Noeud que relie le lien
     private Noeud[] noeuds;
     
+    // Représentation graphique du lien associé
     private Line line;
 
+    /**
+     * Crée un lien reliant 2 noeuds
+     * @param noeuds les noeuds à relié
+     */
     public LienNonOriente(Noeud[] noeuds) {
         this.noeuds = noeuds;
     }
     
-    public LienNonOriente() {}
+    // Sert uniquement à des fins d'instanciation
+    LienNonOriente() {}
     
     @Override
     public Noeud[] getNoeuds() {
@@ -46,6 +60,7 @@ public class LienNonOriente extends Lien {
         return "Lien : {" + noeuds[0] + " | " + noeuds[1] + "}";
     }
     
+    @Override
     public Line getLine() {
         return line;
     }

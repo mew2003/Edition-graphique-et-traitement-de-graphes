@@ -3,17 +3,33 @@ package v1;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * Factory de graphe non oriente
+ * Pour rappel, un graphe non orienté doit respecter les principes suivants :
+ * - Il peut y avoir N nombre de noeuds
+ * - Il peut y avoir entre 0 et L = N(N+1)/2 nombre de liens
+ * - Il ne peut pas y avoir de boucle (un lien qui part d'un noeud et revient à ce même noeud)
+ * - Un noeud ne peut pas avoir plus de N-1 lien
+ * - Deux liens ne peuvent partir du même noeud et aller vers un autre même noeud
+ * @author Mewen
+ */
 public class FactoryGrapheNonOriente extends FactoryGraphe {
     
     private static final FactoryGrapheNonOriente instance = new FactoryGrapheNonOriente();
     
+    // liste des noeuds / liens pouvant être instancié
     private HashMap<String, Noeud> typesNoeuds;
     private HashMap<String, Lien> typesLiens;
 
+    /**
+     * Renvoie une instanciation de la classe FactoryGrapheNonOriente
+     * @return l'instanciation
+     */
     public static FactoryGrapheNonOriente getInstance() {
         return instance;
     }
     
+    // Instanciation de toutes les types de noeuds et de liens
     FactoryGrapheNonOriente() {
         typesNoeuds = new HashMap<>();
         typesLiens = new HashMap<>();
@@ -21,10 +37,12 @@ public class FactoryGrapheNonOriente extends FactoryGraphe {
         typesLiens.put("LienNonOriente", new LienNonOriente());
     }
     
+    @Override
     public Set<String> getTypesNoeuds() {
         return typesNoeuds.keySet();
     }
     
+    @Override
     public Set<String> getTypesLiens() {
         return typesLiens.keySet();
     }

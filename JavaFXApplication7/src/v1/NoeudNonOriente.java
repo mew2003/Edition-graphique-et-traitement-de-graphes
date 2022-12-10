@@ -5,23 +5,40 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/**
+ * Noeud non orienté
+ * Pour rappel, un lien non orienté doit respecter les principes suivants :
+ * - Il possède un nom unique, permetant de le distinguer de tout autre noeud
+ * @author Mewen
+ */
 public class NoeudNonOriente extends Noeud {
 
+    // Nom du noeud
     private String nom;
 
+    // Position X,Y du noeud
     private double[] pos;
 
+    // Radius du noeud
     private double radius;
     
+    // Représentation graphique du noeud associé
     private Circle circle;
     
+    /**
+     * Crée un noeud
+     * @param nom nom du noeud
+     * @param pos position x,y du noeud
+     * @param radius radius du noeud
+     */
     public NoeudNonOriente(String nom, double[] pos, double radius) {
         this.nom = nom;
         this.pos = pos;
         this.radius = radius;
     }
     
-    public NoeudNonOriente() {}
+    // Sert uniquement à des fins d'instanciation
+    NoeudNonOriente() {}
     
     @Override
     public double[] getPositions() {
