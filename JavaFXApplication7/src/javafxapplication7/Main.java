@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Lanceur de l'application
  */
 package javafxapplication7;
 
@@ -10,11 +8,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
 
 /**
- *
- * @author sebastien.dasilvaoli
+ * Lanceur de l'application
  */
 public class Main extends Application {
     

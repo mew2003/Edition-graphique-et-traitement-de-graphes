@@ -7,7 +7,7 @@ public class FactoryGrapheManager {
     
     private HashMap<String, FactoryGraphe> factories;
 
-    private static FactoryGrapheManager instance = new FactoryGrapheManager();
+    private static final FactoryGrapheManager instance = new FactoryGrapheManager();
 
     private FactoryGrapheManager() {
         factories = new HashMap<>();

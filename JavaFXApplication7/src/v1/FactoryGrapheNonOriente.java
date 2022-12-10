@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class FactoryGrapheNonOriente extends FactoryGraphe {
     
-    private static FactoryGrapheNonOriente instance = new FactoryGrapheNonOriente();
+    private static final FactoryGrapheNonOriente instance = new FactoryGrapheNonOriente();
     
     private HashMap<String, Noeud> typesNoeuds;
     private HashMap<String, Lien> typesLiens;
