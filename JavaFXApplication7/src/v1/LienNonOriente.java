@@ -43,8 +43,11 @@ public class LienNonOriente extends Lien {
     @Override
     public void dessinerLien(AnchorPane zoneDessin) {
         double[] posNoeud1 = noeuds[0].getPositions();
+        
         double[] posNoeud2 = noeuds[1].getPositions();
-        this.line = new Line(posNoeud1[0], posNoeud1[1], posNoeud2[0], posNoeud2[1]);
+        double L = Math.sqrt(Math.pow(posNoeud2[0] - posNoeud1[0],2) + Math.pow(posNoeud2[1] - posNoeud1[1],2));
+        double[] vecteurAAPrime = {(posNoeud2[0]-posNoeud1[0]) * noeuds[0].getRadius() / L ,(posNoeud2[1] - posNoeud1[1]) * noeuds[0].getRadius() / L};
+        this.line = new Line(posNoeud1[0] + vecteurAAPrime[0], posNoeud1[1] + vecteurAAPrime[1], posNoeud2[0] - vecteurAAPrime[0], posNoeud2[1] - vecteurAAPrime[1]);
         line.setFill(Color.TRANSPARENT);
         line.setStroke(Color.BLACK);
         zoneDessin.getChildren().addAll(line);
