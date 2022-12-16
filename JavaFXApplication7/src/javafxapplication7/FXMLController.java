@@ -18,8 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
-import v1.FactoryGraphe;
-import v1.FactoryGrapheManager;
+import temp.FactoryGraphe;
+import temp.FactoryGrapheManager;
 
 /**
  * FXML Controller class
@@ -31,8 +31,6 @@ import v1.FactoryGrapheManager;
 public class FXMLController implements Initializable {
     
     private static FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
-    
-    private static FactoryGraphe factory;
     
     private Stage primaryStage;
 
@@ -51,10 +49,9 @@ public class FXMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Set<String> listeNoeuds = manager.getRegiteredFactories();
-        typesGraphes.getItems().addAll(listeNoeuds);
+        Set<String> listeFactory = manager.getRegiteredFactories();
+        typesGraphes.getItems().addAll(listeFactory);
         typesGraphes.getSelectionModel().selectFirst();
-        factory = manager.creerFactory(typesGraphes.getSelectionModel().getSelectedItem());
     }
     
     @FXML
