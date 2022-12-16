@@ -12,7 +12,11 @@ public class Start {
         FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
         FactoryGraphe f = manager.creerFactory("GrapheNonOriente");
         Graphe graphe = f.creerGraphe();
-        System.out.println(graphe.toString());
+        double[] pos = {0.0, 0.0};
+        graphe.creerNoeud("noeud1", pos, 0);
+        graphe.creerNoeud("noeud2", pos, 0);
+        graphe.creerLien("noeud1", "noeud2");
+        System.out.println(graphe);
     }
 
 }

@@ -9,6 +9,18 @@ package temp;
  *
  * @author mewen.derruau
  */
-class Noeud {
+abstract class Noeud {
+
+	public abstract double[] getPositions();
+
+	public abstract double getRadius();
+	
+	public abstract String getNom();
+	
+    public abstract void setNom(String value);
+
+    public abstract void setPositions(double[] positions);
+
+    public abstract void setRadius(double radius);
     
 }

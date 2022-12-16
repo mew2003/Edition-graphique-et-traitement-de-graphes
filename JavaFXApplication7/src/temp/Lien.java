@@ -9,6 +9,10 @@ package temp;
  *
  * @author mewen.derruau
  */
-class Lien {
+abstract class Lien {
+
+	public abstract Noeud[] getNoeuds();
+
+	public abstract void setNoeuds(Noeud[] value);
     
 }

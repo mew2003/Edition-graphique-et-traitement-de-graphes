@@ -10,7 +10,8 @@ package temp;
  * @author mewen.derruau
  */
 abstract class Graphe {
-    public abstract Noeud creerNoeud();
+	
+    public abstract Noeud creerNoeud(String nom, double[] pos, double radius);
     
-    public abstract Lien creerLien();
+    public abstract Lien creerLien(String noeud1, String noeud2);
 }
