@@ -39,6 +39,11 @@ public class LienNonOriente extends Lien {
     @Override
     public void setNoeuds(Noeud[] value) {
         this.noeuds = value;
+        double[] linePos = lineDrawingPositions();
+        line.setStartX(linePos[0]);
+        line.setStartY(linePos[1]);
+        line.setEndX(linePos[2]);
+        line.setEndY(linePos[3]);
     }
 
     @Override
@@ -48,13 +53,19 @@ public class LienNonOriente extends Lien {
 
     @Override
     public void dessiner(AnchorPane zoneDessin) {
+        double[] linePos = lineDrawingPositions();
+        this.line = new Line(linePos[0], linePos[1], linePos[2], linePos[3]);
+        line.setFill(Color.TRANSPARENT);
+        line.setStroke(Color.BLACK);
+        zoneDessin.getChildren().addAll(line);
+    }
+    
+    public double[] lineDrawingPositions() {
         double[] posNoeud1 = noeuds[0].getPositions();
         double[] posNoeud2 = noeuds[1].getPositions();
         double L = Math.sqrt(Math.pow(posNoeud2[0] - posNoeud1[0],2) + Math.pow(posNoeud2[1] - posNoeud1[1],2));
         double[] vecteurAAPrime = {(posNoeud2[0]-posNoeud1[0]) * noeuds[0].getRadius() / L ,(posNoeud2[1] - posNoeud1[1]) * noeuds[0].getRadius() / L};
-        this.line = new Line(posNoeud1[0] + vecteurAAPrime[0], posNoeud1[1] + vecteurAAPrime[1], posNoeud2[0] - vecteurAAPrime[0], posNoeud2[1] - vecteurAAPrime[1]);
-        line.setFill(Color.TRANSPARENT);
-        line.setStroke(Color.BLACK);
-        zoneDessin.getChildren().addAll(line);
+        double[] result = {posNoeud1[0] + vecteurAAPrime[0], posNoeud1[1] + vecteurAAPrime[1], posNoeud2[0] - vecteurAAPrime[0], posNoeud2[1] - vecteurAAPrime[1]};
+        return result;
     }
 }

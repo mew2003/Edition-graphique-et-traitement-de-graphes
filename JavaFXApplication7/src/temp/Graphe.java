@@ -25,4 +25,6 @@ public abstract class Graphe {
      *         selectionné.
      */
     public abstract Object elementClicked(double[] positions, AnchorPane zoneDessin);
+    
+    public abstract Noeud getNode(String libelle);
 }

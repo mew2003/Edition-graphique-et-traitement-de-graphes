@@ -19,6 +19,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
@@ -106,6 +107,8 @@ public class FXMLDocumentController implements Initializable{
     private Button validerModifNoeud;
     @FXML
     private Button validerModifLien;
+    @FXML
+    private AnchorPane aside;
     
     /**
      * Initialisation de l'interface,
@@ -125,13 +128,21 @@ public class FXMLDocumentController implements Initializable{
         zoneDessin.getChildren().addAll(previewedLine);
     }
     
+    @FXML
+    void creerGrapheNonOriente(ActionEvent event) {
+        aside.setVisible(true);
+        valeurLien.setEditable(false);
+        f = manager.creerFactory("GrapheNonOriente");
+        graphe = f.creerGraphe();
+    }
+    
     // Création du manager permettant de créer tout type de graphe
     FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
     
     // Création de la factory GrapheNonOriente (v1)
-    FactoryGraphe f = manager.creerFactory("GrapheNonOriente");
+    FactoryGraphe f;
     
-    Graphe graphe = f.creerGraphe();
+    Graphe graphe;
     
     // Permet le stockage des noeuds à relier par un lien (maximum 2 noeuds)
     Noeud[] noeudARelier = new Noeud[2];
@@ -147,7 +158,7 @@ public class FXMLDocumentController implements Initializable{
      * @param evt 
      */
     @FXML
-    public void dessin(MouseEvent evt) {
+    public void zoneDessinEvent(MouseEvent evt) {
         // Position de la souris de l'utilisateur lors du click
         double[] positions = {evt.getX(), evt.getY()};
         
@@ -213,7 +224,9 @@ public class FXMLDocumentController implements Initializable{
                     Lien link = (Lien) o;
                     editionProprietesLien.setVisible(true);
                     editionProprietesNoeud.setVisible(false);
-                    System.out.println(link.toString());
+                    noeud1Lien.setText(link.getNoeuds()[0].getNom());
+                    noeud2Lien.setText(link.getNoeuds()[1].getNom());
+                    selectedObject = link;
                 }
             } else {
                 editionProprietesLien.setVisible(false);
@@ -221,31 +234,32 @@ public class FXMLDocumentController implements Initializable{
             }
         }   
     }
-    
-    /**
-     * Ouvre l'interface de création de graphique au clic
-     * sur l'option nouveau du menu Graphe
-     * @param event permet de gérer le clic
-     * @throws IOException s'il y a un problème d'entrée-sortie
-     */
-    @FXML
-    private void switchToNew(javafx.event.ActionEvent event) throws IOException {
-        
-        // charge la fenêtre d'accueil pour créer un nouveau graphe
-        root = FXMLLoader.load(getClass().getResource("FXML.fxml"));
-        primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show(); 
-    }
 
     @FXML
     void modifNoeud(ActionEvent event) {
+        // TODO: Corriger bug -> si l'on modifie la position, le lien reste à l'ancien emplacement
         Noeud noeudAModif = (Noeud) selectedObject;
         double[] positions = {Double.parseDouble(posXNoeud.getText()), Double.parseDouble(posYNoeud.getText())};
         noeudAModif.setNom(nomNoeud.getText());
         noeudAModif.setPositions(positions);
         noeudAModif.setRadius(Double.parseDouble(radiusNoeud.getText()));
+    }
+    
+    @FXML
+    void modifLien(ActionEvent event) {
+        Lien lienAModif = (Lien) selectedObject;
+        String[] labelNoeudARelier = {
+            noeud1Lien.getText(),
+            noeud2Lien.getText()
+        };
+        try {
+            Noeud n1 = graphe.getNode(labelNoeudARelier[0]);
+            Noeud n2 = graphe.getNode(labelNoeudARelier[1]);
+            Noeud[] nodes = {n1, n2};
+            lienAModif.setNoeuds(nodes);
+        } catch (Exception e) {
+            System.err.println("Noeud Inexistant");
+        }
     }
     
     @FXML
