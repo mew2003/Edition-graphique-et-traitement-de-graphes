@@ -21,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
@@ -116,6 +117,12 @@ public class FXMLDocumentController implements Initializable{
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        previewedCircle.setFill(Color.TRANSPARENT);
+        previewedCircle.setStroke(Color.BLACK);
+        zoneDessin.getChildren().addAll(previewedCircle);
+        previewedLine.setFill(Color.TRANSPARENT);
+        previewedLine.setStroke(Color.BLACK);
+        zoneDessin.getChildren().addAll(previewedLine);
     }
     
     // Création du manager permettant de créer tout type de graphe
@@ -130,6 +137,10 @@ public class FXMLDocumentController implements Initializable{
     Noeud[] noeudARelier = new Noeud[2];
     
     Object selectedObject;
+    
+    Circle previewedCircle = new Circle(-100, -100, 25);
+    
+    Line previewedLine = new Line(-100, -100, -100, -100);
     
     /**
      * TODO: Comment this method
@@ -171,7 +182,12 @@ public class FXMLDocumentController implements Initializable{
                 
                 Lien nouveauLien = graphe.creerLien(noeudARelier[0], noeudARelier[1]);
                 nouveauLien.dessiner(zoneDessin);
+                listeElements.getItems().addAll(nouveauLien.toString());
                 
+                previewedLine.setStartX(-100);
+                previewedLine.setStartY(-100);
+                previewedLine.setEndX(-100);
+                previewedLine.setEndY(-100);
                 // Réinitialisation de la création de lien
                 noeudARelier = new Noeud[2]; 
             }
@@ -230,5 +246,26 @@ public class FXMLDocumentController implements Initializable{
         noeudAModif.setNom(nomNoeud.getText());
         noeudAModif.setPositions(positions);
         noeudAModif.setRadius(Double.parseDouble(radiusNoeud.getText()));
+    }
+    
+    @FXML
+    void preview(MouseEvent event) {
+        if (noeud.isSelected()) {
+            previewedCircle.setCenterX(event.getX());
+            previewedCircle.setCenterY(event.getY());
+        } else if (lien.isSelected() && noeudARelier[0] != null) {
+            previewedLine.setStartX(noeudARelier[0].getPositions()[0]);
+            previewedLine.setStartY(noeudARelier[0].getPositions()[1]);
+            previewedLine.setEndX(event.getX());
+            previewedLine.setEndY(event.getY());
+        }
+    }
+    
+    @FXML
+    void exitPreview(MouseEvent event) {
+        previewedCircle.setCenterX(-100);
+        previewedCircle.setCenterY(-100);
+        previewedLine.setEndX(-100);
+        previewedLine.setEndY(-100);
     }
 }

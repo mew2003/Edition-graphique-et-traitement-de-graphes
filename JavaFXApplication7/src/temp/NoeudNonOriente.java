@@ -74,7 +74,7 @@ public class NoeudNonOriente extends Noeud {
     
     @Override
     public String toString() {
-        return "Nom : " +  nom + " positions : [" + pos[0] + " , " + pos[1] + "] radius : " + radius;
+        return "Noeud : " +  nom;
     }
 
     @Override

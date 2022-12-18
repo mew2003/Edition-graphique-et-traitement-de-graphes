@@ -17,12 +17,17 @@ public class LienNonOriente extends Lien {
     private Noeud[] noeuds;
     
     private Line line;
+    
+    private String nom;
+    
+    private final String DEFAULT_NAME = "default";
 
     /**
      * Crée un lien reliant 2 noeuds
      * @param noeuds les noeuds à relié
      */
-    public LienNonOriente(Noeud[] noeuds) {
+    public LienNonOriente(Noeud[] noeuds, int nbLien) {
+        this.nom = DEFAULT_NAME + nbLien;
         this.noeuds = noeuds;
     }
     
@@ -38,7 +43,7 @@ public class LienNonOriente extends Lien {
 
     @Override
     public String toString() {
-        return "Lien : {" + noeuds[0] + " | " + noeuds[1] + "}";
+        return "Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]";
     }
 
     @Override

@@ -21,6 +21,7 @@ public class GrapheNonOriente extends Graphe {
     private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
     private int nbNoeud = 1;
+    private int nbLien = 1;
 
     GrapheNonOriente() {}
 
@@ -34,7 +35,7 @@ public class GrapheNonOriente extends Graphe {
     @Override
     public Lien creerLien(Noeud noeud1, Noeud noeud2) {
         Noeud[] noeuds = {noeud1, noeud2};
-    	Lien l = new LienNonOriente(noeuds);
+    	Lien l = new LienNonOriente(noeuds, nbLien++);
         listeLiens.add(l);
         return l;
     }
