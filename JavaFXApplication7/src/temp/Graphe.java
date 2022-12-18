@@ -5,13 +5,24 @@
  */
 package temp;
 
+import javafx.scene.layout.AnchorPane;
+
 /**
  *
  * @author mewen.derruau
  */
-abstract class Graphe {
+public abstract class Graphe {
 	
-    public abstract Noeud creerNoeud(String nom, double[] pos, double radius);
+    public abstract Noeud creerNoeud(double[] pos);
     
-    public abstract Lien creerLien(String noeud1, String noeud2);
+    public abstract Lien creerLien(Noeud noeud1, Noeud noeud2);
+    
+     /**
+     * Permet d'obtenir l'élément cliqué sur l'interface
+     * @param positions position X/Y de la souris au moment du click
+     * @return Un object correspondant au noeud ou lien si un élément est en
+     *         effet bien cliqué ou renvoie la valeur null si rien n'a été
+     *         selectionné.
+     */
+    public abstract Object elementClicked(double[] positions, AnchorPane zoneDessin);
 }

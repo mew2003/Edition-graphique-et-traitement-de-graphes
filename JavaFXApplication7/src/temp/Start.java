@@ -1,7 +1,5 @@
 package temp;
 
-import temp.*;
-
 /**
  *
  * @author mewen.derruau
@@ -13,9 +11,9 @@ public class Start {
         FactoryGraphe f = manager.creerFactory("GrapheNonOriente");
         Graphe graphe = f.creerGraphe();
         double[] pos = {0.0, 0.0};
-        graphe.creerNoeud("noeud1", pos, 0);
-        graphe.creerNoeud("noeud2", pos, 0);
-        graphe.creerLien("noeud1", "noeud2");
+        Noeud noeud1 = graphe.creerNoeud(pos);
+        Noeud noeud2 = graphe.creerNoeud(pos);
+        graphe.creerLien(noeud1, noeud2);
         System.out.println(graphe);
     }
 

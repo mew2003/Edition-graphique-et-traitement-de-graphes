@@ -1,5 +1,10 @@
 package temp;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 /**
  * Noeud non orienté
  * Pour rappel, un lien non orienté doit respecter les principes suivants :
@@ -16,6 +21,20 @@ public class NoeudNonOriente extends Noeud {
 
     // Radius du noeud
     private double radius;
+    
+    private Circle circle;
+    
+    private Label label;
+    
+    private final String DEFAULT_NAME = "default";
+    
+    private final double DEFAULT_RADIUS = 25;
+    
+    public NoeudNonOriente(double[] pos, int nbNoeud) {
+        this.nom = DEFAULT_NAME + nbNoeud;
+        this.pos = pos;
+        this.radius = DEFAULT_RADIUS;
+    }
     
     @Override
     public double[] getPositions() {
@@ -35,27 +54,39 @@ public class NoeudNonOriente extends Noeud {
     @Override
     public void setNom(String value) {
         this.nom = value;
+        label.setText(nom);
     }
 
     @Override
     public void setPositions(double[] positions) {
         this.pos = positions;
+        circle.setCenterX(pos[0]);
+        circle.setCenterY(pos[1]);
+        label.setLayoutX(pos[0] - radius);
+        label.setLayoutY(pos[1] - (radius / 2.0));
     }
 
     @Override
     public void setRadius(double radius) {
         this.radius = radius;
+        circle.setRadius(radius);
     }
     
     @Override
     public String toString() {
         return "Nom : " +  nom + " positions : [" + pos[0] + " , " + pos[1] + "] radius : " + radius;
     }
-    
-    public NoeudNonOriente(String nom, double[] pos, double radius) {
-        this.nom = nom;
-        this.pos = pos;
-        this.radius = radius;
+
+    @Override
+    public void dessiner(AnchorPane zoneDessin) {
+        this.circle = new Circle(pos[0], pos[1], radius);
+        circle.setFill(Color.TRANSPARENT);
+        circle.setStroke(Color.BLACK);
+        label = new Label();
+        label.setText(this.nom);
+        label.setLayoutX(pos[0] - radius);
+        label.setLayoutY(pos[1] - (radius / 2.0));
+        zoneDessin.getChildren().addAll(circle, label);
     }
 
 }

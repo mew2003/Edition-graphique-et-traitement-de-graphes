@@ -5,14 +5,18 @@
  */
 package temp;
 
+import javafx.scene.layout.AnchorPane;
+
 /**
  *
  * @author mewen.derruau
  */
-abstract class Lien {
+public abstract class Lien {
 
-	public abstract Noeud[] getNoeuds();
+    public abstract Noeud[] getNoeuds();
 
-	public abstract void setNoeuds(Noeud[] value);
+    public abstract void setNoeuds(Noeud[] value);
+    
+    public abstract void dessiner(AnchorPane zoneDessin);
     
 }

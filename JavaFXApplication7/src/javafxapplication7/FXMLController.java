@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Set;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -35,8 +36,8 @@ public class FXMLController implements Initializable {
     private Stage primaryStage;
 
     private Scene scene;
-
-    private Parent root;
+    
+    private Stage stage;
     
     @FXML
     private Button valider;
@@ -55,12 +56,12 @@ public class FXMLController implements Initializable {
     }
     
     @FXML
-    private void switchToMain(javafx.event.ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        primaryStage = (Stage)((Node)event.getSource()).getScene().getWindow();
+    private void switchToMain(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show(); 
+        stage.setScene(scene);
+        stage.show();
     }
     
 }

@@ -5,17 +5,19 @@
  */
 package temp;
 
+import javafx.scene.layout.AnchorPane;
+
 /**
  *
  * @author mewen.derruau
  */
-abstract class Noeud {
+public abstract class Noeud {
 
-	public abstract double[] getPositions();
+    public abstract double[] getPositions();
 
-	public abstract double getRadius();
-	
-	public abstract String getNom();
+    public abstract double getRadius();
+
+    public abstract String getNom();
 	
     public abstract void setNom(String value);
 
@@ -23,4 +25,5 @@ abstract class Noeud {
 
     public abstract void setRadius(double radius);
     
+    public abstract void dessiner(AnchorPane zoneDessin);
 }
