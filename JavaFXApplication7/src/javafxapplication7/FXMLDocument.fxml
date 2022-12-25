@@ -6,10 +6,10 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
@@ -62,18 +62,23 @@
          <children>
             <AnchorPane fx:id="palette" prefHeight="206.0" prefWidth="232.0" style="-fx-border-color: grey;">
                <children>
-                  <RadioButton fx:id="noeud" layoutX="31.0" layoutY="64.0" mnemonicParsing="false">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="boutonsPalette" />
-                     </toggleGroup>
-                  </RadioButton>
-                  <RadioButton fx:id="lien" layoutX="31.0" layoutY="105.0" mnemonicParsing="false" toggleGroup="$boutonsPalette" />
-                  <RadioButton fx:id="selection" layoutX="80.0" layoutY="154.0" mnemonicParsing="false" text="Selection" toggleGroup="$boutonsPalette" />
                   <Label layoutX="94.0" layoutY="13.0" text="Palette">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="91.0" layoutY="40.0" onMouseClicked="#addNodeClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/circle.png" />
+                     </image></ImageView>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="91.0" layoutY="90.0" onMouseClicked="#addLinkClicked" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/line.png" />
+                     </image></ImageView>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="91.0" layoutY="140.0" onMouseClicked="#SelectClicked" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/select.png" />
+                     </image></ImageView>
                </children></AnchorPane>
             <ComboBox fx:id="listeElements" layoutY="231.0" prefHeight="25.0" prefWidth="232.0" />
             <Label layoutX="56.0" layoutY="207.0" text="Liste des éléments :">
@@ -118,7 +123,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label contentDisplay="RIGHT" layoutX="27.0" layoutY="108.0" text="Valeur">
+                  <Label contentDisplay="RIGHT" disable="true" layoutX="27.0" layoutY="108.0" text="Valeur">
                      <graphic>
                         <TextField fx:id="valeurLien" />
                      </graphic>

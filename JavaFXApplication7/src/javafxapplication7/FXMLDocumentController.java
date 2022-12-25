@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
@@ -40,17 +41,17 @@ public class FXMLDocumentController implements Initializable{
     
     // Liste des éléments avec intéractions contenu dans l'interface
     @FXML
-    private javafx.scene.control.TextField noeud1Lien;
+    private TextField noeud1Lien;
     @FXML
     private AnchorPane editionProprietesLien;
     @FXML
-    private javafx.scene.control.TextField posXNoeud;
+    private TextField posXNoeud;
     @FXML
-    private javafx.scene.control.TextField valeurLien;
+    private TextField valeurLien;
     @FXML
     private AnchorPane editionProprietesNoeud;
     @FXML
-    private javafx.scene.control.TextField posYNoeud;
+    private TextField posYNoeud;
     @FXML
     private AnchorPane zoneDessin;
     @FXML
@@ -64,15 +65,15 @@ public class FXMLDocumentController implements Initializable{
     @FXML
     private MenuButton menuAide;
     @FXML
-    private javafx.scene.control.TextField nomNoeud;
+    private TextField nomNoeud;
     @FXML
     private RadioButton lien;
     @FXML
     private RadioButton selection;
     @FXML
-    private javafx.scene.control.TextField radiusNoeud;
+    private TextField radiusNoeud;
     @FXML
-    private javafx.scene.control.TextField noeud2Lien;
+    private TextField noeud2Lien;
     @FXML
     private MenuButton menuTraitement;
     @FXML
@@ -153,6 +154,14 @@ public class FXMLDocumentController implements Initializable{
     
     Line previewedLine = new Line(-100, -100, -100, -100);
     
+    /* Mode dans lequel se trouve l'utilisateur
+     * 0 = Initialisation
+     * 1 = Noeud
+     * 2 = Lien
+     * 3 = Outil sélection
+     */
+    int actualMode = 0;
+    
     /**
      * TODO: Comment this method
      * @param evt 
@@ -162,13 +171,13 @@ public class FXMLDocumentController implements Initializable{
         // Position de la souris de l'utilisateur lors du click
         double[] positions = {evt.getX(), evt.getY()};
         
-        /* Selon l'option choisi par l'utilisateur parmis une liste de radio button 
+        /* Selon l'option choisi par l'utilisateur parmi une liste de radio button 
            - Créer un noeud
            - Créer un lien
            - Sélectionne un élément de l'application (noeud ou lien) 
         */
-        if (noeud.isSelected()) {
-            // Réinitialisation de la création de lien
+        if (actualMode == 1) {
+            // Réinitialisation de la création de lien 
             noeudARelier = new Noeud[2];
             
             // Création et ajout du noeud dans la liste des noeuds de l'appli.
@@ -176,7 +185,7 @@ public class FXMLDocumentController implements Initializable{
             nouveauNoeud.dessiner(zoneDessin);
             // Ajout du noeud dans la comboBox listant tous les éléments présent sur l'interface
             listeElements.getItems().addAll(nouveauNoeud.toString());
-        } else if (lien.isSelected()) {
+        } else if (actualMode == 2) {
             /* Permet de :
                - Vérifier que l'élément sélectionner soit bien un noeud
                - Ajouter ce noeud dans la liste des noeuds à relier. */
@@ -205,10 +214,10 @@ public class FXMLDocumentController implements Initializable{
         } else {
             // Réinitialisation de la création de lien
             noeudARelier = new Noeud[2];
-            // récupère l'élément séléctionner
+            // récupère l'élément sélectionner
             Object o = graphe.elementClicked(positions, zoneDessin);
             /* Si l'élement est null, ne rien afficher
-               Dans le cas contraire, l'object cliqué est afficher dans
+               Dans le cas contraire, l'object clique est afficher dans
                l'édition de propriété avec ces valeurs. */
             if (o != null) {
                 try {
@@ -264,10 +273,10 @@ public class FXMLDocumentController implements Initializable{
     
     @FXML
     void preview(MouseEvent event) {
-        if (noeud.isSelected()) {
+        if (actualMode == 1) {
             previewedCircle.setCenterX(event.getX());
             previewedCircle.setCenterY(event.getY());
-        } else if (lien.isSelected() && noeudARelier[0] != null) {
+        } else if (actualMode == 2 && noeudARelier[0] != null) {
             previewedLine.setStartX(noeudARelier[0].getPositions()[0]);
             previewedLine.setStartY(noeudARelier[0].getPositions()[1]);
             previewedLine.setEndX(event.getX());
@@ -281,5 +290,20 @@ public class FXMLDocumentController implements Initializable{
         previewedCircle.setCenterY(-100);
         previewedLine.setEndX(-100);
         previewedLine.setEndY(-100);
+    }
+    
+    @FXML
+    void SelectClicked(MouseEvent event) {
+    	actualMode = 3;
+    }
+
+    @FXML
+    void addLinkClicked(MouseEvent event) {
+    	actualMode = 2;
+    }
+
+    @FXML
+    void addNodeClicked(MouseEvent event) {
+    	actualMode = 1;
     }
 }
