@@ -1,4 +1,4 @@
-package temp;
+package app;
 
 /**
  *
@@ -6,6 +6,7 @@ package temp;
  */
 public class Start {
     
+	/* Jeux de tests */
     public static void main(String[] args) {
         FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
         FactoryGraphe f = manager.creerFactory("GrapheNonOriente");

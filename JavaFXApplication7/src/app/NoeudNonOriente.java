@@ -1,4 +1,7 @@
-package temp;
+/**
+ * Représentation d'un noeud non orienté
+ */
+package app;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -8,7 +11,7 @@ import javafx.scene.shape.Circle;
 /**
  * Noeud non orienté
  * Pour rappel, un lien non orienté doit respecter les principes suivants :
- * - Il possède un nom unique, permetant de le distinguer de tout autre noeud
+ * - Il possède un nom unique, permettant de le distinguer de tout autre noeud
  * @author Mewen
  */
 public class NoeudNonOriente extends Noeud {
@@ -22,15 +25,25 @@ public class NoeudNonOriente extends Noeud {
     // Radius du noeud
     private double radius;
     
+    // Représentation graphique du noeud
     private Circle circle;
     
+    // Représentation graphique du nom du noeud
     private Label label;
     
+    // Nom par défaut du noeud
     private final String DEFAULT_NAME = "default";
     
+    // Radius par défaut du noeud
     private final double DEFAULT_RADIUS = 25;
     
+    /**
+     * Crée un noeud
+     * @param pos positions X/Y du noeud
+     * @param nbNoeud permet le nom unique du noeud
+     */
     public NoeudNonOriente(double[] pos, int nbNoeud) {
+    	//TODO: Possibilité de créer un noeud portant le même nom qu'un autre noeud précédemment crée.
         this.nom = DEFAULT_NAME + nbNoeud;
         this.pos = pos;
         this.radius = DEFAULT_RADIUS;
@@ -52,7 +65,7 @@ public class NoeudNonOriente extends Noeud {
     }
 
     @Override
-    public void setNom(String value) {
+	public void setNom(String value) {
         this.nom = value;
         label.setText(nom);
     }

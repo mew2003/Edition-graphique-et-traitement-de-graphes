@@ -80,7 +80,7 @@
                         <Image url="@../images/select.png" />
                      </image></ImageView>
                </children></AnchorPane>
-            <ComboBox fx:id="listeElements" layoutY="231.0" prefHeight="25.0" prefWidth="232.0" />
+            <ComboBox fx:id="listeElements" layoutY="231.0" onAction="#elementSelected" prefHeight="25.0" prefWidth="232.0" />
             <Label layoutX="56.0" layoutY="207.0" text="Liste des éléments :">
                <font>
                   <Font size="14.0" />

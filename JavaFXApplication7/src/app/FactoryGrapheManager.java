@@ -1,21 +1,24 @@
-package temp;
+/*
+ * Classe manager des factory de graphe 
+ */
+package app;
 
 import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Manager des factories de graphes, permet l'instanciation et la création
- * de tout les graphes saisies dans la factories.
+ * Manager des factories de graphes, permet l'instantiation et la création
+ * de toutes les factories de graphes disponibles.
  * @author Mewen
  */
 public class FactoryGrapheManager {
     
-    // Liste des factory de graphe
+    // Liste des factories de graphe
     private HashMap<String, FactoryGraphe> factories;
 
     private static final FactoryGrapheManager instance = new FactoryGrapheManager();
 
-    // Instanciation de toutes les factories de graphe
+    // Instantiation de toutes les factories de graphe
     private FactoryGrapheManager() {
         factories = new HashMap<>();
         factories.put("GrapheNonOriente", new FactoryGrapheNonOriente());
@@ -30,17 +33,16 @@ public class FactoryGrapheManager {
     }
 
     /**
-     * Renvoie une instanciation de la classe FactoryGrapheManager
+     * Renvoie une instantiation de la classe FactoryGrapheManager
      * @return l'instanciation
      */
     public static FactoryGrapheManager getInstance() {
-        // Automatically generated method. Please delete this comment before entering specific code.
         return instance;
     }
     
     /**
-     * Permet de créer un factory parmis la liste de celle implémenté
-     * @param type chaîne de caractères correspondant au type de graphe souhaité
+     * Permet de créer un factory parmi la liste de celle implémenté
+     * @param type chaîne de caractères correspondant au type de factory souhaité
      * @return la factory choisis
      */
     public FactoryGraphe creerFactory(String type) {

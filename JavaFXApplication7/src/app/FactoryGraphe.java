@@ -1,6 +1,7 @@
-package temp;
-
-import java.util.Set;
+/*
+ * Classe parent des factory de graphe
+ */
+package app;
 
 /**
  * Classe parent des factories de graphes
@@ -8,6 +9,10 @@ import java.util.Set;
  */
 public abstract class FactoryGraphe {
     
+	/**
+	 * Créer un graphe
+	 * @return l'object graphe correspondant
+	 */
     public abstract Graphe creerGraphe();
 
 }
