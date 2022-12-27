@@ -14,7 +14,7 @@ import javafx.scene.shape.Circle;
  * - Il possède un nom unique, permettant de le distinguer de tout autre noeud
  * @author Mewen
  */
-public class NoeudNonOriente extends Noeud {
+public class NoeudXOROriente extends Noeud {
 
     // Nom du noeud
     private String nom;
@@ -42,7 +42,7 @@ public class NoeudNonOriente extends Noeud {
      * @param pos positions X/Y du noeud
      * @param nbNoeud permet le nom unique du noeud
      */
-    public NoeudNonOriente(double[] pos, int nbNoeud) {
+    public NoeudXOROriente(double[] pos, int nbNoeud) {
     	//TODO: Possibilité de créer un noeud portant le même nom qu'un autre noeud précédemment crée.
         this.nom = DEFAULT_NAME + nbNoeud;
         this.pos = pos;
