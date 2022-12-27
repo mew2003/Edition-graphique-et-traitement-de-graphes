@@ -244,7 +244,7 @@ public class FXMLDocumentController implements Initializable {
          * Dans le cas contraire, affichage du menu de propriété correspondant
          */
         if (o != null) {
-        	//TODO: Trouver un moyen d'afficher dans la comboBox de la liste des éléments l'élément sélectionner depuis l'outil sélection
+                listeElements.getSelectionModel().getSelectedItem().equals(o);
             try {
                 Noeud node = (Noeud) o;
                 editionProprietesLien.setVisible(false);
@@ -263,6 +263,7 @@ public class FXMLDocumentController implements Initializable {
                 selectedObject = link;
             }
         } else {
+            listeElements.getSelectionModel().clearSelection();
             editionProprietesLien.setVisible(false);
             editionProprietesNoeud.setVisible(false);
         }

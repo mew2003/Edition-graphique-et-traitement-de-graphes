@@ -89,7 +89,7 @@ public class NoeudNonOriente extends Noeud {
     public String toString() {
         return "Noeud : " +  nom;
     }
-
+    
     @Override
     public void dessiner(AnchorPane zoneDessin) {
         this.circle = new Circle(pos[0], pos[1], radius);

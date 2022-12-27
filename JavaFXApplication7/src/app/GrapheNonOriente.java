@@ -70,7 +70,7 @@ public class GrapheNonOriente extends Graphe {
         for (Node n : childrens) {
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
-                    if (isNodeClicked(positions[0], positions[1], no)) {
+                    if (isNodeClicked(positions[0], positions[1], no)) {                      
                         return no;
                     }
                 }
@@ -106,7 +106,7 @@ public class GrapheNonOriente extends Graphe {
      * @param mouseY position Y de la souris
      * @param lien Lien à vérifier
      * @param precision precision +/- pour laquelle la position de la souris
-     *                  peut-être tolérer.
+     *                  peut-être tolérée.
      * @return true si les positions se trouve en effet à l'emplacement d'un lien
      *         false dans le cas contraire.
      */
