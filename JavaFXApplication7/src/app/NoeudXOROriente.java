@@ -75,14 +75,14 @@ public class NoeudXOROriente extends Noeud {
         this.pos = positions;
         circle.setCenterX(pos[0]);
         circle.setCenterY(pos[1]);
-        label.setLayoutX(pos[0] - radius);
-        label.setLayoutY(pos[1] - (radius / 2.0));
+        actualiser();
     }
 
     @Override
     public void setRadius(double radius) {
         this.radius = radius;
         circle.setRadius(radius);
+        actualiser();
     }
     
     @Override
@@ -98,8 +98,13 @@ public class NoeudXOROriente extends Noeud {
         label = new Label();
         label.setText(this.nom);
         label.setLayoutX(pos[0] - radius);
-        label.setLayoutY(pos[1] - (radius / 2.0));
+        label.setLayoutY(pos[1] - 8);
         zoneDessin.getChildren().addAll(circle, label);
+    }
+    
+    public void actualiser() {
+    	label.setLayoutX(pos[0] - radius);
+        label.setLayoutY(pos[1] - (label.getHeight() / 2));
     }
 
 }

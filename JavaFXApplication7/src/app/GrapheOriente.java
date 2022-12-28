@@ -140,4 +140,14 @@ public class GrapheOriente extends Graphe {
 		//TODO: link
 	}
 
+	@Override
+	public void modifRadius(Noeud noeud, double radius) {
+		noeud.setRadius(radius);
+		for (Lien l : listeLiens) {
+			if (l.getNoeuds()[0] == noeud || l.getNoeuds()[1] == noeud) {
+				l.actualiser();
+			}
+		}
+	}
+
 }

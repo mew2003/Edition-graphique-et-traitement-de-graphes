@@ -62,4 +62,6 @@ public abstract class Graphe {
      * @param noeuds nouveau noeuds que relient le lien
      */
     public abstract void modifLien(Lien lien, Noeud[] noeuds);
+    
+    public abstract void modifRadius(Noeud noeud, double radius);
 }

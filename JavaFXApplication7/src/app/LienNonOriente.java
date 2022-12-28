@@ -87,7 +87,8 @@ public class LienNonOriente extends Lien {
         double[] posNoeud2 = noeuds[1].getPositions();
         double L = Math.sqrt(Math.pow(posNoeud2[0] - posNoeud1[0],2) + Math.pow(posNoeud2[1] - posNoeud1[1],2));
         double[] vecteurAAPrime = {(posNoeud2[0]-posNoeud1[0]) * noeuds[0].getRadius() / L ,(posNoeud2[1] - posNoeud1[1]) * noeuds[0].getRadius() / L};
-        double[] result = {posNoeud1[0] + vecteurAAPrime[0], posNoeud1[1] + vecteurAAPrime[1], posNoeud2[0] - vecteurAAPrime[0], posNoeud2[1] - vecteurAAPrime[1]};
+        double[] vecteurAAPrime2 = {(posNoeud2[0]-posNoeud1[0]) * noeuds[1].getRadius() / L ,(posNoeud2[1] - posNoeud1[1]) * noeuds[1].getRadius() / L};
+        double[] result = {posNoeud1[0] + vecteurAAPrime[0], posNoeud1[1] + vecteurAAPrime[1], posNoeud2[0] - vecteurAAPrime2[0], posNoeud2[1] - vecteurAAPrime2[1]};
         return result;
     }
 
