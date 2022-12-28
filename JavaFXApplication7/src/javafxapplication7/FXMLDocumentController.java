@@ -9,11 +9,15 @@ import java.util.ResourceBundle;
 import app.FactoryGraphe;
 import app.FactoryGrapheManager;
 import app.Graphe;
+import app.GrapheNonOriente;
 import app.Lien;
 import app.Noeud;
+import javafx.beans.property.DoubleProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
@@ -243,8 +248,10 @@ public class FXMLDocumentController implements Initializable {
         /* Si l'élement est null, ne rien afficher
          * Dans le cas contraire, affichage du menu de propriété correspondant
          */
+        /* Liste de tous les éléments présents sur la zone de dessin  */
+        ObservableList<Node> childrens = zoneDessin.getChildren();
         if (o != null) {
-                listeElements.getSelectionModel().getSelectedItem().equals(o);
+        	listeElements.getSelectionModel().select(o);
             try {
                 Noeud node = (Noeud) o;
                 editionProprietesLien.setVisible(false);
@@ -254,6 +261,15 @@ public class FXMLDocumentController implements Initializable {
                 posYNoeud.setText("" + node.getPositions()[1]);
                 radiusNoeud.setText("" + node.getRadius());
                 selectedObject = node;
+                for (Node n : childrens) {
+                	if(n instanceof Circle) {
+                		if(n.contains(node.getPositions()[0], node.getPositions()[1])) {
+                			((Circle) n).setStrokeWidth(5.0);
+                		} else {
+                			((Circle) n).setStrokeWidth(1.0);
+                		}
+                	}    	
+                }
             } catch (Exception e) {
                 Lien link = (Lien) o;
                 editionProprietesLien.setVisible(true);
@@ -261,8 +277,19 @@ public class FXMLDocumentController implements Initializable {
                 noeud1Lien.setText(link.getNoeuds()[0].getNom());
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
                 selectedObject = link;
+                // TODO trouver le moyen de surligner le lien quand on le sélectionne
+                // il faut trouver un moyen de récupéré les éléments qui sont relié au lien 
+                // avec les méthode de la classe node
             }
         } else {
+        	for (Node n : childrens) {
+        		if(n instanceof Circle) {
+        			((Circle) n).setStrokeWidth(1.0); 
+        		}
+        		if(n instanceof Line) {
+        			((Line) n).setStrokeWidth(1.0); 
+        		}
+        	}
             listeElements.getSelectionModel().clearSelection();
             editionProprietesLien.setVisible(false);
             editionProprietesNoeud.setVisible(false);
