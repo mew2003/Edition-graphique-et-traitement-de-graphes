@@ -12,14 +12,14 @@ public class LienOriente extends Lien {
     // Représentation graphique du lien
     private Line line, arrow1, arrow2;
     
-    //TODO: Ajouté la flèche (Graphiquement)
-    
     private String nom;
     
     // Nom par défaut d'un lien
     private final String DEFAULT_NAME = "default";
    
     private final double LONGUEUR_ARROW = 10.0;
+    
+    private final double ROTATION_ARROW = Math.toRadians(30.0);
     
     /**
      * Crée un lien reliant 2 noeuds
@@ -51,24 +51,34 @@ public class LienOriente extends Lien {
         double[] linePos = lineDrawingPositions();
         double[] arrowPos = arrowPositions(linePos);
         this.line = new Line(linePos[0], linePos[1], linePos[2], linePos[3]);
-        this.arrow1 = new Line();
-        this.arrow2 = new Line();
+        this.arrow1 = new Line(linePos[2], linePos[3], arrowPos[0], arrowPos[1]);
+        this.arrow2 = new Line(linePos[2], linePos[3], arrowPos[2], arrowPos[3]);
         line.setFill(Color.TRANSPARENT);
         line.setStroke(Color.BLACK);
         arrow1.setFill(Color.TRANSPARENT);
         arrow1.setStroke(Color.BLACK);
         arrow2.setFill(Color.TRANSPARENT);
         arrow2.setStroke(Color.BLACK);
-        zoneDessin.getChildren().addAll(line);
+        zoneDessin.getChildren().addAll(line, arrow1, arrow2);
     }
     
     private double[] arrowPositions(double[] linePos) {
-    	double hauteur = Math.abs(linePos[1] - linePos[3]);
-    	double largeur = Math.abs(linePos[0] - linePos[2]);
-    	double degreInclinaison = Math.atan(hauteur/largeur) * (180/Math.PI);
-    	System.out.println("SX : " + linePos[0] + " SY : " + linePos[1] + " EX : " + linePos[2] + " EY : " + linePos[3]);
-    	System.out.println("h : " + hauteur + " l : " + largeur + " D : " + degreInclinaison);
-		return null;
+    	double L = Math.sqrt(Math.pow(linePos[2] - linePos[0],2) + Math.pow(linePos[3] - linePos[1],2));
+        double[] vecteurAAPrime = {(linePos[2]-linePos[0]) * LONGUEUR_ARROW / L, (linePos[3] - linePos[1]) * LONGUEUR_ARROW / L};
+        double[] pointC = {linePos[2] - vecteurAAPrime[0], linePos[3] - vecteurAAPrime[1]};
+        //Translation 0,0
+        pointC[0] -= linePos[2];
+        pointC[1] -= linePos[3];
+        double[] pointCPrime = {Math.cos(ROTATION_ARROW)*pointC[0]+(-Math.sin(ROTATION_ARROW)*pointC[1]),
+        		                Math.sin(ROTATION_ARROW)*pointC[0]+Math.cos(ROTATION_ARROW)*pointC[1],
+        		                Math.cos(-ROTATION_ARROW)*pointC[0]+(-Math.sin(-ROTATION_ARROW)*pointC[1]),
+        		                Math.sin(-ROTATION_ARROW)*pointC[0]+Math.cos(-ROTATION_ARROW)*pointC[1]};
+        //Translation position initiale
+        pointCPrime[0] += linePos[2];
+        pointCPrime[1] += linePos[3];
+        pointCPrime[2] += linePos[2];
+        pointCPrime[3] += linePos[3];
+		return pointCPrime;
 	}
 
 	@Override
@@ -87,8 +97,9 @@ public class LienOriente extends Lien {
     public double[] lineDrawingPositions() {
         double[] posNoeud1 = noeuds[0].getPositions();
         double[] posNoeud2 = noeuds[1].getPositions();
+        // Distance entre les deux points
         double L = Math.sqrt(Math.pow(posNoeud2[0] - posNoeud1[0],2) + Math.pow(posNoeud2[1] - posNoeud1[1],2));
-        double[] vecteurAAPrime = {(posNoeud2[0]-posNoeud1[0]) * noeuds[0].getRadius() / L ,(posNoeud2[1] - posNoeud1[1]) * noeuds[0].getRadius() / L};
+        double[] vecteurAAPrime = {(posNoeud2[0]-posNoeud1[0]) * noeuds[0].getRadius() / L, (posNoeud2[1] - posNoeud1[1]) * noeuds[0].getRadius() / L};
         double[] result = {posNoeud1[0] + vecteurAAPrime[0], posNoeud1[1] + vecteurAAPrime[1], posNoeud2[0] - vecteurAAPrime[0], posNoeud2[1] - vecteurAAPrime[1]};
         return result;
     }

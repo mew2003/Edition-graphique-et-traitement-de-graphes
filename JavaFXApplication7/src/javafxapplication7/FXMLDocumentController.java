@@ -332,7 +332,7 @@ public class FXMLDocumentController implements Initializable {
         double[] positions = {Double.parseDouble(posXNoeud.getText()), Double.parseDouble(posYNoeud.getText())};
         graphe.modifNomNoeud(noeudAModif, nomNoeud.getText());
         graphe.modifPos(noeudAModif, positions);
-        noeudAModif.setRadius(Double.parseDouble(radiusNoeud.getText()));
+        graphe.modifRadius(noeudAModif, Double.parseDouble(radiusNoeud.getText()));
     }
     
     /**
