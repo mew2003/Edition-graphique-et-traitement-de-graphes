@@ -1,72 +1,42 @@
-/**
- * Représentation d'un graphe simple non orienté
- */
 package app;
 
 import java.util.ArrayList;
+
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
-/**
- * Pour rappel, un graphe non orienté doit respecter les principes suivants :
- * - Il peut y avoir N nombre de noeuds
- * - Il peut y avoir entre 0 et L = N(N+1)/2 nombre de liens
- * - Il ne peut pas y avoir de boucle (un lien qui part d'un noeud et revient à ce même noeud)
- * - Un noeud ne peut pas avoir plus de N-1 lien
- * - Deux liens ne peuvent partir du même noeud et aller vers un autre même noeud
- * @author mewen.derruau
- */
-public class GrapheNonOriente extends Graphe {
+public class GrapheOriente extends Graphe {
 	
-    private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
+	private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 1;
     private int nbLien = 1;
+    
+    GrapheOriente() {}
 
-    GrapheNonOriente() {}
-
-    @Override
-    public Noeud creerNoeud(double[] pos) {
-    	Noeud n = new NoeudXOROriente(pos, nbNoeud++);
+	@Override
+	public Noeud creerNoeud(double[] pos) {
+		Noeud n = new NoeudXOROriente(pos, nbNoeud++);
     	listeNoeuds.add(n);
         return n;
-    } 
+	}
 
-    @Override
-    public Lien creerLien(Noeud noeud1, Noeud noeud2) {
-    	for (Lien l : listeLiens) {
-    		if (l.getNoeuds()[0] == noeud1 && l.getNoeuds()[1] == noeud2
-    		   || l.getNoeuds()[0] == noeud2 && l.getNoeuds()[1] == noeud1) {
-    			throw new IllegalArgumentException("Deux liens ne peuvent pas avoir en commun les mêmes noeuds");
-    		}
-    	}
+	@Override
+	public Lien creerLien(Noeud noeud1, Noeud noeud2) {
+		//TODO: Bloquer la création de lien dans le cas ou un lien similaire existe déjà, y compris boucle (possible si l'autre lien est dans l'autre sens) 
         Noeud[] noeuds = {noeud1, noeud2};
-    	Lien l = new LienNonOriente(noeuds, nbLien++);
+    	Lien l = new LienOriente(noeuds, nbLien++);
         listeLiens.add(l);
         return l;
-    }
-    
-    @Override
-    public String toString() {
-    	String chaine = "GrapheNonOriente, noeuds [";
-    	for (Noeud i : listeNoeuds) {
-    		chaine += i.toString() + ", ";
-    	}
-    	chaine += "], liens [";
-    	for (Lien i : listeLiens) {
-    		chaine += i.toString() + ", ";
-    	}
-    	chaine += "]";
-        return chaine;
-    }
+	}
 
-    @Override
-    public Object elementClicked(double[] positions, AnchorPane zoneDessin) {
-        ObservableList<Node> childrens = zoneDessin.getChildren();
+	@Override
+	public Object elementClicked(double[] positions, AnchorPane zoneDessin) {
+		ObservableList<Node> childrens = zoneDessin.getChildren();
         for (Node n : childrens) {
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
@@ -84,8 +54,8 @@ public class GrapheNonOriente extends Graphe {
             }
         }
         return null;
-    }
-    
+	}
+	
     /**
      * Vérifie qu'une position X,Y soit situer à l'emplacement d'un noeud
      * @param mouseX position X de la souris
@@ -135,25 +105,25 @@ public class GrapheNonOriente extends Graphe {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
-    @Override
-    public Noeud getNode(String libelle) {
-        for (Noeud n : listeNoeuds) {
+	@Override
+	public Noeud getNode(String libelle) {
+		for (Noeud n : listeNoeuds) {
             if (n.getNom().equals(libelle)) {
                 return n;
             }
         }
         throw new IllegalArgumentException("Le noeud n'existe pas");
-    }
-    
-    @Override
-    public void modifNomNoeud(Noeud noeud, String nouveauNom) {
-    	for (Noeud n : listeNoeuds) {
+	}
+
+	@Override
+	public void modifNomNoeud(Noeud noeud, String nouveauNom) {
+		for (Noeud n : listeNoeuds) {
     		if (nouveauNom.equals(n.getNom())) {
     			return;
     		}
     	}
     	noeud.setNom(nouveauNom);
-    }
+	}
 
 	@Override
 	public void modifPos(Noeud noeud, double[] pos) {
@@ -167,13 +137,7 @@ public class GrapheNonOriente extends Graphe {
 
 	@Override
 	public void modifLien(Lien lien, Noeud[] noeuds) {
-		if (noeuds[0] == noeuds[1]) throw new IllegalArgumentException("Impossible de créer une boucle pour un lien simple non orienté");
-		for (Lien l : listeLiens) {
-    		if (l.getNoeuds()[0] == noeuds[0] && l.getNoeuds()[1] == noeuds[1]
-    		   || l.getNoeuds()[0] == noeuds[1] && l.getNoeuds()[1] == noeuds[0]) {
-    			throw new IllegalArgumentException("Deux liens ne peuvent pas avoir en commun les mêmes noeuds");
-    		}
-    	}
-		lien.setNoeuds(noeuds);
+		//TODO: link
 	}
+
 }

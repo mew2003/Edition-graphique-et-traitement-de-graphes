@@ -162,6 +162,14 @@ public class FXMLDocumentController implements Initializable {
         graphe = factory.creerGraphe();
     }
     
+    @FXML
+    void creerGrapheOriente(ActionEvent event) {
+    	initialisation();
+        valeurLien.setEditable(false);
+        factory = manager.creerFactory("GrapheOriente");
+        graphe = factory.creerGraphe();
+    }
+    
     /**
      * Selon le mode dans lequel se trouve l'utilisateur
      * - Créer un noeud
@@ -388,13 +396,14 @@ public class FXMLDocumentController implements Initializable {
             posYNoeud.setText("" + node.getPositions()[1]);
             radiusNoeud.setText("" + node.getRadius());
             selectedObject = node;
-        } catch (Exception e) {
-            Lien link = (Lien) listeElements.getValue();
+        } catch (Exception e) {}
+    	try {
+    		Lien link = (Lien) listeElements.getValue();
             editionProprietesLien.setVisible(true);
             editionProprietesNoeud.setVisible(false);
             noeud1Lien.setText(link.getNoeuds()[0].getNom());
             noeud2Lien.setText(link.getNoeuds()[1].getNom());
             selectedObject = link;
-        }
+    	} catch (Exception e) {}
     }
 }

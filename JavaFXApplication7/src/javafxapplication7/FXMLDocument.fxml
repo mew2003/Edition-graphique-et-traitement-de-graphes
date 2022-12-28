@@ -26,6 +26,7 @@
                   <Menu mnemonicParsing="false" text="Nouveau">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#creerGrapheNonOriente" text="Graphe non orienté" />
+                        <MenuItem mnemonicParsing="false" onAction="#creerGrapheOriente" text="Graphe orienté" />
                     </items>
                   </Menu>
               </items>

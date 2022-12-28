@@ -22,6 +22,7 @@ public class FactoryGrapheManager {
     private FactoryGrapheManager() {
         factories = new HashMap<>();
         factories.put("GrapheNonOriente", new FactoryGrapheNonOriente());
+        factories.put("GrapheOriente", new FactoryGrapheOriente());
     }
     
     /**
