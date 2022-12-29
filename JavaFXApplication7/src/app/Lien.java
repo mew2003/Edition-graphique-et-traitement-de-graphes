@@ -4,6 +4,7 @@
 package app;
 
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Line;
 
 /**
  * Permet les différents échanges avec un lien quelconques
@@ -33,5 +34,7 @@ public abstract class Lien {
      * Actualise l'affichage graphique du lien
      */
     public abstract void actualiser();
+    
+    public abstract Line getLine();
     
 }

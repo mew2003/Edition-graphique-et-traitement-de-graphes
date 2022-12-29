@@ -27,7 +27,11 @@ public class GrapheOriente extends Graphe {
 
 	@Override
 	public Lien creerLien(Noeud noeud1, Noeud noeud2) {
-		//TODO: Bloquer la création de lien dans le cas ou un lien similaire existe déjà, y compris boucle (possible si l'autre lien est dans l'autre sens) 
+		for (Lien l : listeLiens) {
+    		if (l.getNoeuds()[0] == noeud1 && l.getNoeuds()[1] == noeud2) {
+    			throw new IllegalArgumentException("Deux liens ne peuvent pas avoir en commun les mêmes noeuds dans le même ordre");
+    		}
+    	}
         Noeud[] noeuds = {noeud1, noeud2};
     	Lien l = new LienOriente(noeuds, nbLien++);
         listeLiens.add(l);
@@ -44,8 +48,7 @@ public class GrapheOriente extends Graphe {
                         return no;
                     }
                 }
-            }
-            if (n instanceof Line) {
+            } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
                     if (isLinkClicked(positions[0], positions[1], li, ((Line) n).getStrokeWidth() / 10)) {
                         return li;
@@ -81,12 +84,15 @@ public class GrapheOriente extends Graphe {
      *         false dans le cas contraire.
      */
     public boolean isLinkClicked(double mouseX, double mouseY, Lien lien, double precision) {
-        double[] node1 = lien.getNoeuds()[0].getPositions();
-        double[] node2 = lien.getNoeuds()[1].getPositions();
+    	Line lienAVerif = lien.getLine();
+    	if (lienAVerif == null) {
+    		return false; //Stub TODO: /!\ Attention, si le lien est une boucle, sa 'ligne' n'existe pas (c'est un arc)
+    	}
+        double[] linePos = {lienAVerif.getStartX(), lienAVerif.getStartY(), lienAVerif.getEndX(), lienAVerif.getEndY()};
         // Distance entre les points
-        double distN1N2 = distance(node1[0], node1[1], node2[0], node2[1]);
-        double distN1L = distance(node1[0], node1[1], mouseX, mouseY);
-        double distN2L = distance(node2[0], node2[1], mouseX, mouseY);
+        double distN1N2 = distance(linePos[0], linePos[1], linePos[2], linePos[3]);
+        double distN1L = distance(linePos[0], linePos[1], mouseX, mouseY);
+        double distN2L = distance(linePos[2], linePos[3], mouseX, mouseY);
         // Degré de précision tolérer (MIN / MAX)
         double floor = (distN1L + distN2L) - precision;
         double ceil = (distN1L + distN2L) + precision;

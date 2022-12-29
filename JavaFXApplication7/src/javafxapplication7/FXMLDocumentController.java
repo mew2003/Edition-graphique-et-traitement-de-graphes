@@ -288,18 +288,13 @@ public class FXMLDocumentController implements Initializable {
                 pos1xy = link.getNoeuds()[0].getPositions();
                 pos2xy = link.getNoeuds()[1].getPositions();
                 selectedObject = link;
-                int i = 0;
                 for (Node n : childrens) {
                 	if(n instanceof Line) {
-                		System.out.println("lien " + i + " noeud 1 " + link.getNoeuds()[0].toString());
-                		System.out.println("lien " + i + " noeud 2 " +link.getNoeuds()[1].toString());
-                		System.out.println(pos1xy[1] + " " + pos2xy[1]);
                 		if(n.intersects(pos1xy[1] + link.getNoeuds()[0].getRadius(), pos2xy[1] - link.getNoeuds()[1].getRadius(), Math.abs(pos1xy[0] - pos2xy[0]), Math.abs(pos1xy[1] - pos2xy[1]))) {
                 			((Line) n).setStrokeWidth(3.0);
                 		} else {
                 			((Line) n).setStrokeWidth(1.0);
                 		}
-                		i++;
                 	}
                 	
                 }

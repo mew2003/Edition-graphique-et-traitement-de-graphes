@@ -71,7 +71,7 @@ public class LienNonOriente extends Lien {
 
     @Override
     public void dessiner(AnchorPane zoneDessin) {
-        double[] linePos = lineDrawingPositions();
+		double[] linePos = lineDrawingPositions();
         this.line = new Line(linePos[0], linePos[1], linePos[2], linePos[3]);
         line.setFill(Color.TRANSPARENT);
         line.setStroke(Color.BLACK);
@@ -98,5 +98,10 @@ public class LienNonOriente extends Lien {
      */
 	public String getNom() {
 		return nom;
+	}
+
+	@Override
+	public Line getLine() {
+		return line;
 	}
 }
