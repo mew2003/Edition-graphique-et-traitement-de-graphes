@@ -57,25 +57,26 @@ public class LienOriente extends Lien {
 
     @Override
     public void dessiner(AnchorPane zoneDessin) {
+    	double[] linePos, arrowPos;
     	if (noeuds[0] == noeuds[1]) {
     		double[] depart = departArc();
-    		double[] linePos = {depart[0], depart[1] - noeuds[0].getRadius() / 2.0, depart[0], depart[1]};
-    		double[] arrowPos = arrowPositions(linePos);
-    		this.arrow1 = new Line(depart[0], depart[1], arrowPos[0], arrowPos[1]);
-            this.arrow2 = new Line(depart[0], depart[1], arrowPos[2], arrowPos[3]);
+    		linePos = new double[]{depart[0], depart[1] - noeuds[0].getRadius() / 2.0, depart[0], depart[1]};
+    		arrowPos = arrowPositions(linePos);
+    		double arcRadius = noeuds[0].getRadius() / 2.0;
+    		arc = new Arc(noeuds[0].getPositions()[0], noeuds[0].getPositions()[1] - noeuds[0].getRadius(), arcRadius, arcRadius, -14.49, 208.98); //Trouver sur Geogebra
             arc.setFill(Color.TRANSPARENT);
     		arc.setStroke(Color.BLACK);
     		zoneDessin.getChildren().addAll(arc);
     	} else {
-    		double[] linePos = lineDrawingPositions();
-            double[] arrowPos = arrowPositions(linePos);
+    		linePos = lineDrawingPositions();
+            arrowPos = arrowPositions(linePos);
             this.line = new Line(linePos[0], linePos[1], linePos[2], linePos[3]);
-            this.arrow1 = new Line(linePos[2], linePos[3], arrowPos[0], arrowPos[1]);
-            this.arrow2 = new Line(linePos[2], linePos[3], arrowPos[2], arrowPos[3]);
             line.setFill(Color.TRANSPARENT);
             line.setStroke(Color.BLACK);
             zoneDessin.getChildren().addAll(line);
     	}
+    	this.arrow1 = new Line(linePos[2], linePos[3], arrowPos[0], arrowPos[1]);
+        this.arrow2 = new Line(linePos[2], linePos[3], arrowPos[2], arrowPos[3]);
     	arrow1.setFill(Color.TRANSPARENT);
         arrow1.setStroke(Color.BLACK);
         arrow2.setFill(Color.TRANSPARENT);
@@ -85,8 +86,6 @@ public class LienOriente extends Lien {
     
     private double[] departArc() {
     	double[] pointC = {noeuds[0].getPositions()[0], noeuds[0].getPositions()[1] - noeuds[0].getRadius()};
-		double arcRadius = noeuds[0].getRadius() / 2.0;
-		arc = new Arc(pointC[0], pointC[1], arcRadius, arcRadius, -14.49, 208.98); //Trouver sur Geogebra
 		//Translation 0,0
 		pointC[0] -= noeuds[0].getPositions()[0];
         pointC[1] -= noeuds[0].getPositions()[1];
@@ -119,20 +118,35 @@ public class LienOriente extends Lien {
 
 	@Override
     public void actualiser() {
+		double[] linePos, arrowPos;
 		if (noeuds[0] == noeuds[1]) {
 			double[] pointC = {noeuds[0].getPositions()[0], noeuds[0].getPositions()[1] - noeuds[0].getRadius()};
     		double arcRadius = noeuds[0].getRadius() / 2.0;
+    		
     		arc.setCenterX(pointC[0]);
     		arc.setCenterY(pointC[1]);
     		arc.setRadiusX(arcRadius);
     		arc.setRadiusY(arcRadius);
+    		
+    		double[] depart = departArc();
+    		linePos = new double[]{depart[0], depart[1] - noeuds[0].getRadius() / 2.0, depart[0], depart[1]};
+    		arrowPos = arrowPositions(linePos);
 		} else {
-			double[] linePos = lineDrawingPositions();
+			linePos = lineDrawingPositions();
+			arrowPos = arrowPositions(linePos);
 	        line.setStartX(linePos[0]);
 	        line.setStartY(linePos[1]);
 	        line.setEndX(linePos[2]);
 	        line.setEndY(linePos[3]);
 		}
+		arrow1.setStartX(linePos[2]);
+		arrow1.setStartY(linePos[3]);
+		arrow1.setEndX(arrowPos[0]);
+		arrow1.setEndY(arrowPos[1]);
+		arrow2.setStartX(linePos[2]);
+		arrow2.setStartY(linePos[3]);
+		arrow2.setEndX(arrowPos[2]);
+		arrow2.setEndY(arrowPos[3]);
     }
 	
     /**
