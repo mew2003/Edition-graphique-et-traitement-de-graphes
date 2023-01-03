@@ -51,6 +51,8 @@ public class LienOriente extends Lien {
 			arc = new Arc();
 			arc.setFill(Color.TRANSPARENT);
     		arc.setStroke(Color.BLACK);
+    		arc.setStartAngle(-14.49);
+    		arc.setLength(208.98);
     		zoneDessin.getChildren().addAll(arc);
 			zoneDessin.getChildren().remove(line);
 			line = null;

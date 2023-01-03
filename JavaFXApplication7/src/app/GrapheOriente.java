@@ -59,7 +59,6 @@ public class GrapheOriente extends Graphe {
             } else if (n instanceof Arc) {
             	for (Lien li : listeLiens) {
                     if (isArcClicked(positions[0], positions[1], li)) {
-                    	System.out.println("test");
                         return li;
                     }
                 }

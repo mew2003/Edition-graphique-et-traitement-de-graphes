@@ -305,12 +305,13 @@ public class FXMLDocumentController implements Initializable {
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
                 selectedObject = link;
                 Line lien = link.getLine();
-                lien.setOnMouseClicked(event -> {
-                	lien.setStrokeWidth(3.0);
-                });
-                zoneDessin.setOnMouseClicked(event -> {
-                	lien.setStrokeWidth(1.0);
-                });
+                //TODO: marche que pour les lignes, pas pour les arcs (exception)
+//                lien.setOnMouseClicked(event -> {
+//                	lien.setStrokeWidth(3.0);
+//                });
+//                zoneDessin.setOnMouseClicked(event -> {
+//                	lien.setStrokeWidth(1.0);
+//                });
             }
         } else {
         	for (Node n : childrens) {
