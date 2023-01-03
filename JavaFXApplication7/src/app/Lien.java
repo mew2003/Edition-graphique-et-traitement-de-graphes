@@ -30,6 +30,8 @@ public abstract class Lien {
      */
     public abstract void dessiner(AnchorPane zoneDessin);
     
+    public abstract double[] lineDrawingPositions();
+    
     /**
      * Actualise l'affichage graphique du lien
      */

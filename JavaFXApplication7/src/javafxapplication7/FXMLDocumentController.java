@@ -3,6 +3,7 @@
  */
 package javafxapplication7;
 
+import java.awt.Event;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -17,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -269,14 +271,31 @@ public class FXMLDocumentController implements Initializable {
                 posYNoeud.setText("" + node.getPositions()[1]);
                 radiusNoeud.setText("" + node.getRadius());
                 selectedObject = node;
+                Circle circle = node.getCircle();
+                circle.setOnMouseClicked(event -> {
+                	circle.setStrokeWidth(3.0);
+                });
                 for (Node n : childrens) {
                 	if(n instanceof Circle) {
-                		if(n.contains(node.getPositions()[0], node.getPositions()[1])) {
-                			((Circle) n).setStrokeWidth(3.0);
-                		} else {
-                			((Circle) n).setStrokeWidth(1.0);
-                		}
-                	}    	
+                		if(n.toString().equals(circle.toString())) {
+//                        	((Circle) n).setStrokeWidth(3.0);
+                        	n.setOnMouseDragged(event -> {
+                        		posXNoeud.setText("" + event.getX());
+                                posYNoeud.setText("" + event.getY());
+                                double[] EditPosition = {0,0};
+                                EditPosition[0] = event.getX();
+                                EditPosition[1] = event.getY();
+                                node.setPositions(EditPosition);
+                                Lien link = (Lien) o;
+                                link.lineDrawingPositions();
+                                link.actualiser();
+                        	});
+                        } else {
+                        	((Circle) n).setStrokeWidth(1.0);
+                        }
+                	} else if(n instanceof Line) {
+                		((Line) n).setStrokeWidth(1.0);
+                	}
                 }
             } catch (Exception e) {
                 Lien link = (Lien) o;
@@ -284,23 +303,14 @@ public class FXMLDocumentController implements Initializable {
                 editionProprietesNoeud.setVisible(false);
                 noeud1Lien.setText(link.getNoeuds()[0].getNom());
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
-                double[] pos1xy, pos2xy;
-                pos1xy = link.getNoeuds()[0].getPositions();
-                pos2xy = link.getNoeuds()[1].getPositions();
                 selectedObject = link;
-                for (Node n : childrens) {
-                	if(n instanceof Line) {
-                		if(n.intersects(pos1xy[1] + link.getNoeuds()[0].getRadius(), pos2xy[1] - link.getNoeuds()[1].getRadius(), Math.abs(pos1xy[0] - pos2xy[0]), Math.abs(pos1xy[1] - pos2xy[1]))) {
-                			((Line) n).setStrokeWidth(3.0);
-                		} else {
-                			((Line) n).setStrokeWidth(1.0);
-                		}
-                	}
-                	
-                }
-                // TODO trouver le moyen de surligner le lien quand on le sélectionne
-                // il faut trouver un moyen de récupéré les éléments qui sont relié au lien 
-                // avec les méthode de la classe node
+                Line lien = link.getLine();
+                lien.setOnMouseClicked(event -> {
+                	lien.setStrokeWidth(3.0);
+                });
+                zoneDessin.setOnMouseClicked(event -> {
+                	lien.setStrokeWidth(1.0);
+                });
             }
         } else {
         	for (Node n : childrens) {
@@ -378,16 +388,6 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void exitPreview(MouseEvent event) {
-    	/* Liste de tous les éléments présents sur la zone de dessin  */
-        ObservableList<Node> childrens = zoneDessin.getChildren();
-        for (Node n : childrens) {
-    		if(n instanceof Circle) {
-    			((Circle) n).setStrokeWidth(1.0); 
-    		}
-    		if(n instanceof Line) {
-    			((Line) n).setStrokeWidth(1.0); 
-    		}
-    	}
         previewedCircle.setCenterX(-100);
         previewedCircle.setCenterY(-100);
         previewedLine.setStartX(-100);
@@ -400,9 +400,42 @@ public class FXMLDocumentController implements Initializable {
      * Changement du mode actuel selon l'option choisie par l'utilisateur
      * @param event click
      */
-    @FXML void addNodeClicked(MouseEvent event) {actualMode = 1;}
-    @FXML void addLinkClicked(MouseEvent event) {actualMode = 2;}
-    @FXML void SelectClicked(MouseEvent event) {actualMode = 3;}
+    @FXML void addNodeClicked(MouseEvent event) {
+    	actualMode = 1; 
+    	ObservableList<Node> childrens = zoneDessin.getChildren();
+    	for (Node n : childrens) {
+			if(n instanceof Circle) {
+				((Circle) n).setStrokeWidth(1.0); 
+			}
+			if(n instanceof Line) {
+				((Line) n).setStrokeWidth(1.0); 
+			}
+    	}
+    }
+    @FXML void addLinkClicked(MouseEvent event) {
+    	actualMode = 2;
+    	ObservableList<Node> childrens = zoneDessin.getChildren();
+    	for (Node n : childrens) {
+			if(n instanceof Circle) {
+				((Circle) n).setStrokeWidth(1.0); 
+			}
+			if(n instanceof Line) {
+				((Line) n).setStrokeWidth(1.0); 
+			}
+    	}
+    }
+    @FXML void SelectClicked(MouseEvent event) {
+    	actualMode = 3;
+	    ObservableList<Node> childrens = zoneDessin.getChildren();
+		for (Node n : childrens) {
+			if(n instanceof Circle) {
+				((Circle) n).setStrokeWidth(1.0); 
+			}
+			if(n instanceof Line) {
+				((Line) n).setStrokeWidth(1.0); 
+			}
+		}
+    }
 
     /**
      * Affiche les propriétés de l'élement sélectionner
@@ -421,14 +454,15 @@ public class FXMLDocumentController implements Initializable {
             posYNoeud.setText("" + node.getPositions()[1]);
             radiusNoeud.setText("" + node.getRadius());
             selectedObject = node;
+            Circle circle = node.getCircle();
             for (Node n : childrens) {
             	if(n instanceof Circle) {
-            		if(n.contains(node.getPositions()[0], node.getPositions()[1])) {
-            			((Circle) n).setStrokeWidth(3.0);
-            		} else {
-            			((Circle) n).setStrokeWidth(1.0);
-            		}
-            	}    	
+            		if(n.toString().equals(circle.toString())) {
+                    	((Circle) n).setStrokeWidth(3.0);
+                    } else {
+                    	((Circle) n).setStrokeWidth(1.0);
+                    }
+            	}
             }
         } catch (Exception e) {}
     	try {
@@ -438,6 +472,19 @@ public class FXMLDocumentController implements Initializable {
             noeud1Lien.setText(link.getNoeuds()[0].getNom());
             noeud2Lien.setText(link.getNoeuds()[1].getNom());
             selectedObject = link;
+            double[] resultat = link.lineDrawingPositions();
+    		Point2D test = new Point2D(resultat[0], resultat[1]);
+    		Point2D test2 = new Point2D(resultat[2], resultat[3]);
+    		test.distance(test2);
+    		for(Node n : childrens) {
+    			if(n instanceof Line) {
+    				if(n.getBoundsInLocal().contains(test)) {
+            			((Line) n).setStrokeWidth(3.0);
+            		} else {
+            			((Line) n).setStrokeWidth(1.0);
+            		}
+    			}
+    		}
     	} catch (Exception e) {}
     }
 }
