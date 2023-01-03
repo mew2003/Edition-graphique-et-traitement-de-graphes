@@ -58,27 +58,14 @@ public class LienOriente extends Lien {
     @Override
     public void dessiner(AnchorPane zoneDessin) {
     	if (noeuds[0] == noeuds[1]) {
-    		double[] pointC = {noeuds[0].getPositions()[0], noeuds[0].getPositions()[1] - noeuds[0].getRadius()};
-    		double arcRadius = noeuds[0].getRadius() / 2.0;
-    		arc = new Arc(pointC[0], pointC[1], arcRadius, arcRadius, -14.49, 208.98); //Trouver sur Geogebra
-    		arc.setFill(Color.TRANSPARENT);
-    		arc.setStroke(Color.BLACK);
-    		//Translation 0,0
-    		pointC[0] -= noeuds[0].getPositions()[0];
-            pointC[1] -= noeuds[0].getPositions()[1];
-    		double[] pointCPrime = {Math.cos(Math.toRadians(28.84))*pointC[0]+(-Math.sin(Math.toRadians(28.84))*pointC[1]),
-	                			    Math.sin(Math.toRadians(28.84))*pointC[0]+Math.cos(Math.toRadians(28.84))*pointC[1]}; // Trouver sur Geogebra
-    		pointCPrime[0] += noeuds[0].getPositions()[0];
-    		pointCPrime[1] += noeuds[0].getPositions()[1];
-    		double[] linePos = {pointCPrime[0], pointCPrime[1] - arcRadius, pointCPrime[0], pointCPrime[1]};
+    		double[] depart = departArc();
+    		double[] linePos = {depart[0], depart[1] - noeuds[0].getRadius() / 2.0, depart[0], depart[1]};
     		double[] arrowPos = arrowPositions(linePos);
-    		this.arrow1 = new Line(pointCPrime[0], pointCPrime[1], arrowPos[0], arrowPos[1]);
-            this.arrow2 = new Line(pointCPrime[0], pointCPrime[1], arrowPos[2], arrowPos[3]);
-            arrow1.setFill(Color.TRANSPARENT);
-            arrow1.setStroke(Color.BLACK);
-            arrow2.setFill(Color.TRANSPARENT);
-            arrow2.setStroke(Color.BLACK);
-    		zoneDessin.getChildren().addAll(arc, arrow1, arrow2);
+    		this.arrow1 = new Line(depart[0], depart[1], arrowPos[0], arrowPos[1]);
+            this.arrow2 = new Line(depart[0], depart[1], arrowPos[2], arrowPos[3]);
+            arc.setFill(Color.TRANSPARENT);
+    		arc.setStroke(Color.BLACK);
+    		zoneDessin.getChildren().addAll(arc);
     	} else {
     		double[] linePos = lineDrawingPositions();
             double[] arrowPos = arrowPositions(linePos);
@@ -87,12 +74,28 @@ public class LienOriente extends Lien {
             this.arrow2 = new Line(linePos[2], linePos[3], arrowPos[2], arrowPos[3]);
             line.setFill(Color.TRANSPARENT);
             line.setStroke(Color.BLACK);
-            arrow1.setFill(Color.TRANSPARENT);
-            arrow1.setStroke(Color.BLACK);
-            arrow2.setFill(Color.TRANSPARENT);
-            arrow2.setStroke(Color.BLACK);
-            zoneDessin.getChildren().addAll(line, arrow1, arrow2);
+            zoneDessin.getChildren().addAll(line);
     	}
+    	arrow1.setFill(Color.TRANSPARENT);
+        arrow1.setStroke(Color.BLACK);
+        arrow2.setFill(Color.TRANSPARENT);
+        arrow2.setStroke(Color.BLACK);
+    	zoneDessin.getChildren().addAll(arrow1, arrow2);
+    }
+    
+    private double[] departArc() {
+    	double[] pointC = {noeuds[0].getPositions()[0], noeuds[0].getPositions()[1] - noeuds[0].getRadius()};
+		double arcRadius = noeuds[0].getRadius() / 2.0;
+		arc = new Arc(pointC[0], pointC[1], arcRadius, arcRadius, -14.49, 208.98); //Trouver sur Geogebra
+		//Translation 0,0
+		pointC[0] -= noeuds[0].getPositions()[0];
+        pointC[1] -= noeuds[0].getPositions()[1];
+		double[] pointCPrime = {Math.cos(Math.toRadians(28.84))*pointC[0]+(-Math.sin(Math.toRadians(28.84))*pointC[1]),
+                			    Math.sin(Math.toRadians(28.84))*pointC[0]+Math.cos(Math.toRadians(28.84))*pointC[1]}; // Trouver sur Geogebra
+		//Translation point de départ
+		pointCPrime[0] += noeuds[0].getPositions()[0];
+		pointCPrime[1] += noeuds[0].getPositions()[1];
+		return pointCPrime;
     }
     
     private double[] arrowPositions(double[] linePos) {
@@ -137,12 +140,12 @@ public class LienOriente extends Lien {
      * @return les positions
      */
     public double[] lineDrawingPositions() {
-        double[] posNoeud1 = noeuds[0].getPositions();
+    	double[] posNoeud1 = noeuds[0].getPositions();
         double[] posNoeud2 = noeuds[1].getPositions();
-        // Distance entre les deux points
         double L = Math.sqrt(Math.pow(posNoeud2[0] - posNoeud1[0],2) + Math.pow(posNoeud2[1] - posNoeud1[1],2));
-        double[] vecteurAAPrime = {(posNoeud2[0]-posNoeud1[0]) * noeuds[0].getRadius() / L, (posNoeud2[1] - posNoeud1[1]) * noeuds[0].getRadius() / L};
-        double[] result = {posNoeud1[0] + vecteurAAPrime[0], posNoeud1[1] + vecteurAAPrime[1], posNoeud2[0] - vecteurAAPrime[0], posNoeud2[1] - vecteurAAPrime[1]};
+        double[] vecteurAAPrime = {(posNoeud2[0]-posNoeud1[0]) * noeuds[0].getRadius() / L ,(posNoeud2[1] - posNoeud1[1]) * noeuds[0].getRadius() / L};
+        double[] vecteurAAPrime2 = {(posNoeud2[0]-posNoeud1[0]) * noeuds[1].getRadius() / L ,(posNoeud2[1] - posNoeud1[1]) * noeuds[1].getRadius() / L};
+        double[] result = {posNoeud1[0] + vecteurAAPrime[0], posNoeud1[1] + vecteurAAPrime[1], posNoeud2[0] - vecteurAAPrime2[0], posNoeud2[1] - vecteurAAPrime2[1]};
         return result;
     }
 
