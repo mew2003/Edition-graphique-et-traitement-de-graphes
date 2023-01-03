@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Arc;
 
 public class GrapheOriente extends Graphe {
 	
@@ -51,6 +53,13 @@ public class GrapheOriente extends Graphe {
             } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
                     if (isLinkClicked(positions[0], positions[1], li, ((Line) n).getStrokeWidth() / 10)) {
+                        return li;
+                    }
+                }
+            } else if (n instanceof Arc) {
+            	for (Lien li : listeLiens) {
+                    if (isArcClicked(positions[0], positions[1], li)) {
+                    	System.out.println("test");
                         return li;
                     }
                 }
@@ -99,6 +108,13 @@ public class GrapheOriente extends Graphe {
         return floor < distN1N2 && distN1N2 < ceil;
     }
     
+    public boolean isArcClicked(double mouseX, double mouseY, Lien lien) {
+    	LienOriente lienO = (LienOriente) lien;
+    	Arc arc = lienO.getArc();
+    	return mouseX > arc.getCenterX() - arc.getRadiusX() && mouseX < arc.getCenterX() + arc.getRadiusX()
+        	   && mouseY > arc.getCenterY() - arc.getRadiusX() && mouseY < arc.getCenterY() + arc.getRadiusX();
+    }
+    
     /**
      * Calcul la distance entre deux points
      * @param x1 position X point 1
@@ -142,8 +158,8 @@ public class GrapheOriente extends Graphe {
 	}
 
 	@Override
-	public void modifLien(Lien lien, Noeud[] noeuds) {
-		//TODO: link
+	public void modifLien(Lien lien, Noeud[] noeuds, AnchorPane zoneDessin) {
+		lien.setNoeuds(noeuds, zoneDessin);
 	}
 
 	@Override

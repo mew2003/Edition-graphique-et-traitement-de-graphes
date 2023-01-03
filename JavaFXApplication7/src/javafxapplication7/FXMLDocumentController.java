@@ -345,7 +345,7 @@ public class FXMLDocumentController implements Initializable {
             Noeud n1 = graphe.getNode(labelNoeudARelier[0]);
             Noeud n2 = graphe.getNode(labelNoeudARelier[1]);
             Noeud[] nodes = {n1, n2};
-            graphe.modifLien(lienAModif, nodes);
+            graphe.modifLien(lienAModif, nodes, zoneDessin);
         } catch (Exception e) {
             System.err.println(e);
         }

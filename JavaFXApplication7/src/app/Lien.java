@@ -22,7 +22,7 @@ public abstract class Lien {
      * Remplace les anciens noeuds que relié un lien par les nouveaux saisis en argument
      * @param value les nouveaux liens
      */
-    public abstract void setNoeuds(Noeud[] value);
+    public abstract void setNoeuds(Noeud[] value, AnchorPane zoneDessin);
     
     /**
      * Dessine sur la zone de dessin le lien

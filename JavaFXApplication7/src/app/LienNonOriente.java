@@ -46,7 +46,7 @@ public class LienNonOriente extends Lien {
     }
 
     @Override
-    public void setNoeuds(Noeud[] value) {
+    public void setNoeuds(Noeud[] value, AnchorPane zoneDessin) {
         this.noeuds = value;
         double[] linePos = lineDrawingPositions();
         line.setStartX(linePos[0]);

@@ -165,7 +165,7 @@ public class GrapheNonOriente extends Graphe {
 	}
 
 	@Override
-	public void modifLien(Lien lien, Noeud[] noeuds) {
+	public void modifLien(Lien lien, Noeud[] noeuds, AnchorPane zoneDessin) {
 		if (noeuds[0] == noeuds[1]) throw new IllegalArgumentException("Impossible de créer une boucle pour un lien simple non orienté");
 		for (Lien l : listeLiens) {
     		if (l.getNoeuds()[0] == noeuds[0] && l.getNoeuds()[1] == noeuds[1]
@@ -173,7 +173,7 @@ public class GrapheNonOriente extends Graphe {
     			throw new IllegalArgumentException("Deux liens ne peuvent pas avoir en commun les mêmes noeuds");
     		}
     	}
-		lien.setNoeuds(noeuds);
+		lien.setNoeuds(noeuds, zoneDessin);
 	}
 
 	@Override

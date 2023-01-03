@@ -40,14 +40,30 @@ public class LienOriente extends Lien {
 		return noeuds;
 	}
 
+	public Arc getArc() {
+		return arc;
+	}
+
 	@Override
-	public void setNoeuds(Noeud[] value) {
+	public void setNoeuds(Noeud[] value, AnchorPane zoneDessin) {
 		this.noeuds = value;
-		double[] linePos = lineDrawingPositions();
-        line.setStartX(linePos[0]);
-        line.setStartY(linePos[1]);
-        line.setEndX(linePos[2]);
-        line.setEndY(linePos[3]);
+		if (noeuds[0] == noeuds[1]) {
+			arc = new Arc();
+			arc.setFill(Color.TRANSPARENT);
+    		arc.setStroke(Color.BLACK);
+    		zoneDessin.getChildren().addAll(arc);
+			zoneDessin.getChildren().remove(line);
+			line = null;
+		} else {
+			//TODO: Passer d'un arc à une ligne
+			line = new Line();
+			line.setFill(Color.TRANSPARENT);
+			line.setStroke(Color.BLACK);
+    		zoneDessin.getChildren().addAll(line);
+			zoneDessin.getChildren().remove(arc);
+			arc = null;
+		}
+		actualiser();
 	}
 	
     @Override
