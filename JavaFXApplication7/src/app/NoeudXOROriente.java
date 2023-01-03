@@ -50,6 +50,13 @@ public class NoeudXOROriente extends Noeud {
     }
     
     @Override
+    public Circle getCircle() {
+		return circle;
+	}
+
+
+
+	@Override
     public double[] getPositions() {
         return pos;
     }

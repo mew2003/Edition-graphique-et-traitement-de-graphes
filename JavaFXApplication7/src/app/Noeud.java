@@ -4,6 +4,7 @@
 package app;
 
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
 
 /**
  * Permet les différents échanges avec un noeud quelconques
@@ -52,4 +53,6 @@ public abstract class Noeud {
      * @param nom nouveau nom du noeud
      */
     public abstract void setNom(String nom);
+
+	public abstract Circle getCircle();
 }

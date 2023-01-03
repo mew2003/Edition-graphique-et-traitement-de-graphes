@@ -82,6 +82,7 @@ public class LienNonOriente extends Lien {
      * Donne les positions X/Y du départ et de la fin du lien par rapport au noeuds qu'il relie
      * @return les positions
      */
+    @Override
     public double[] lineDrawingPositions() {
         double[] posNoeud1 = noeuds[0].getPositions();
         double[] posNoeud2 = noeuds[1].getPositions();
