@@ -271,10 +271,16 @@ public class FXMLDocumentController implements Initializable {
                 radiusNoeud.setText("" + node.getRadius());
                 selectedObject = node;
                 Circle circle = node.getCircle();
-                if(circle.getBoundsInLocal().contains(node.getPositions()[0], node.getPositions()[1])) {
-                	circle.setStrokeWidth(3.0);
-                } else {
-                	circle.setStrokeWidth(1.0);
+                for (Node n : childrens) {
+                	if(n instanceof Circle) {
+                		if(n.toString().equals(circle.toString())) {
+                        	((Circle) n).setStrokeWidth(3.0);
+                        } else {
+                        	((Circle) n).setStrokeWidth(1.0);
+                        }
+                	} else if(n instanceof Line) {
+                		((Line) n).setStrokeWidth(1.0);
+                	}
                 }
             } catch (Exception e) {
                 Lien link = (Lien) o;
@@ -294,6 +300,8 @@ public class FXMLDocumentController implements Initializable {
                 		} else {
                 			((Line) n).setStrokeWidth(1.0);
                 		}
+        			} else if(n instanceof Circle) {
+        				((Circle) n).setStrokeWidth(1.0);
         			}
         		}
             }
@@ -440,10 +448,14 @@ public class FXMLDocumentController implements Initializable {
             radiusNoeud.setText("" + node.getRadius());
             selectedObject = node;
             Circle circle = node.getCircle();
-            if(circle.getBoundsInLocal().contains(node.getPositions()[0], node.getPositions()[1])) {
-            	circle.setStrokeWidth(3.0);
-            } else {
-            	circle.setStrokeWidth(1.0);
+            for (Node n : childrens) {
+            	if(n instanceof Circle) {
+            		if(n.toString().equals(circle.toString())) {
+                    	((Circle) n).setStrokeWidth(3.0);
+                    } else {
+                    	((Circle) n).setStrokeWidth(1.0);
+                    }
+            	}
             }
         } catch (Exception e) {}
     	try {
