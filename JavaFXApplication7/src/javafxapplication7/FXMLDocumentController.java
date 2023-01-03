@@ -3,6 +3,7 @@
  */
 package javafxapplication7;
 
+import java.awt.Event;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -271,10 +272,24 @@ public class FXMLDocumentController implements Initializable {
                 radiusNoeud.setText("" + node.getRadius());
                 selectedObject = node;
                 Circle circle = node.getCircle();
+                circle.setOnMouseClicked(event -> {
+                	circle.setStrokeWidth(3.0);
+                });
                 for (Node n : childrens) {
                 	if(n instanceof Circle) {
                 		if(n.toString().equals(circle.toString())) {
-                        	((Circle) n).setStrokeWidth(3.0);
+//                        	((Circle) n).setStrokeWidth(3.0);
+                        	n.setOnMouseDragged(event -> {
+                        		posXNoeud.setText("" + event.getX());
+                                posYNoeud.setText("" + event.getY());
+                                double[] EditPosition = {0,0};
+                                EditPosition[0] = event.getX();
+                                EditPosition[1] = event.getY();
+                                node.setPositions(EditPosition);
+                                Lien link = (Lien) o;
+                                link.lineDrawingPositions();
+                                link.actualiser();
+                        	});
                         } else {
                         	((Circle) n).setStrokeWidth(1.0);
                         }
@@ -289,21 +304,13 @@ public class FXMLDocumentController implements Initializable {
                 noeud1Lien.setText(link.getNoeuds()[0].getNom());
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
                 selectedObject = link;
-                double[] resultat = link.lineDrawingPositions();
-        		Point2D test = new Point2D(resultat[0], resultat[1]);
-        		Point2D test2 = new Point2D(resultat[2], resultat[3]);
-        		test.distance(test2);
-        		for(Node n : childrens) {
-        			if (n instanceof Line) {
-        				if(n.getBoundsInLocal().contains(test)) {
-                			((Line) n).setStrokeWidth(3.0);
-                		} else {
-                			((Line) n).setStrokeWidth(1.0);
-                		}
-        			} else if(n instanceof Circle) {
-        				((Circle) n).setStrokeWidth(1.0);
-        			}
-        		}
+                Line lien = link.getLine();
+                lien.setOnMouseClicked(event -> {
+                	lien.setStrokeWidth(3.0);
+                });
+                zoneDessin.setOnMouseClicked(event -> {
+                	lien.setStrokeWidth(1.0);
+                });
             }
         } else {
         	for (Node n : childrens) {
