@@ -371,6 +371,20 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
+
+    @FXML
+    public void supprimerNoeud() {
+    	System.out.println("NON");
+    }
+    
+
+    @FXML
+    public void supprimerLien() {
+    	Lien lienASuppr = (Lien) selectedObject;
+    	graphe.supprimerLien(lienASuppr, zoneDessin);
+    	listeElements.getItems().remove(selectedObject);
+    }
+    
     /**
      * Outil de preview sur la zone de dessin, selon le mode sélectionner
      * 1 : preview d'un cercle suivant la souris

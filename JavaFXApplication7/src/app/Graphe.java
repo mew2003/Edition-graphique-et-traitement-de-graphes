@@ -26,6 +26,8 @@ public abstract class Graphe {
      */
     public abstract Lien creerLien(Noeud noeud1, Noeud noeud2);
     
+	public abstract Lien supprimerLien(Lien lienASuppr, AnchorPane zoneDessin);
+	
      /**
      * Permet d'obtenir l'élément clique sur l'interface
      * @param positions position X/Y de la souris au moment du click
@@ -66,4 +68,6 @@ public abstract class Graphe {
     public abstract void modifRadius(Noeud noeud, double radius);
     
     public abstract void reset();
+
+
 }
