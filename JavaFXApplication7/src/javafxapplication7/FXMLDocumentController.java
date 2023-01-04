@@ -230,18 +230,13 @@ public class FXMLDocumentController implements Initializable {
          * - Vérifier que l'élément sélectionner soit bien un noeud
          * - Ajouter ce noeud dans la liste des noeuds à relier. 
          */
-
-        System.out.println(positions[0] + " " + positions[1]);
     	try {
             if (noeudARelier[0] == null) {
                 noeudARelier[0] = (Noeud) graphe.elementClicked(positions, zoneDessin);
-                System.out.println(noeudARelier[0]);
             } else {
                 noeudARelier[1] = (Noeud) graphe.elementClicked(positions, zoneDessin);
-                System.out.println(noeudARelier[1]);
             }
         } catch (Exception e) {} 
-    	System.out.println(noeudARelier[0] + " " + noeudARelier[1]);
     	
         // Si deux noeuds ont été sélectionner -> création du lien.
         if (noeudARelier[1] != null) {

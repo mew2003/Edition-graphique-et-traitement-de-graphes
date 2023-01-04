@@ -8,6 +8,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
+
 import static tools.clickDetection.*;
 
 public class GrapheProbabiliste extends Graphe {
@@ -42,7 +44,6 @@ public class GrapheProbabiliste extends Graphe {
 	public Object elementClicked(double[] positions, AnchorPane zoneDessin) {
 		ObservableList<Node> childrens = zoneDessin.getChildren();
         for (Node n : childrens) {
-        	System.out.println(n);
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
                     if (isNodeClicked(positions[0], positions[1], no)) {                      
@@ -52,6 +53,12 @@ public class GrapheProbabiliste extends Graphe {
             } else if (n instanceof Arc) {
             	for (Lien li : listeLiens) {
                     if (isArcClicked(positions[0], positions[1], li)) {
+                        return li;
+                    }
+                }
+            } else if (n instanceof QuadCurve) {
+            	for (Lien li : listeLiens) {
+                    if (isQuadCurvedClicked(positions[0], positions[1], li)) {
                         return li;
                     }
                 }

@@ -46,8 +46,16 @@ public class LienProbabiliste extends Lien {
 
 	@Override
 	public void setNoeuds(Noeud[] value, AnchorPane zoneDessin) {
-		// TODO Auto-generated method stub
-
+		this.noeuds = value;
+		if (arc != null) {
+			zoneDessin.getChildren().remove(arc);
+		} 
+		if (quadCurve != null) {
+			zoneDessin.getChildren().remove(quadCurve);
+		}
+		zoneDessin.getChildren().remove(arrow1);
+		zoneDessin.getChildren().remove(arrow2);
+		dessiner(zoneDessin);
 	}
 
 	@Override
@@ -64,7 +72,7 @@ public class LienProbabiliste extends Lien {
     	} else {
     		linePos = lineDrawingPositions(noeuds);
             double[] pointCentral = {(linePos[0] + linePos[2])/2, (linePos[1] + linePos[3])/2};
-            // (Y2 - Y1)/5     (X1 - X2)/5
+            // (Y2 - Y1)/5     (X1 - X2)/5 © Mewen
             double[] vecteur = {(linePos[3] - linePos[1])/5, (linePos[0] - linePos[2])/5};
             double[] pointC = {pointCentral[0] + vecteur[0], pointCentral[1] + vecteur[1]};
             quadCurve = new QuadCurve(
@@ -97,5 +105,9 @@ public class LienProbabiliste extends Lien {
     public String toString() {
         return "Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]";
     }
+
+	public QuadCurve getQuadCurved() {
+		return quadCurve;
+	}
 
 }
