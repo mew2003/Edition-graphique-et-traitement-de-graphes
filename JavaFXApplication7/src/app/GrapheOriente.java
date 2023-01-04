@@ -163,4 +163,15 @@ public class GrapheOriente extends Graphe {
 		}
 	}
 
+	@Override
+    public void reset() {
+    	for (Noeud n : listeNoeuds) {
+    		n.getCircle().setStrokeWidth(1.0);
+    	}
+    	for (Lien l : listeLiens) {
+    		LienNonOriente li = (LienNonOriente) l;
+    		li.getLine().setStrokeWidth(1.0);
+    	}
+    }
+
 }

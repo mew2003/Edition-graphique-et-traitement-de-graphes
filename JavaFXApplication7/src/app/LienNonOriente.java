@@ -6,6 +6,7 @@ package app;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import static tools.drawingPositions.*;
 
 /**
  * Lien non orienté
@@ -48,7 +49,7 @@ public class LienNonOriente extends Lien {
     @Override
     public void setNoeuds(Noeud[] value, AnchorPane zoneDessin) {
         this.noeuds = value;
-        double[] linePos = lineDrawingPositions();
+        double[] linePos = lineDrawingPositions(noeuds);
         line.setStartX(linePos[0]);
         line.setStartY(linePos[1]);
         line.setEndX(linePos[2]);
@@ -57,7 +58,7 @@ public class LienNonOriente extends Lien {
     
     @Override
     public void actualiser() {
-        double[] linePos = lineDrawingPositions();
+        double[] linePos = lineDrawingPositions(noeuds);
         line.setStartX(linePos[0]);
         line.setStartY(linePos[1]);
         line.setEndX(linePos[2]);
@@ -71,26 +72,11 @@ public class LienNonOriente extends Lien {
 
     @Override
     public void dessiner(AnchorPane zoneDessin) {
-		double[] linePos = lineDrawingPositions();
+		double[] linePos = lineDrawingPositions(noeuds);
         this.line = new Line(linePos[0], linePos[1], linePos[2], linePos[3]);
         line.setFill(Color.TRANSPARENT);
         line.setStroke(Color.BLACK);
         zoneDessin.getChildren().addAll(line);
-    }
-    
-    /**
-     * Donne les positions X/Y du départ et de la fin du lien par rapport au noeuds qu'il relie
-     * @return les positions
-     */
-    @Override
-    public double[] lineDrawingPositions() {
-        double[] posNoeud1 = noeuds[0].getPositions();
-        double[] posNoeud2 = noeuds[1].getPositions();
-        double L = Math.sqrt(Math.pow(posNoeud2[0] - posNoeud1[0],2) + Math.pow(posNoeud2[1] - posNoeud1[1],2));
-        double[] vecteurAAPrime = {(posNoeud2[0]-posNoeud1[0]) * noeuds[0].getRadius() / L ,(posNoeud2[1] - posNoeud1[1]) * noeuds[0].getRadius() / L};
-        double[] vecteurAAPrime2 = {(posNoeud2[0]-posNoeud1[0]) * noeuds[1].getRadius() / L ,(posNoeud2[1] - posNoeud1[1]) * noeuds[1].getRadius() / L};
-        double[] result = {posNoeud1[0] + vecteurAAPrime[0], posNoeud1[1] + vecteurAAPrime[1], posNoeud2[0] - vecteurAAPrime2[0], posNoeud2[1] - vecteurAAPrime2[1]};
-        return result;
     }
 
     /**

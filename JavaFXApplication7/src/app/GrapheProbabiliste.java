@@ -42,16 +42,11 @@ public class GrapheProbabiliste extends Graphe {
 	public Object elementClicked(double[] positions, AnchorPane zoneDessin) {
 		ObservableList<Node> childrens = zoneDessin.getChildren();
         for (Node n : childrens) {
+        	System.out.println(n);
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
                     if (isNodeClicked(positions[0], positions[1], no)) {                      
                         return no;
-                    }
-                }
-            } else if (n instanceof Line) {
-                for (Lien li : listeLiens) {
-                    if (isLinkClicked(positions[0], positions[1], li, ((Line) n).getStrokeWidth() / 10)) {
-                        return li;
                     }
                 }
             } else if (n instanceof Arc) {
@@ -115,4 +110,15 @@ public class GrapheProbabiliste extends Graphe {
 			}
 		}
 	}
+	
+	@Override
+    public void reset() {
+    	for (Noeud n : listeNoeuds) {
+    		n.getCircle().setStrokeWidth(1.0);
+    	}
+    	for (Lien l : listeLiens) {
+    		LienNonOriente li = (LienNonOriente) l;
+    		li.getLine().setStrokeWidth(1.0);
+    	}
+    }
 }
