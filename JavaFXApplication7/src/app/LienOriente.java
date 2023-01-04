@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 import static tools.drawingPositions.*;
 
 public class LienOriente extends Lien {
@@ -43,10 +44,11 @@ public class LienOriente extends Lien {
 		return noeuds;
 	}
 
-	public Arc getArc() {
-		return arc;
+	public Shape[] getArc() {
+		Shape[] shape = {arc, arrow1, arrow2};
+		return shape;
 	}
-
+	
 	@Override
 	public void setNoeuds(Noeud[] value, AnchorPane zoneDessin) {
 		this.noeuds = value;
@@ -93,7 +95,12 @@ public class LienOriente extends Lien {
         arrow2.setStroke(Color.BLACK);
     	zoneDessin.getChildren().addAll(arrow1, arrow2);
     }
-
+    
+    @Override
+    public void effacer(AnchorPane zoneDessin) {
+    	zoneDessin.getChildren().remove(line);
+    }
+    
 	@Override
     public void actualiser() {
 		double[] linePos, arrowPos;
@@ -127,8 +134,9 @@ public class LienOriente extends Lien {
 		arrow2.setEndY(arrowPos[3]);
     }
 
-	public Line getLine() {
-		return line;
+	public Line[] getLine() {
+		Line[] lines = {line, arrow1, arrow2};
+		return lines;
 	}
 
 }

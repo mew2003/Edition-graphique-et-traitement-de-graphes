@@ -45,7 +45,7 @@ public class clickDetection {
     		lienAVerif = lienM.getLine();
     	} else {
     		LienOriente lienM = (LienOriente) lien;
-    		lienAVerif = lienM.getLine();
+    		lienAVerif = lienM.getLine()[0];
     	}
 		if (lienAVerif == null) {
     		return false;
@@ -63,7 +63,7 @@ public class clickDetection {
     
     public static boolean isArcClicked(double mouseX, double mouseY, Lien lien) {
     	LienOriente lienO = (LienOriente) lien;
-    	Arc arc = lienO.getArc();
+    	Arc arc = (Arc) lienO.getArc()[0];
     	return arc != null && mouseX > arc.getCenterX() - arc.getRadiusX() && mouseX < arc.getCenterX() + arc.getRadiusX()
         	   && mouseY > arc.getCenterY() - arc.getRadiusX() && mouseY < arc.getCenterY() + arc.getRadiusX();
     }
