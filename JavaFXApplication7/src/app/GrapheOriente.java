@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 import javafx.scene.shape.Arc;
 import static tools.clickDetection.*;
 
@@ -47,27 +48,70 @@ public class GrapheOriente extends Graphe {
         for (Node n : childrens) {
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
-                    if (isNodeClicked(positions[0], positions[1], no)) {                      
+                    if (isNodeClicked(positions[0], positions[1], no)) {    
+                    	reset();
                         return no;
                     }
                 }
             } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
                     if (isLinkClicked(positions[0], positions[1], li, ((Line) n).getStrokeWidth() / 10)) {
+                    	LienOriente lienOR = (LienOriente) li;
+                    	reset();
+                    	for(Line line : lienOR.getLine()) {
+                    		line.setStrokeWidth(3.0);
+                    	}
                         return li;
                     }
                 }
             } else if (n instanceof Arc) {
             	for (Lien li : listeLiens) {
                     if (isArcClicked(positions[0], positions[1], li)) {
+                    	LienOriente lienOR = (LienOriente) li;
+                    	reset();
+                    	for(Shape shape : lienOR.getArc()) {
+                    		shape.setStrokeWidth(3.0);
+                    	}
                         return li;
                     }
                 }
             }
         }
+        reset();
         return null;
 	}
-
+	
+    @Override
+    public void reset() {
+    	for (Noeud n : listeNoeuds) {
+    		n.getCircle().setStrokeWidth(1.0);
+    	}
+    	for (Lien l : listeLiens) {
+    		LienOriente li = (LienOriente) l;
+    		for(Shape shape : li.getArc()) {
+    			if(shape != null) {
+    				shape.setStrokeWidth(1.0);
+    			}
+    		}
+    		for(Line line : li.getLine()) {
+    			if(line != null) {
+    				line.setStrokeWidth(1.0);
+    			}
+    		}
+    	}
+    }
+    
+    @Override
+    public void relocalisation() {
+    	for(Lien l : listeLiens) {
+    		for(Noeud n : listeNoeuds) {
+    			if(l.getNoeuds()[0].getNom().equals(n.getNom())) {
+    				l.actualiser();
+    			}
+    		}
+    	}
+    }
+    
 	@Override
 	public Noeud getNode(String libelle) {
 		for (Noeud n : listeNoeuds) {
