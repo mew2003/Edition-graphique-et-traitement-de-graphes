@@ -3,6 +3,7 @@
  */
 package app;
 
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -66,4 +67,6 @@ public abstract class Graphe {
     public abstract void modifRadius(Noeud noeud, double radius);
     
     public abstract void reset();
+    
+    public abstract void relocalisation();
 }

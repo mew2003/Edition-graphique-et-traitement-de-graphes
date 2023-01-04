@@ -6,12 +6,15 @@ package javafxapplication7;
 import java.awt.Event;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.spi.LocaleNameProvider;
 
 import app.FactoryGraphe;
 import app.FactoryGrapheManager;
 import app.Graphe;
 import app.GrapheNonOriente;
 import app.Lien;
+import app.LienNonOriente;
+import app.LienOriente;
 import app.Noeud;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
@@ -22,6 +25,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -293,9 +297,8 @@ public class FXMLDocumentController implements Initializable {
                                 double[] EditPosition = {0,0};
                                 EditPosition[0] = event.getX();
                                 EditPosition[1] = event.getY();
-                                node.setPositions(EditPosition);
-                                //TODO : actualiser le lien en même temps que le noeud bouge
-                                
+                                node.setPositions(EditPosition); 
+                                graphe.relocalisation();
                         	});
                         } else {
                         	((Circle) n).setStrokeWidth(1.0);
@@ -311,19 +314,61 @@ public class FXMLDocumentController implements Initializable {
                 noeud1Lien.setText(link.getNoeuds()[0].getNom());
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
                 selectedObject = link;
-                link.actualiser();
-//                for(Node n : childrens) {
-//                	if(n instanceof Line) {
-//                		System.out.println(n.equals(link.getLine()));
-//                		if(n.equals(link.getLine())) {
-//                			((Shape) n).setStrokeWidth(3.0);
-//                		} else {
-//                			((Shape) n).setStrokeWidth(1.0);
-//                		}
-//                	} else if(n instanceof Circle) {
-//                		((Circle) n).setStrokeWidth(1.0);
-//                	}
-//                }
+                if(link instanceof LienNonOriente) {
+                    LienNonOriente lien = (LienNonOriente) link;
+                    for(Node n : childrens) {
+                    	if(n instanceof Line) {
+                    		if(n.equals(lien.getLine())) {
+                    			n.setOnMouseDragged(event -> {
+                    				lien.getLine().setStrokeWidth(3.0);
+                		            previewedLine.setStartX(lien.getNoeuds()[0].getPositions()[0]);
+                		            previewedLine.setStartY(lien.getNoeuds()[0].getPositions()[1]);
+                		            previewedLine.setEndX(event.getX());
+                		            previewedLine.setEndY(event.getY());
+                    			});
+                    			n.setOnMouseReleased(event -> {
+                    				exitPreview(event);
+                    				double[] pos = {event.getX(), event.getY()};
+                    				if(graphe.elementClicked(pos, zoneDessin) != null) {
+                    					Noeud noeud = (Noeud) graphe.elementClicked(pos, zoneDessin);
+                    					Noeud[] noeuds = {link.getNoeuds()[0], noeud};
+                        				if(!(noeud.equals(noeuds[0]))) {
+                        					lien.setNoeuds(noeuds, zoneDessin);
+                        				}
+                    				}
+                    			});
+                    		}
+                    	}
+                    }
+                } else if(link instanceof LienOriente) {
+                    LienOriente lien = (LienOriente) link;
+                    for(Node n : childrens) {
+                    	if(n instanceof Line) {
+                    		if(n.equals(lien.getLine()[0])) {
+                    			n.setOnMouseDragged(event -> {
+                    				for(Line line : lien.getLine()) {
+                    					line.setStrokeWidth(3.0);
+                    				}
+                		            previewedLine.setStartX(lien.getNoeuds()[0].getPositions()[0]);
+                		            previewedLine.setStartY(lien.getNoeuds()[0].getPositions()[1]);
+                		            previewedLine.setEndX(event.getX());
+                		            previewedLine.setEndY(event.getY());
+                    			});
+                    			n.setOnMouseReleased(event -> {
+                    				exitPreview(event);
+                    				double[] pos = {event.getX(), event.getY()};
+                    				if(graphe.elementClicked(pos, zoneDessin) != null) {
+                    					Noeud noeud = (Noeud) graphe.elementClicked(pos, zoneDessin);
+                    					Noeud[] noeuds = {link.getNoeuds()[0], noeud};
+                        				if(!(noeud.equals(noeuds[0]))) {
+                        					lien.setNoeuds(noeuds, zoneDessin);
+                        				}
+                    				}
+                    			});
+                    		}
+                    	}
+                    }
+                }
             }
         } else {
             listeElements.getSelectionModel().clearSelection();
@@ -386,6 +431,7 @@ public class FXMLDocumentController implements Initializable {
             previewedCircle.setCenterX(event.getX());
             previewedCircle.setCenterY(event.getY());
         } else if (actualMode == 2 && noeudARelier[0] != null) {
+           
             previewedLine.setStartX(noeudARelier[0].getPositions()[0]);
             previewedLine.setStartY(noeudARelier[0].getPositions()[1]);
             previewedLine.setEndX(event.getX());
@@ -449,7 +495,20 @@ public class FXMLDocumentController implements Initializable {
             noeud1Lien.setText(link.getNoeuds()[0].getNom());
             noeud2Lien.setText(link.getNoeuds()[1].getNom());
             selectedObject = link;
-            
+            if(link instanceof LienNonOriente) {
+            	LienNonOriente lienNOR = (LienNonOriente) link;
+            	graphe.reset();
+            	lienNOR.getLine().setStrokeWidth(3.0); 
+            } else if(link instanceof LienOriente) {
+            	LienOriente lienOR = (LienOriente) link;
+            	graphe.reset();
+            	for(Line l : lienOR.getLine()) {
+            		l.setStrokeWidth(3.0);
+            	}
+            	for(Shape shape : lienOR.getArc()) {
+            		shape.setStrokeWidth(3.0);
+            	}
+            }            
     	} catch (Exception e) {}
     	
     }

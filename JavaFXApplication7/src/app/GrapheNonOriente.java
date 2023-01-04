@@ -6,6 +6,7 @@ package app;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -101,7 +102,18 @@ public class GrapheNonOriente extends Graphe {
     		li.getLine().setStrokeWidth(1.0);
     	}
     }
-
+    
+    @Override
+    public void relocalisation() {
+    	for(Lien l : listeLiens) {
+    		for(Noeud n : listeNoeuds) {
+    			if(l.getNoeuds()[0].getNom().equals(n.getNom())) {
+    				l.actualiser();
+    			}
+    		}
+    	}
+    }
+    
     @Override
     public Noeud getNode(String libelle) {
         for (Noeud n : listeNoeuds) {
