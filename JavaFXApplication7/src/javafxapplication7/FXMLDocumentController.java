@@ -337,7 +337,16 @@ public class FXMLDocumentController implements Initializable {
                     				if(graphe.elementClicked(pos, zoneDessin) != null) {
                     					Noeud noeud = (Noeud) graphe.elementClicked(pos, zoneDessin);
                     					Noeud[] noeuds = {link.getNoeuds()[0], noeud};
-                        				if(!(noeud.equals(noeuds[0]))) {
+                    					boolean ok = true;
+                    					for(int i = 0; i < listeElements.getItems().size() ; i++) {
+                    						String test = listeElements.getItems().get(i).toString();
+                    						if(test.equals("Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]")) {
+                    							ok = false;
+                    						}
+                    						System.out.println(ok);
+                    					}
+                    					System.out.println(ok);
+                        				if(ok && !(noeud.equals(noeuds[0]))) {
                         					lien.setNoeuds(noeuds, zoneDessin);
                         				}
                     				}
