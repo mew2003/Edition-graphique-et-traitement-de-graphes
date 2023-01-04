@@ -311,23 +311,21 @@ public class FXMLDocumentController implements Initializable {
                 noeud1Lien.setText(link.getNoeuds()[0].getNom());
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
                 selectedObject = link;
-                Line lien = link.getLine();
                 link.actualiser();
-                for(Node n : childrens) {
-                	if(n instanceof Line) {
-                		System.out.println(n.toString().equals(lien.toString()));
-                		if(n.toString().equals(lien.toString())) {
-                			((Shape) n).setStrokeWidth(3.0);
-                		} else {
-                			((Shape) n).setStrokeWidth(1.0);
-                		}
-                	} else if(n instanceof Circle) {
-                		((Circle) n).setStrokeWidth(1.0);
-                	}
-                }
+//                for(Node n : childrens) {
+//                	if(n instanceof Line) {
+//                		System.out.println(n.equals(link.getLine()));
+//                		if(n.equals(link.getLine())) {
+//                			((Shape) n).setStrokeWidth(3.0);
+//                		} else {
+//                			((Shape) n).setStrokeWidth(1.0);
+//                		}
+//                	} else if(n instanceof Circle) {
+//                		((Circle) n).setStrokeWidth(1.0);
+//                	}
+//                }
             }
         } else {
-        	reset();
             listeElements.getSelectionModel().clearSelection();
             editionProprietesLien.setVisible(false);
             editionProprietesNoeud.setVisible(false);
@@ -415,27 +413,12 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML void addNodeClicked(MouseEvent event) {
     	actualMode = 1; 
-    	reset();
     }
     @FXML void addLinkClicked(MouseEvent event) {
     	actualMode = 2;
-    	reset();
     }
     @FXML void SelectClicked(MouseEvent event) {
     	actualMode = 3;
-    	reset();
-    }
-    
-    void reset() {
-    	ObservableList<Node> childrens = zoneDessin.getChildren();
-		for (Node n : childrens) {
-			if(n instanceof Circle) {
-				((Circle) n).setStrokeWidth(1.0); 
-			}
-			if(n instanceof Line) {
-				((Line) n).setStrokeWidth(1.0); 
-			}
-		}
     }
 
     /**
@@ -446,51 +429,28 @@ public class FXMLDocumentController implements Initializable {
     void elementSelected(ActionEvent event) {
     	/* Liste de tous les éléments présents sur la zone de dessin  */
         ObservableList<Node> childrens = zoneDessin.getChildren();
-        if(actualMode == 3) {
-        	try {
-                Noeud node = (Noeud) listeElements.getValue();
-                editionProprietesLien.setVisible(false);
-                editionProprietesNoeud.setVisible(true);
-                nomNoeud.setText(node.getNom());
-                posXNoeud.setText("" + node.getPositions()[0]);
-                posYNoeud.setText("" + node.getPositions()[1]);
-                radiusNoeud.setText("" + node.getRadius());
-                selectedObject = node;
-                Circle circle = node.getCircle();
-                for (Node n : childrens) {
-                	if(n instanceof Circle) {
-                		if(n.toString().equals(circle.toString())) {
-                			((Shape) n).setStrokeWidth(3.0);
-                        } else {
-                        	((Circle) n).setStrokeWidth(1.0);
-                        }
-                	} else if(n instanceof Line) {
-                		((Line) n).setStrokeWidth(1.0);       		
-                	}
-                }
-            } catch (Exception e) {}
-        	try {
-        		Lien link = (Lien) listeElements.getValue();
-                editionProprietesLien.setVisible(true);
-                editionProprietesNoeud.setVisible(false);
-                noeud1Lien.setText(link.getNoeuds()[0].getNom());
-                noeud2Lien.setText(link.getNoeuds()[1].getNom());
-                selectedObject = link;
-                Line lien = link.getLine();
-                link.actualiser();
-                for(Node n : childrens) {
-                	if(n instanceof Line) {
-                		if(n.toString().equals(lien.toString())) {
-                			((Shape) n).setStrokeWidth(3.0);
-                		} else {
-                			((Shape) n).setStrokeWidth(1.0);
-                		}
-                	} else if(n instanceof Circle) {
-                		((Circle) n).setStrokeWidth(1.0);
-                	}
-                }
-        	} catch (Exception e) {}
-        }
+    	try {
+            Noeud node = (Noeud) listeElements.getValue();
+            editionProprietesLien.setVisible(false);
+            editionProprietesNoeud.setVisible(true);
+            nomNoeud.setText(node.getNom());
+            posXNoeud.setText("" + node.getPositions()[0]);
+            posYNoeud.setText("" + node.getPositions()[1]);
+            radiusNoeud.setText("" + node.getRadius());
+            selectedObject = node;
+            Circle circle = node.getCircle();
+            graphe.reset();
+            circle.setStrokeWidth(3.0);
+        } catch (Exception e) {}
+    	try {
+    		Lien link = (Lien) listeElements.getValue();
+            editionProprietesLien.setVisible(true);
+            editionProprietesNoeud.setVisible(false);
+            noeud1Lien.setText(link.getNoeuds()[0].getNom());
+            noeud2Lien.setText(link.getNoeuds()[1].getNom());
+            selectedObject = link;
+            
+    	} catch (Exception e) {}
     	
     }
 }

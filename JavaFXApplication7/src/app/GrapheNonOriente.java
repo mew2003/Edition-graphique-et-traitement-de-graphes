@@ -71,19 +71,35 @@ public class GrapheNonOriente extends Graphe {
         for (Node n : childrens) {
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
-                    if (isNodeClicked(positions[0], positions[1], no)) {                      
+                    if (isNodeClicked(positions[0], positions[1], no)) {  
+                    	reset();
                         return no;
                     }
                 }
             } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
                     if (isLinkClicked(positions[0], positions[1], li, ((Line) n).getStrokeWidth() / 10)) {
-                        return li;
+                        LienNonOriente lienN = (LienNonOriente) li;
+                        reset();
+                        lienN.getLine().setStrokeWidth(3.0);
+                    	return li;
                     }
                 }
             }
         }
+        reset();
         return null;
+    }
+    
+    @Override
+    public void reset() {
+    	for (Noeud n : listeNoeuds) {
+    		n.getCircle().setStrokeWidth(1.0);
+    	}
+    	for (Lien l : listeLiens) {
+    		LienNonOriente li = (LienNonOriente) l;
+    		li.getLine().setStrokeWidth(1.0);
+    	}
     }
 
     @Override

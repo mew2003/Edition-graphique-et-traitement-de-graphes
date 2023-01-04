@@ -64,4 +64,6 @@ public abstract class Graphe {
     public abstract void modifLien(Lien lien, Noeud[] noeuds, AnchorPane zoneDessin);
     
     public abstract void modifRadius(Noeud noeud, double radius);
+    
+    public abstract void reset();
 }
