@@ -173,6 +173,13 @@ public class FXMLDocumentController implements Initializable {
         graphe = factory.creerGraphe();
     }
     
+    @FXML
+    void creerGrapheProbabiliste(ActionEvent event) {
+    	initialisation();
+        factory = manager.creerFactory("GrapheProbabiliste");
+        graphe = factory.creerGraphe();
+    }
+    
     /**
      * Selon le mode dans lequel se trouve l'utilisateur
      * - Créer un noeud

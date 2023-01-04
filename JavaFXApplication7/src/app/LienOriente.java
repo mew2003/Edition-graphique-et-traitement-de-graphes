@@ -12,9 +12,11 @@ public class LienOriente extends Lien {
     private Noeud[] noeuds;
     
     // Représentation graphique du lien
-    private Line line, arrow1, arrow2;
+    private Line arrow1, arrow2;
     
-    private Arc arc;
+    private Line line = null;
+    
+    private Arc arc = null;
     
     private String nom;
     
@@ -23,7 +25,13 @@ public class LienOriente extends Lien {
    
     private final double LONGUEUR_ARROW = 10.0;
     
-    private final double ROTATION_ARROW = Math.toRadians(30.0);
+    private final double ROTATION_ARROW = 0.52;
+    
+    private final double BOUCLE_ANGLE = -14.49;
+    
+    private final double BOUCLE_DEPART = 0.52;
+    
+    private final double BOUCLE_SIZE = 208.98;
     
     /**
      * Crée un lien reliant 2 noeuds
@@ -47,25 +55,15 @@ public class LienOriente extends Lien {
 	@Override
 	public void setNoeuds(Noeud[] value, AnchorPane zoneDessin) {
 		this.noeuds = value;
-		if (noeuds[0] == noeuds[1]) {
-			arc = new Arc();
-			arc.setFill(Color.TRANSPARENT);
-    		arc.setStroke(Color.BLACK);
-    		arc.setStartAngle(-14.49);
-    		arc.setLength(208.98);
-    		zoneDessin.getChildren().addAll(arc);
-			zoneDessin.getChildren().remove(line);
-			line = null;
-		} else {
-			//TODO: Passer d'un arc à une ligne
-			line = new Line();
-			line.setFill(Color.TRANSPARENT);
-			line.setStroke(Color.BLACK);
-    		zoneDessin.getChildren().addAll(line);
+		if (arc != null) {
 			zoneDessin.getChildren().remove(arc);
-			arc = null;
+		} 
+		if (line != null) {
+			zoneDessin.getChildren().remove(line);
 		}
-		actualiser();
+		zoneDessin.getChildren().remove(arrow1);
+		zoneDessin.getChildren().remove(arrow2);
+		dessiner(zoneDessin);
 	}
 	
     @Override
@@ -81,7 +79,7 @@ public class LienOriente extends Lien {
     		linePos = new double[]{depart[0], depart[1] - noeuds[0].getRadius() / 2.0, depart[0], depart[1]};
     		arrowPos = arrowPositions(linePos);
     		double arcRadius = noeuds[0].getRadius() / 2.0;
-    		arc = new Arc(noeuds[0].getPositions()[0], noeuds[0].getPositions()[1] - noeuds[0].getRadius(), arcRadius, arcRadius, -14.49, 208.98); //Trouver sur Geogebra
+    		arc = new Arc(noeuds[0].getPositions()[0], noeuds[0].getPositions()[1] - noeuds[0].getRadius(), arcRadius, arcRadius, BOUCLE_ANGLE, BOUCLE_SIZE);
             arc.setFill(Color.TRANSPARENT);
     		arc.setStroke(Color.BLACK);
     		zoneDessin.getChildren().addAll(arc);
@@ -107,8 +105,8 @@ public class LienOriente extends Lien {
 		//Translation 0,0
 		pointC[0] -= noeuds[0].getPositions()[0];
         pointC[1] -= noeuds[0].getPositions()[1];
-		double[] pointCPrime = {Math.cos(Math.toRadians(28.84))*pointC[0]+(-Math.sin(Math.toRadians(28.84))*pointC[1]),
-                			    Math.sin(Math.toRadians(28.84))*pointC[0]+Math.cos(Math.toRadians(28.84))*pointC[1]}; // Trouver sur Geogebra
+		double[] pointCPrime = {Math.cos(BOUCLE_DEPART)*pointC[0]+(-Math.sin(BOUCLE_DEPART)*pointC[1]),
+                			    Math.sin(BOUCLE_DEPART)*pointC[0]+Math.cos(BOUCLE_DEPART)*pointC[1]}; 
 		//Translation point de départ
 		pointCPrime[0] += noeuds[0].getPositions()[0];
 		pointCPrime[1] += noeuds[0].getPositions()[1];
@@ -167,10 +165,7 @@ public class LienOriente extends Lien {
 		arrow2.setEndY(arrowPos[3]);
     }
 	
-    /**
-     * Donne les positions X/Y du départ et de la fin du lien par rapport au noeuds qu'il relie
-     * @return les positions
-     */
+	@Override
     public double[] lineDrawingPositions() {
     	double[] posNoeud1 = noeuds[0].getPositions();
         double[] posNoeud2 = noeuds[1].getPositions();
@@ -181,7 +176,6 @@ public class LienOriente extends Lien {
         return result;
     }
 
-	@Override
 	public Line getLine() {
 		return line;
 	}

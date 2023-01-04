@@ -101,7 +101,6 @@ public class LienNonOriente extends Lien {
 		return nom;
 	}
 
-	@Override
 	public Line getLine() {
 		return line;
 	}

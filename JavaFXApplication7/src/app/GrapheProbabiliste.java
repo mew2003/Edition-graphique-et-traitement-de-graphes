@@ -5,22 +5,19 @@ import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Arc;
 import static tools.clickDetection.*;
 
-public class GrapheOriente extends Graphe {
-	
+public class GrapheProbabiliste extends Graphe {
+
 	private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 1;
     private int nbLien = 1;
-    
-    GrapheOriente() {}
-
+	
 	@Override
 	public Noeud creerNoeud(double[] pos) {
 		Noeud n = new NoeudXOROriente(pos, nbNoeud++);
@@ -36,7 +33,7 @@ public class GrapheOriente extends Graphe {
     		}
     	}
         Noeud[] noeuds = {noeud1, noeud2};
-    	Lien l = new LienOriente(noeuds, nbLien++);
+    	Lien l = new LienProbabiliste(noeuds, nbLien++);
         listeLiens.add(l);
         return l;
 	}
@@ -118,5 +115,4 @@ public class GrapheOriente extends Graphe {
 			}
 		}
 	}
-
 }

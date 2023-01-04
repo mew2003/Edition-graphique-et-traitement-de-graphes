@@ -30,13 +30,15 @@ public abstract class Lien {
      */
     public abstract void dessiner(AnchorPane zoneDessin);
     
+    /**
+     * Donne les positions X/Y du départ et de la fin du lien par rapport au noeuds qu'il relie
+     * @return les positions
+     */
     public abstract double[] lineDrawingPositions();
     
     /**
      * Actualise l'affichage graphique du lien
      */
     public abstract void actualiser();
-    
-    public abstract Line getLine();
     
 }

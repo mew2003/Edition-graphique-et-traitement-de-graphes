@@ -32,7 +32,7 @@ public class NoeudXOROriente extends Noeud {
     private Label label;
     
     // Nom par défaut du noeud
-    private final String DEFAULT_NAME = "default";
+    private final String DEFAULT_NAME = "S";
     
     // Radius par défaut du noeud
     private final double DEFAULT_RADIUS = 25;
