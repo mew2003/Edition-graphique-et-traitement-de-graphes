@@ -33,6 +33,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 
 /**
  * Contrôleur de l'application
@@ -278,21 +279,22 @@ public class FXMLDocumentController implements Initializable {
                 	if(n instanceof Circle) {
                 		if(n.toString().equals(circle.toString())) {
                 			circle.setStrokeWidth(3.0);
-                			if(circle.getStrokeWidth() == 3.0) {
-                            	n.setOnMouseDragged(event -> {
-                            		posXNoeud.setText("" + event.getX());
-                                    posYNoeud.setText("" + event.getY());
-                                    double[] EditPosition = {0,0};
-                                    EditPosition[0] = event.getX();
-                                    EditPosition[1] = event.getY();
-                                    node.setPositions(EditPosition);
-                            	});
-                			}
+                        	n.setOnMouseDragged(event -> {
+                        		circle.setStrokeWidth(3.0);
+                        		posXNoeud.setText("" + event.getX());
+                                posYNoeud.setText("" + event.getY());
+                                double[] EditPosition = {0,0};
+                                EditPosition[0] = event.getX();
+                                EditPosition[1] = event.getY();
+                                node.setPositions(EditPosition);
+                                //TODO : actualiser le lien en même temps que le noeud bouge
+                                
+                        	});
                         } else {
                         	((Circle) n).setStrokeWidth(1.0);
                         }
                 	} else if(n instanceof Line) {
-                		((Line) n).setStrokeWidth(1.0);
+                		((Line) n).setStrokeWidth(1.0);       		
                 	}
                 }
             } catch (Exception e) {
@@ -303,11 +305,19 @@ public class FXMLDocumentController implements Initializable {
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
                 selectedObject = link;
                 Line lien = link.getLine();
-                //TODO: marche que pour les lignes, pas pour les arcs (exception)
-                lien.setOnMouseClicked(event -> {
-                	lien.setStrokeWidth(3.0);
-                	link.actualiser();
-                });
+                link.actualiser();
+                for(Node n : childrens) {
+                	if(n instanceof Line) {
+                		System.out.println(n.toString().equals(lien.toString()));
+                		if(n.toString().equals(lien.toString())) {
+                			((Shape) n).setStrokeWidth(3.0);
+                		} else {
+                			((Shape) n).setStrokeWidth(1.0);
+                		}
+                	} else if(n instanceof Circle) {
+                		((Circle) n).setStrokeWidth(1.0);
+                	}
+                }
             }
         } else {
         	reset();
@@ -439,6 +449,18 @@ public class FXMLDocumentController implements Initializable {
                 posYNoeud.setText("" + node.getPositions()[1]);
                 radiusNoeud.setText("" + node.getRadius());
                 selectedObject = node;
+                Circle circle = node.getCircle();
+                for (Node n : childrens) {
+                	if(n instanceof Circle) {
+                		if(n.toString().equals(circle.toString())) {
+                			((Shape) n).setStrokeWidth(3.0);
+                        } else {
+                        	((Circle) n).setStrokeWidth(1.0);
+                        }
+                	} else if(n instanceof Line) {
+                		((Line) n).setStrokeWidth(1.0);       		
+                	}
+                }
             } catch (Exception e) {}
         	try {
         		Lien link = (Lien) listeElements.getValue();
@@ -447,6 +469,19 @@ public class FXMLDocumentController implements Initializable {
                 noeud1Lien.setText(link.getNoeuds()[0].getNom());
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
                 selectedObject = link;
+                Line lien = link.getLine();
+                link.actualiser();
+                for(Node n : childrens) {
+                	if(n instanceof Line) {
+                		if(n.toString().equals(lien.toString())) {
+                			((Shape) n).setStrokeWidth(3.0);
+                		} else {
+                			((Shape) n).setStrokeWidth(1.0);
+                		}
+                	} else if(n instanceof Circle) {
+                		((Circle) n).setStrokeWidth(1.0);
+                	}
+                }
         	} catch (Exception e) {}
         }
     	
