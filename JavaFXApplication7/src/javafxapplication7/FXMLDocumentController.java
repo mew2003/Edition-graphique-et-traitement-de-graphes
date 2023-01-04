@@ -181,6 +181,8 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     public void zoneDessinEvent(MouseEvent evt) {
+    	/* Liste de tous les éléments présents sur la zone de dessin  */
+        ObservableList<Node> childrens = zoneDessin.getChildren();
         // Position de la souris de l'utilisateur lors du click
     	double[] positions = {evt.getX(), evt.getY()};
 
@@ -260,7 +262,7 @@ public class FXMLDocumentController implements Initializable {
          */
         /* Liste de tous les éléments présents sur la zone de dessin  */
         ObservableList<Node> childrens = zoneDessin.getChildren();
-        if (o != null && actualMode == 3) {
+        if (o != null) {
         	listeElements.getSelectionModel().select(o);
             try {
                 Noeud node = (Noeud) o;
@@ -272,20 +274,20 @@ public class FXMLDocumentController implements Initializable {
                 radiusNoeud.setText("" + node.getRadius());
                 selectedObject = node;
                 Circle circle = node.getCircle();
-                circle.setOnMouseClicked(event -> {
-                	circle.setStrokeWidth(3.0);
-                });
                 for (Node n : childrens) {
                 	if(n instanceof Circle) {
-                		if(n.toString().equals(circle.toString()) && circle.getStrokeWidth() == 3.0) {
-                        	n.setOnMouseDragged(event -> {
-                        		posXNoeud.setText("" + event.getX());
-                                posYNoeud.setText("" + event.getY());
-                                double[] EditPosition = {0,0};
-                                EditPosition[0] = event.getX();
-                                EditPosition[1] = event.getY();
-                                node.setPositions(EditPosition);
-                        	});
+                		if(n.toString().equals(circle.toString())) {
+                			circle.setStrokeWidth(3.0);
+                			if(circle.getStrokeWidth() == 3.0) {
+                            	n.setOnMouseDragged(event -> {
+                            		posXNoeud.setText("" + event.getX());
+                                    posYNoeud.setText("" + event.getY());
+                                    double[] EditPosition = {0,0};
+                                    EditPosition[0] = event.getX();
+                                    EditPosition[1] = event.getY();
+                                    node.setPositions(EditPosition);
+                            	});
+                			}
                         } else {
                         	((Circle) n).setStrokeWidth(1.0);
                         }
@@ -308,14 +310,7 @@ public class FXMLDocumentController implements Initializable {
                 });
             }
         } else {
-        	for (Node n : childrens) {
-        		if(n instanceof Circle) {
-        			((Circle) n).setStrokeWidth(1.0); 
-        		}
-        		if(n instanceof Line) {
-        			((Line) n).setStrokeWidth(1.0); 
-        		}
-        	}
+        	reset();
             listeElements.getSelectionModel().clearSelection();
             editionProprietesLien.setVisible(false);
             editionProprietesNoeud.setVisible(false);
@@ -366,6 +361,12 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void preview(MouseEvent event) {
+    	if(actualMode != 3) {
+        	ObservableList<Node> childrens = zoneDessin.getChildren();
+    		for (Node n : childrens) {
+    			n.setOnMouseDragged(null);
+    		}
+    	}
         if (actualMode == 1) {
             previewedCircle.setCenterX(event.getX());
             previewedCircle.setCenterY(event.getY());
@@ -397,31 +398,19 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML void addNodeClicked(MouseEvent event) {
     	actualMode = 1; 
-    	ObservableList<Node> childrens = zoneDessin.getChildren();
-    	for (Node n : childrens) {
-			if(n instanceof Circle) {
-				((Circle) n).setStrokeWidth(1.0); 
-			}
-			if(n instanceof Line) {
-				((Line) n).setStrokeWidth(1.0); 
-			}
-    	}
+    	reset();
     }
     @FXML void addLinkClicked(MouseEvent event) {
     	actualMode = 2;
-    	ObservableList<Node> childrens = zoneDessin.getChildren();
-    	for (Node n : childrens) {
-			if(n instanceof Circle) {
-				((Circle) n).setStrokeWidth(1.0); 
-			}
-			if(n instanceof Line) {
-				((Line) n).setStrokeWidth(1.0); 
-			}
-    	}
+    	reset();
     }
     @FXML void SelectClicked(MouseEvent event) {
     	actualMode = 3;
-	    ObservableList<Node> childrens = zoneDessin.getChildren();
+    	reset();
+    }
+    
+    void reset() {
+    	ObservableList<Node> childrens = zoneDessin.getChildren();
 		for (Node n : childrens) {
 			if(n instanceof Circle) {
 				((Circle) n).setStrokeWidth(1.0); 
@@ -450,16 +439,6 @@ public class FXMLDocumentController implements Initializable {
                 posYNoeud.setText("" + node.getPositions()[1]);
                 radiusNoeud.setText("" + node.getRadius());
                 selectedObject = node;
-                Circle circle = node.getCircle();
-                for (Node n : childrens) {
-                	if(n instanceof Circle) {
-                		if(n.toString().equals(circle.toString())) {
-                        	((Circle) n).setStrokeWidth(3.0);
-                        } else {
-                        	((Circle) n).setStrokeWidth(1.0);
-                        }
-                	}
-                }
             } catch (Exception e) {}
         	try {
         		Lien link = (Lien) listeElements.getValue();
@@ -468,11 +447,6 @@ public class FXMLDocumentController implements Initializable {
                 noeud1Lien.setText(link.getNoeuds()[0].getNom());
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
                 selectedObject = link;
-                Line lien = link.getLine();
-                lien.setOnMouseClicked(event2 -> {
-                	lien.setStrokeWidth(3.0);
-                	link.actualiser();
-                });
         	} catch (Exception e) {}
         }
     	
