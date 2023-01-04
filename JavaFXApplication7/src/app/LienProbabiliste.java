@@ -110,4 +110,10 @@ public class LienProbabiliste extends Lien {
 		return quadCurve;
 	}
 
+	@Override
+	public void effacer(AnchorPane zoneDessin) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

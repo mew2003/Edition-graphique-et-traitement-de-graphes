@@ -128,4 +128,16 @@ public class GrapheProbabiliste extends Graphe {
     		li.getLine().setStrokeWidth(1.0);
     	}
     }
+
+	@Override
+	public Lien supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void relocalisation() {
+		// TODO Auto-generated method stub
+		
+	}
 }
