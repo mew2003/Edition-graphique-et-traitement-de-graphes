@@ -79,6 +79,11 @@ public class LienNonOriente extends Lien {
         zoneDessin.getChildren().addAll(line);
     }
 
+    @Override
+    public void effacer(AnchorPane zoneDessin) {
+    	zoneDessin.getChildren().remove(line);
+    }
+    
     /**
      * Renvoie le nom du lien
      * @return le nom

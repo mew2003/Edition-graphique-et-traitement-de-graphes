@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -15,7 +20,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication7.FXMLDocumentController">
+<BorderPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication7.FXMLDocumentController">
 <top>
       <Pane prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -116,6 +121,7 @@
                      </graphic>
                   </Label>
                   <Button fx:id="validerModifNoeud" layoutX="90.0" layoutY="271.0" mnemonicParsing="false" onAction="#modifNoeud" text="Valider" />
+                  <Button layoutX="79.0" layoutY="319.0" mnemonicParsing="false" onAction="#supprimerNoeud" text="Supprimer" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="editionProprietesLien" layoutY="259.0" prefHeight="433.0" prefWidth="232.0" visible="false">
@@ -141,6 +147,7 @@
                      </graphic>
                   </Label>
                   <Button fx:id="validerModifLien" layoutX="88.0" layoutY="237.0" mnemonicParsing="false" onAction="#modifLien" text="Valider" />
+                  <Button layoutX="77.0" layoutY="280.0" mnemonicParsing="false" onAction="#supprimerLien" text="Supprimer" />
                </children>
             </AnchorPane>
          </children>

@@ -152,4 +152,11 @@ public class GrapheOriente extends Graphe {
 			}
 		}
 	}
+
+	@Override
+	public Lien supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

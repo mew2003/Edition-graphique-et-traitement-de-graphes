@@ -95,7 +95,12 @@ public class LienOriente extends Lien {
         arrow2.setStroke(Color.BLACK);
     	zoneDessin.getChildren().addAll(arrow1, arrow2);
     }
-
+    
+    @Override
+    public void effacer(AnchorPane zoneDessin) {
+    	zoneDessin.getChildren().remove(line);
+    }
+    
 	@Override
     public void actualiser() {
 		double[] linePos, arrowPos;

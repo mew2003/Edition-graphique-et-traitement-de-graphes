@@ -53,6 +53,20 @@ public class GrapheNonOriente extends Graphe {
     }
     
     @Override
+    public Lien supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
+    	int i = 0;
+    	for (Lien l : listeLiens) {
+    		if (l == lienASuppr) {
+    			lienASuppr.effacer(zoneDessin);
+    			listeLiens.remove(i);
+    		}
+    		i++;
+    	}
+    	
+    	return null;
+    }
+    
+    @Override
     public String toString() {
     	String chaine = "GrapheNonOriente, noeuds [";
     	for (Noeud i : listeNoeuds) {

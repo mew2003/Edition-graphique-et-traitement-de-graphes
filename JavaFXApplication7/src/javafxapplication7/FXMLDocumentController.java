@@ -242,6 +242,7 @@ public class FXMLDocumentController implements Initializable {
                 noeudARelier[1] = (Noeud) graphe.elementClicked(positions, zoneDessin);
             }
         } catch (Exception e) {} 
+    	
         // Si deux noeuds ont été sélectionner -> création du lien.
         if (noeudARelier[1] != null) {
         	try {
@@ -463,6 +464,20 @@ public class FXMLDocumentController implements Initializable {
         } catch (Exception e) {
             System.err.println(e);
         }
+    }
+    
+
+    @FXML
+    public void supprimerNoeud() {
+    	System.out.println("NON");
+    }
+    
+
+    @FXML
+    public void supprimerLien() {
+    	Lien lienASuppr = (Lien) selectedObject;
+    	graphe.supprimerLien(lienASuppr, zoneDessin);
+    	listeElements.getItems().remove(selectedObject);
     }
     
     /**
