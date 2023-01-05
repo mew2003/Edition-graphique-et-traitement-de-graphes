@@ -41,6 +41,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
+import tools.probabilite;
 
 /**
  * Contrôleur de l'application
@@ -107,8 +108,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button validerModifLien;
     @FXML
-    private AnchorPane aside;
-    
+    private AnchorPane aside;    
+    @FXML
+    private MenuItem verifierGrapheId;
     
     // Création du manager permettant de créer toutes les factories
     FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
@@ -168,6 +170,7 @@ public class FXMLDocumentController implements Initializable {
     void creerGrapheNonOriente(ActionEvent event) {
     	initialisation();
     	valeurLien.setDisable(true);
+    	verifierGrapheId.setDisable(true);
         factory = manager.creerFactory("GrapheNonOriente");
         graphe = factory.creerGraphe();
     }
@@ -176,6 +179,7 @@ public class FXMLDocumentController implements Initializable {
     void creerGrapheOriente(ActionEvent event) {
     	initialisation();
     	valeurLien.setDisable(true);
+    	verifierGrapheId.setDisable(true);
         factory = manager.creerFactory("GrapheOriente");
         graphe = factory.creerGraphe();
     }
@@ -184,8 +188,16 @@ public class FXMLDocumentController implements Initializable {
     void creerGrapheProbabiliste(ActionEvent event) {
     	initialisation();
     	valeurLien.setDisable(false);
+    	verifierGrapheId.setDisable(false);
         factory = manager.creerFactory("GrapheProbabiliste");
         graphe = factory.creerGraphe();
+    }
+    
+    @FXML
+    void verifierGraphe(ActionEvent event) {
+    	boolean result;
+    	result = probabilite.verifierGraphe((GrapheProbabiliste) graphe);
+    	System.out.println(result);
     }
     
     /**
@@ -466,12 +478,12 @@ public class FXMLDocumentController implements Initializable {
             Noeud n2 = graphe.getNode(labelNoeudARelier[1]);
             Noeud[] nodes = {n1, n2};
             graphe.modifLien(lienAModif, nodes, zoneDessin);
+            if (graphe instanceof GrapheProbabiliste) {
+            	GrapheProbabiliste g = (GrapheProbabiliste) graphe;
+            	g.modifValeur(lienAModif, Double.parseDouble(valeurLien.getText()));
+            }
         } catch (Exception e) {
             System.err.println(e);
-        }
-        if (graphe instanceof GrapheProbabiliste) {
-        	GrapheProbabiliste g = (GrapheProbabiliste) graphe;
-        	g.modifValeur(lienAModif, Double.parseDouble(valeurLien.getText()));
         }
         lienAModif.actualiser();
     }
