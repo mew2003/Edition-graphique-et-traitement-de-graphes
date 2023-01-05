@@ -3,37 +3,30 @@
  */
 package javafxapplication7;
 
-import java.awt.Event;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.spi.LocaleNameProvider;
 
 import app.FactoryGraphe;
 import app.FactoryGrapheManager;
 import app.Graphe;
-import app.GrapheNonOriente;
 import app.GrapheProbabiliste;
 import app.Lien;
 import app.LienNonOriente;
 import app.LienOriente;
 import app.LienProbabiliste;
 import app.Noeud;
-import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
@@ -41,7 +34,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
-import javafx.scene.shape.QuadCurve;
+import tools.probabilite;
 
 /**
  * Contrôleur de l'application
@@ -108,8 +101,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button validerModifLien;
     @FXML
-    private AnchorPane aside;
-    
+    private AnchorPane aside;    
+    @FXML
+    private MenuItem verifierGrapheId;
     
     // Création du manager permettant de créer toutes les factories
     FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
@@ -169,6 +163,7 @@ public class FXMLDocumentController implements Initializable {
     void creerGrapheNonOriente(ActionEvent event) {
     	initialisation();
     	valeurLien.setDisable(true);
+    	verifierGrapheId.setDisable(true);
         factory = manager.creerFactory("GrapheNonOriente");
         graphe = factory.creerGraphe();
     }
@@ -177,6 +172,7 @@ public class FXMLDocumentController implements Initializable {
     void creerGrapheOriente(ActionEvent event) {
     	initialisation();
     	valeurLien.setDisable(true);
+    	verifierGrapheId.setDisable(true);
         factory = manager.creerFactory("GrapheOriente");
         graphe = factory.creerGraphe();
     }
@@ -185,8 +181,16 @@ public class FXMLDocumentController implements Initializable {
     void creerGrapheProbabiliste(ActionEvent event) {
     	initialisation();
     	valeurLien.setDisable(false);
+    	verifierGrapheId.setDisable(false);
         factory = manager.creerFactory("GrapheProbabiliste");
         graphe = factory.creerGraphe();
+    }
+    
+    @FXML
+    void verifierGraphe(ActionEvent event) {
+    	boolean result;
+    	result = probabilite.verifierGraphe((GrapheProbabiliste) graphe);
+    	System.out.println(result);
     }
     
     /**
@@ -198,8 +202,6 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     public void zoneDessinEvent(MouseEvent evt) {
-    	/* Liste de tous les éléments présents sur la zone de dessin  */
-        ObservableList<Node> childrens = zoneDessin.getChildren();
         // Position de la souris de l'utilisateur lors du click
     	double[] positions = {evt.getX(), evt.getY()};
 
@@ -467,12 +469,12 @@ public class FXMLDocumentController implements Initializable {
             Noeud n2 = graphe.getNode(labelNoeudARelier[1]);
             Noeud[] nodes = {n1, n2};
             graphe.modifLien(lienAModif, nodes, zoneDessin);
+            if (graphe instanceof GrapheProbabiliste) {
+            	GrapheProbabiliste g = (GrapheProbabiliste) graphe;
+            	g.modifValeur(lienAModif, Double.parseDouble(valeurLien.getText()));
+            }
         } catch (Exception e) {
             System.err.println(e);
-        }
-        if (graphe instanceof GrapheProbabiliste) {
-        	GrapheProbabiliste g = (GrapheProbabiliste) graphe;
-        	g.modifValeur(lienAModif, Double.parseDouble(valeurLien.getText()));
         }
         lienAModif.actualiser();
     }
@@ -567,8 +569,6 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void elementSelected(ActionEvent event) {
-    	/* Liste de tous les éléments présents sur la zone de dessin  */
-        ObservableList<Node> childrens = zoneDessin.getChildren();
     	try {
             Noeud node = (Noeud) listeElements.getValue();
             editionProprietesLien.setVisible(false);

@@ -173,6 +173,27 @@ public class GrapheProbabiliste extends Graphe {
 	
 	public void modifValeur(Lien lien, double newValue) {
 		LienProbabiliste l = (LienProbabiliste) lien;
+		Noeud noeudAVerif = lien.getNoeuds()[0];
+		double ActualLeaving = 0.0;
+		for (Lien li : listeLiens) {
+			if (li.getNoeuds()[0] == noeudAVerif) {
+				LienProbabiliste lie = (LienProbabiliste) li;
+				ActualLeaving += lie.getValue();
+			}
+		}
+		ActualLeaving += newValue;
+		if (ActualLeaving > 1.0) {
+			throw new IllegalArgumentException("La somme des valeurs partant d'un noeud ne peut pas être supérieur à 1.0");
+		}
 		l.setValue(newValue);
 	}
+
+	public ArrayList<Noeud> getListeNoeuds() {
+		return listeNoeuds;
+	}
+
+	public ArrayList<Lien> getListeLiens() {
+		return listeLiens;
+	}
+	
 }

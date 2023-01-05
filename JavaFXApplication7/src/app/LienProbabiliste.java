@@ -183,6 +183,11 @@ public class LienProbabiliste extends Lien {
 	}
 	
 	public void setValue(double newValue) {
+		if (0 > newValue || newValue > 1) {
+			throw new IllegalArgumentException("Un lien probabiliste ne peut pas " 
+		                                       + "avoir pour valeur un nombre inférieur" 
+					                           + " à 0 ou supérieur à 1.");
+		}
 		this.valeur = newValue;
 	}
 
