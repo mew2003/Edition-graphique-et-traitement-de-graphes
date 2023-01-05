@@ -165,7 +165,14 @@ public class LienProbabiliste extends Lien {
 
 	@Override
 	public void effacer(AnchorPane zoneDessin) {
-		// TODO Auto-generated method stub
+		if (quadCurve != null) {
+    		zoneDessin.getChildren().remove(quadCurve);
+    	} else {
+    		zoneDessin.getChildren().remove(arc);
+    	}
+    	zoneDessin.getChildren().remove(arrow1);
+    	zoneDessin.getChildren().remove(arrow2);
+    	zoneDessin.getChildren().remove(label);
 		
 	}
 	
