@@ -54,11 +54,12 @@ public class GrapheNonOriente extends Graphe {
     }
     
     @Override
-    public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
+    public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
     	for (int i = 0 ; i < listeLiens.size() ; i++)  {
     		if (listeLiens.get(i) == lienASuppr) {
     			lienASuppr.effacer(zoneDessin);
     			listeLiens.remove(lienASuppr);
+    			listeElements.getItems().remove(lienASuppr);
     			i--;
     		}
     	}
@@ -75,12 +76,10 @@ public class GrapheNonOriente extends Graphe {
     			//TODO modifier le remove de la liste d'éléments pour le passer dans 'supprimerLien'
     			for (int j = 0 ; j < listeLiens.size() ; j++) {
     				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
-    					listeElements.getItems().remove(listeLiens.get(j));
-    					supprimerLien(listeLiens.get(j), zoneDessin);
+    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
     					j--;
     				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
-    					listeElements.getItems().remove(listeLiens.get(j));
-    					supprimerLien(listeLiens.get(j), zoneDessin);
+    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
     					j--;
     				}
     		    }

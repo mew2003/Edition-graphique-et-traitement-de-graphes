@@ -44,64 +44,65 @@ public class GrapheOriente extends Graphe {
         return l;
 	}
 	
-	@Override
-	public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
-		for (int i = 0 ; i < listeLiens.size() ; i++)  {
-    		if (listeLiens.get(i) == lienASuppr) {
-    			lienASuppr.effacer(zoneDessin);
-    			listeLiens.remove(lienASuppr);
-    			i--;
-    		}
-    	}
-	}
-	
+	 @Override
+	    public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
+	    	for (int i = 0 ; i < listeLiens.size() ; i++)  {
+	    		if (listeLiens.get(i) == lienASuppr) {
+	    			lienASuppr.effacer(zoneDessin);
+	    			listeLiens.remove(lienASuppr);
+	    			listeElements.getItems().remove(lienASuppr);
+	    			i--;
+	    		}
+	    	}
+	    }
+	    
 	@Override
 	public void supprimerNoeud(Noeud noeudASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
+		
 		for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
-    		if (listeNoeuds.get(i) == noeudASuppr) {
-    			noeudASuppr.effacer(zoneDessin);
-    			listeNoeuds.remove(noeudASuppr);
-    			i--;
-    			for (int j = 0 ; j < listeLiens.size() ; j++) {
-    				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
-    					listeElements.getItems().remove(listeLiens.get(j));
-    					supprimerLien(listeLiens.get(j), zoneDessin);
-    					j--;
-    				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
-    					listeElements.getItems().remove(listeLiens.get(j));
-    					supprimerLien(listeLiens.get(j), zoneDessin);
-    					j--;
-    				}
-    		    }
+			if (listeNoeuds.get(i) == noeudASuppr) {
+				noeudASuppr.effacer(zoneDessin);
+				listeNoeuds.remove(noeudASuppr);
+				i--;
+				//TODO modifier le remove de la liste d'éléments pour le passer dans 'supprimerLien'
+				for (int j = 0 ; j < listeLiens.size() ; j++) {
+					if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
+						supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+						j--;
+					} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
+						supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+						j--;
+					}
+			    }
 			}
 		}
 	}
-
+	
 	@Override
 	public Object elementClicked(double[] positions, AnchorPane zoneDessin) {
 		ObservableList<Node> childrens = zoneDessin.getChildren();
-        for (Node n : childrens) {
-            if (n instanceof Circle) {
-                for (Noeud no : listeNoeuds) {
-                    if (isNodeClicked(positions[0], positions[1], no)) {    
-                    	reset();
-                        return no;
-                    }
-                }
-            } else if (n instanceof QuadCurve) {
-                for (Lien li : listeLiens) {
-                    if (isQuadCurvedClicked(positions[0], positions[1], li)) {
-                        return li;
-                    }
-                }
-            } else if (n instanceof Arc) {
-            	for (Lien li : listeLiens) {
-                    if (isArcClicked(positions[0], positions[1], li)) {
-                        return li;
-                    }
-                }
-            }
-        }
+	    for (Node n : childrens) {
+	        if (n instanceof Circle) {
+	            for (Noeud no : listeNoeuds) {
+	                if (isNodeClicked(positions[0], positions[1], no)) {    
+	                	reset();
+	                    return no;
+	                }
+	            }
+	        } else if (n instanceof QuadCurve) {
+	            for (Lien li : listeLiens) {
+	                if (isQuadCurvedClicked(positions[0], positions[1], li)) {
+	                    return li;
+	                }
+	            }
+	        } else if (n instanceof Arc) {
+	        	for (Lien li : listeLiens) {
+	                if (isArcClicked(positions[0], positions[1], li)) {
+	                    return li;
+	                }
+	            }
+	        }
+	    }
         reset();
         return null;
 	}
