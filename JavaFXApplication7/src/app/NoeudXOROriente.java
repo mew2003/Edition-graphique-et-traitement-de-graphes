@@ -109,6 +109,12 @@ public class NoeudXOROriente extends Noeud {
         zoneDessin.getChildren().addAll(circle, label);
     }
     
+    @Override
+    public void effacer(AnchorPane zoneDessin) {
+    	zoneDessin.getChildren().remove(circle);
+    	zoneDessin.getChildren().remove(label);
+    }
+    
     public void actualiser() {
     	label.setLayoutX(pos[0] - radius);
         label.setLayoutY(pos[1] - (label.getHeight() / 2));

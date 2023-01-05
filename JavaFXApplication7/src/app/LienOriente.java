@@ -98,7 +98,14 @@ public class LienOriente extends Lien {
     
     @Override
     public void effacer(AnchorPane zoneDessin) {
-    	zoneDessin.getChildren().remove(line);
+    	if (line != null) {
+    		zoneDessin.getChildren().remove(line);
+    	} else {
+    		zoneDessin.getChildren().remove(arc);
+    	}
+    	zoneDessin.getChildren().remove(arrow1);
+    	zoneDessin.getChildren().remove(arrow2);
+    	
     }
     
 	@Override

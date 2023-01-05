@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -41,6 +42,41 @@ public class GrapheOriente extends Graphe {
         listeLiens.add(l);
         return l;
 	}
+	
+	@Override
+	public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
+		for (int i = 0 ; i < listeLiens.size() ; i++)  {
+    		if (listeLiens.get(i) == lienASuppr) {
+    			lienASuppr.effacer(zoneDessin);
+    			listeLiens.remove(lienASuppr);
+    			i--;
+    		}
+    	}
+	}
+	
+	@Override
+	public void supprimerNoeud(Noeud noeudASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
+		for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
+    		if (listeNoeuds.get(i) == noeudASuppr) {
+    			noeudASuppr.effacer(zoneDessin);
+    			listeNoeuds.remove(noeudASuppr);
+    			i--;
+    			for (int j = 0 ; j < listeLiens.size() ; j++) {
+    				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
+    					System.out.println("lien noeud 1 suppr");
+    					listeElements.getItems().remove(listeLiens.get(j));
+    					supprimerLien(listeLiens.get(j), zoneDessin);
+    					j--;
+    				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
+    					System.out.println("lien noeud 2 suppr");
+    					listeElements.getItems().remove(listeLiens.get(j));
+    					supprimerLien(listeLiens.get(j), zoneDessin);
+    					j--;
+    				}
+    		    }
+			}
+		}
+	}
 
 	@Override
 	public Object elementClicked(double[] positions, AnchorPane zoneDessin) {
@@ -56,22 +92,12 @@ public class GrapheOriente extends Graphe {
             } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
                     if (isLinkClicked(positions[0], positions[1], li)) {
-                    	LienOriente lienOR = (LienOriente) li;
-                    	reset();
-                    	for(Line line : lienOR.getLine()) {
-                    		line.setStrokeWidth(3.0);
-                    	}
                         return li;
                     }
                 }
             } else if (n instanceof Arc) {
             	for (Lien li : listeLiens) {
                     if (isArcClicked(positions[0], positions[1], li)) {
-                    	LienOriente lienOR = (LienOriente) li;
-                    	reset();
-                    	for(Shape shape : lienOR.getArc()) {
-                    		shape.setStrokeWidth(3.0);
-                    	}
                         return li;
                     }
                 }
@@ -162,12 +188,6 @@ public class GrapheOriente extends Graphe {
 				l.actualiser();
 			}
 		}
-	}
-
-	@Override
-	public Lien supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

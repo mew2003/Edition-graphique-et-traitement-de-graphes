@@ -30,6 +30,10 @@ public abstract class Lien {
      */
     public abstract void dessiner(AnchorPane zoneDessin);
     
+    /**
+     * Efface le lien sur la zone de dessin
+     * @param zoneDessin la zone graphique qui contient le dessin
+     */
     public abstract void effacer(AnchorPane zoneDessin);
     
     /**

@@ -3,6 +3,7 @@
  */
 package app;
 
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -27,7 +28,20 @@ public abstract class Graphe {
      */
     public abstract Lien creerLien(Noeud noeud1, Noeud noeud2);
     
-	public abstract Lien supprimerLien(Lien lienASuppr, AnchorPane zoneDessin);
+    /**
+     * Supprime un lien et sa représentation graphique
+     * @param lienASuppr le lien à supprimer
+     * @param zoneDessin la zone graphique sur laquelle supprimer la représentation du lien
+     */
+	public abstract void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin);
+	
+	/**
+	 * Supprime un noeud et sa représentation graphique
+	 * @param noeudASuppr le noeud à supprimer
+	 * @param zoneDessin la zone graphique sur laquelle supprimer la représentation du lien
+	 * @param listeElements la liste de tous les éléments du graphe
+	 */
+	public abstract void supprimerNoeud(Noeud noeudASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements);
 	
      /**
      * Permet d'obtenir l'élément clique sur l'interface

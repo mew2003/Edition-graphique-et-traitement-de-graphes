@@ -6,6 +6,7 @@ package app;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
@@ -25,6 +26,7 @@ public class GrapheNonOriente extends Graphe {
 	
     private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
+    private ArrayList<Lien> listeASuppr = new ArrayList<>();
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 1;
     private int nbLien = 1;
@@ -53,18 +55,41 @@ public class GrapheNonOriente extends Graphe {
     }
     
     @Override
-    public Lien supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
-    	int i = 0;
-    	for (Lien l : listeLiens) {
-    		if (l == lienASuppr) {
+    public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
+    	for (int i = 0 ; i < listeLiens.size() ; i++)  {
+    		if (listeLiens.get(i) == lienASuppr) {
     			lienASuppr.effacer(zoneDessin);
-    			listeLiens.remove(i);
+    			listeLiens.remove(lienASuppr);
+    			i--;
     		}
-    		i++;
     	}
-    	
-    	return null;
     }
+    
+    @Override
+    public void supprimerNoeud(Noeud noeudASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
+    	
+    	for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
+    		if (listeNoeuds.get(i) == noeudASuppr) {
+    			noeudASuppr.effacer(zoneDessin);
+    			listeNoeuds.remove(noeudASuppr);
+    			i--;
+    			for (int j = 0 ; j < listeLiens.size() ; j++) {
+    				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
+    					System.out.println("lien noeud 1 suppr");
+    					listeElements.getItems().remove(listeLiens.get(j));
+    					supprimerLien(listeLiens.get(j), zoneDessin);
+    					j--;
+    				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
+    					System.out.println("lien noeud 2 suppr");
+    					listeElements.getItems().remove(listeLiens.get(j));
+    					supprimerLien(listeLiens.get(j), zoneDessin);
+    					j--;
+    				}
+    		    }
+			}
+		}
+    }
+
     
     @Override
     public String toString() {
@@ -94,9 +119,7 @@ public class GrapheNonOriente extends Graphe {
             } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
                     if (isLinkClicked(positions[0], positions[1], li)) {
-                        LienNonOriente lienN = (LienNonOriente) li;
                         reset();
-                        lienN.getLine().setStrokeWidth(3.0);
                     	return li;
                     }
                 }

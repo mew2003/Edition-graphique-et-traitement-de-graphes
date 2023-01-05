@@ -37,6 +37,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
@@ -325,9 +326,10 @@ public class FXMLDocumentController implements Initializable {
                     LienNonOriente lien = (LienNonOriente) link;
                     for(Node n : childrens) {
                     	if(n instanceof Line) {
-                    		if(n.equals(lien.getLine())) {
+                    		if(n.equals(lien.getLine()) && lien.getLine().getStrokeWidth() == 3.0) {
                     			n.setOnMouseDragged(event -> {
                     				lien.getLine().setStrokeWidth(3.0);
+                    				previewedLine.setStrokeWidth(3.0);
                 		            previewedLine.setStartX(lien.getNoeuds()[0].getPositions()[0]);
                 		            previewedLine.setStartY(lien.getNoeuds()[0].getPositions()[1]);
                 		            previewedLine.setEndX(event.getX());
@@ -339,7 +341,14 @@ public class FXMLDocumentController implements Initializable {
                     				if(graphe.elementClicked(pos, zoneDessin) != null) {
                     					Noeud noeud = (Noeud) graphe.elementClicked(pos, zoneDessin);
                     					Noeud[] noeuds = {link.getNoeuds()[0], noeud};
-                        				if(!(noeud.equals(noeuds[0]))) {
+                    					boolean ok = true;
+                    					for(int i = 0; i < listeElements.getItems().size() ; i++) {
+                    						String test = listeElements.getItems().get(i).toString();
+                    						if(test.equals("Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]")) {
+                    							ok = false;
+                    						}
+                    					}
+                        				if(ok && !(noeud.equals(noeuds[0]))) {
                         					lien.setNoeuds(noeuds, zoneDessin);
                         				}
                     				}
@@ -356,6 +365,7 @@ public class FXMLDocumentController implements Initializable {
                     				for(Line line : lien.getLine()) {
                     					line.setStrokeWidth(3.0);
                     				}
+                    				previewedLine.setStrokeWidth(3.0);
                 		            previewedLine.setStartX(lien.getNoeuds()[0].getPositions()[0]);
                 		            previewedLine.setStartY(lien.getNoeuds()[0].getPositions()[1]);
                 		            previewedLine.setEndX(event.getX());
@@ -364,10 +374,53 @@ public class FXMLDocumentController implements Initializable {
                     			n.setOnMouseReleased(event -> {
                     				exitPreview(event);
                     				double[] pos = {event.getX(), event.getY()};
-                    				if(graphe.elementClicked(pos, zoneDessin) != null) {
+                    				if(graphe.elementClicked(pos, zoneDessin) != null
+                    				   && graphe.elementClicked(pos, zoneDessin) != lien) {
                     					Noeud noeud = (Noeud) graphe.elementClicked(pos, zoneDessin);
                     					Noeud[] noeuds = {link.getNoeuds()[0], noeud};
-                        				if(!(noeud.equals(noeuds[0]))) {
+                    					boolean ok = true;
+                    					for(int i = 0; i < listeElements.getItems().size() ; i++) {
+                    						String test = listeElements.getItems().get(i).toString();
+                    						if(test.equals("Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]")) {
+                    							ok = false;
+                    						}
+                    					}
+                        				if(ok) {
+                        					lien.setNoeuds(noeuds, zoneDessin);
+                        				}
+                    				}
+                    			});
+                    		}
+                    	} else if (n instanceof Arc) {
+                    		if(n.equals(lien.getArc()[0])) {
+                    			for(Shape shape : lien.getArc()) {
+                					shape.setStrokeWidth(3.0);
+                				}
+                    			n.setOnMouseDragged(event -> {
+                    				for(Shape shape : lien.getArc()) {
+                    					shape.setStrokeWidth(3.0);
+                    				}
+                    				previewedLine.setStrokeWidth(3.0);
+                		            previewedLine.setStartX(lien.getNoeuds()[0].getPositions()[0]);
+                		            previewedLine.setStartY(lien.getNoeuds()[0].getPositions()[1]);
+                		            previewedLine.setEndX(event.getX());
+                		            previewedLine.setEndY(event.getY());
+                    			});
+                    			n.setOnMouseReleased(event -> {
+                    				exitPreview(event);
+                    				double[] pos = {event.getX(), event.getY()};
+                    				if(graphe.elementClicked(pos, zoneDessin) != null
+                    					&& graphe.elementClicked(pos, zoneDessin) != lien) {
+                    					Noeud noeud = (Noeud) graphe.elementClicked(pos, zoneDessin);
+                    					Noeud[] noeuds = {link.getNoeuds()[0], noeud};
+                    					boolean ok = true;
+                    					for(int i = 0; i < listeElements.getItems().size() ; i++) {
+                    						String test = listeElements.getItems().get(i).toString();
+                    						if(test.equals("Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]")) {
+                    							ok = false;
+                    						}
+                    					}
+                        				if(ok) {
                         					lien.setNoeuds(noeuds, zoneDessin);
                         				}
                     				}
@@ -375,7 +428,7 @@ public class FXMLDocumentController implements Initializable {
                     		}
                     	}
                     }
-                }
+            	}
             }
         } else {
             listeElements.getSelectionModel().clearSelection();
@@ -426,15 +479,23 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     public void supprimerNoeud() {
-    	System.out.println("NON");
+    	Noeud noeudASuppr = (Noeud) selectedObject;
+    	listeElements.getItems().remove(selectedObject);
+    	graphe.supprimerNoeud(noeudASuppr, zoneDessin, listeElements);
+    	listeElements.getSelectionModel().clearSelection();
+        editionProprietesLien.setVisible(false);
+        editionProprietesNoeud.setVisible(false);
     }
     
 
     @FXML
     public void supprimerLien() {
     	Lien lienASuppr = (Lien) selectedObject;
-    	graphe.supprimerLien(lienASuppr, zoneDessin);
     	listeElements.getItems().remove(selectedObject);
+    	graphe.supprimerLien(lienASuppr, zoneDessin);
+    	listeElements.getSelectionModel().clearSelection();
+        editionProprietesLien.setVisible(false);
+        editionProprietesNoeud.setVisible(false);
     }
     
     /**
@@ -448,10 +509,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void preview(MouseEvent event) {
     	if(actualMode != 3) {
-        	ObservableList<Node> childrens = zoneDessin.getChildren();
-    		for (Node n : childrens) {
-    			n.setOnMouseDragged(null);
-    		}
+        	reset2();
     	}
         if (actualMode == 1) {
             previewedCircle.setCenterX(event.getX());
@@ -485,12 +543,22 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML void addNodeClicked(MouseEvent event) {
     	actualMode = 1; 
+    	reset2();
     }
     @FXML void addLinkClicked(MouseEvent event) {
     	actualMode = 2;
+    	reset2();
     }
     @FXML void SelectClicked(MouseEvent event) {
     	actualMode = 3;
+    }
+    
+    void reset2() {
+    	ObservableList<Node> childrens = zoneDessin.getChildren();
+		for (Node n : childrens) {
+			n.setOnMouseDragged(null);
+			n.setOnMouseReleased(null);
+		}
     }
 
     /**
