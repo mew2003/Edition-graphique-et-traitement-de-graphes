@@ -380,7 +380,6 @@ public class FXMLDocumentController implements Initializable {
                     					}
                         				if(ok) {
                         					lien.setNoeuds(noeuds, zoneDessin);
-                        					lien.actualiser();
                         				}
                     				}
                     			});
@@ -416,7 +415,6 @@ public class FXMLDocumentController implements Initializable {
                     					}
                         				if(ok) {
                         					lien.setNoeuds(noeuds, zoneDessin);
-                        					lien.actualiser();
                         				}
                     				}
                     			});
