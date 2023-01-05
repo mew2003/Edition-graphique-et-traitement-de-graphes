@@ -101,7 +101,8 @@ public class GrapheProbabiliste extends Graphe {
 	public void modifLien(Lien lien, Noeud[] noeuds, AnchorPane zoneDessin) {
 		for (Lien l : listeLiens) {
 			if (l.getNoeuds()[0] == noeuds[0] 
-			    && l.getNoeuds()[1] == noeuds[1]) {
+			    && l.getNoeuds()[1] == noeuds[1]
+			    && l != lien) {
 				throw new IllegalArgumentException("Deux liens ne peuvent pas avoir en commun les mêmes noeuds");
 			}
 		}
@@ -139,5 +140,10 @@ public class GrapheProbabiliste extends Graphe {
 	public void relocalisation() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void modifValeur(Lien lien, double newValue) {
+		LienProbabiliste l = (LienProbabiliste) lien;
+		l.setValue(newValue);
 	}
 }

@@ -12,9 +12,11 @@ import app.FactoryGraphe;
 import app.FactoryGrapheManager;
 import app.Graphe;
 import app.GrapheNonOriente;
+import app.GrapheProbabiliste;
 import app.Lien;
 import app.LienNonOriente;
 import app.LienOriente;
+import app.LienProbabiliste;
 import app.Noeud;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
@@ -164,7 +166,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void creerGrapheNonOriente(ActionEvent event) {
     	initialisation();
-        valeurLien.setEditable(false);
+    	valeurLien.setDisable(true);
         factory = manager.creerFactory("GrapheNonOriente");
         graphe = factory.creerGraphe();
     }
@@ -172,7 +174,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void creerGrapheOriente(ActionEvent event) {
     	initialisation();
-        valeurLien.setEditable(false);
+    	valeurLien.setDisable(true);
         factory = manager.creerFactory("GrapheOriente");
         graphe = factory.creerGraphe();
     }
@@ -180,6 +182,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void creerGrapheProbabiliste(ActionEvent event) {
     	initialisation();
+    	valeurLien.setDisable(false);
         factory = manager.creerFactory("GrapheProbabiliste");
         graphe = factory.creerGraphe();
     }
@@ -313,6 +316,10 @@ public class FXMLDocumentController implements Initializable {
                 editionProprietesNoeud.setVisible(false);
                 noeud1Lien.setText(link.getNoeuds()[0].getNom());
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
+                if (link instanceof LienProbabiliste) {
+                	LienProbabiliste l = (LienProbabiliste) link;
+                	valeurLien.setText("" + l.getValue());
+                }
                 selectedObject = link;
                 if(link instanceof LienNonOriente) {
                     LienNonOriente lien = (LienNonOriente) link;
@@ -409,6 +416,11 @@ public class FXMLDocumentController implements Initializable {
         } catch (Exception e) {
             System.err.println(e);
         }
+        if (graphe instanceof GrapheProbabiliste) {
+        	GrapheProbabiliste g = (GrapheProbabiliste) graphe;
+        	g.modifValeur(lienAModif, Double.parseDouble(valeurLien.getText()));
+        }
+        lienAModif.actualiser();
     }
     
 
