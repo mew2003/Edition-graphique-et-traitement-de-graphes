@@ -3,11 +3,16 @@ package tools;
 import app.Lien;
 import app.LienNonOriente;
 import app.LienOriente;
+import app.LienProbabiliste;
 import app.Noeud;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
 
 public class clickDetection {
+	
+	static double precisionLigne = 1.0;
+	static double precisionQuadCurved = 5.0;
 
 	/**
      * Vérifie qu'une position X,Y soit situer à l'emplacement d'un noeud
@@ -33,8 +38,8 @@ public class clickDetection {
      * @return true si les positions se trouve en effet à l'emplacement d'un lien
      *         false dans le cas contraire.
      */
-    public static boolean isLinkClicked(double mouseX, double mouseY, Lien lien, double precision) {
-    	Line lienAVerif = null;
+    public static boolean isLinkClicked(double mouseX, double mouseY, Lien lien) {
+    	Line lienAVerif;
     	if (lien instanceof LienNonOriente) {
     		LienNonOriente lienM = (LienNonOriente) lien;
     		lienAVerif = lienM.getLine();
@@ -51,8 +56,8 @@ public class clickDetection {
         double distN1L = distance(linePos[0], linePos[1], mouseX, mouseY);
         double distN2L = distance(linePos[2], linePos[3], mouseX, mouseY);
         // Degré de précision tolérer (MIN / MAX)
-        double floor = (distN1L + distN2L) - precision;
-        double ceil = (distN1L + distN2L) + precision;
+        double floor = (distN1L + distN2L) - precisionLigne;
+        double ceil = (distN1L + distN2L) + precisionLigne;
         return floor < distN1N2 && distN1N2 < ceil;
     }
     
@@ -61,6 +66,30 @@ public class clickDetection {
     	Arc arc = (Arc) lienO.getArc()[0];
     	return arc != null && mouseX > arc.getCenterX() - arc.getRadiusX() && mouseX < arc.getCenterX() + arc.getRadiusX()
         	   && mouseY > arc.getCenterY() - arc.getRadiusX() && mouseY < arc.getCenterY() + arc.getRadiusX();
+    }
+    
+    public static boolean isQuadCurvedClicked(double mouseX, double mouseY, Lien lien) {
+    	//TODO: Refaire depuis 0 vu que c'est de la merde et que ça marche pas
+    	LienProbabiliste lienP = (LienProbabiliste) lien;
+    	QuadCurve quadCurve = lienP.getQuadCurved();
+    	double[] mousePos = {mouseX, mouseY};
+    	double[] triangleA = {quadCurve.getStartX(), quadCurve.getStartY()};
+    	double[] triangleB = {quadCurve.getControlX(), quadCurve.getControlY()};
+    	double[] triangleC = {quadCurve.getEndX(), quadCurve.getEndY()};
+    	double triangleArea = triangleArea(triangleA, triangleB, triangleC);
+    	double PBC = triangleArea(mousePos, triangleB, triangleC);
+    	double APC = triangleArea(triangleA, mousePos, triangleC);
+    	double ABP = triangleArea(triangleA, triangleB, mousePos);
+    	double areaFind = PBC + APC + ABP;
+    	double floor = triangleArea - precisionLigne;
+        double ceil = triangleArea + precisionLigne;
+        System.out.println(triangleArea + " " + areaFind);
+        return floor < areaFind && areaFind < ceil;
+    }
+    
+    public static double triangleArea(double[] point1, double[] point2, double[] point3) {
+		return (point1[0] * (point2[1] - point3[1]) + point2[0] * (point3[1] - point1[1])
+				+ point3[0] * (point1[1] + point2[1])) / 2;
     }
     
     /**
