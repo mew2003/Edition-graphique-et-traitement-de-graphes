@@ -7,6 +7,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Shape;
 
 import static tools.drawingPositions.*;
 
@@ -159,8 +160,9 @@ public class LienProbabiliste extends Lien {
         return "Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]";
     }
 
-	public QuadCurve getQuadCurved() {
-		return quadCurve;
+	public Shape[] getQuadCurved() {
+		Shape[] lines = {quadCurve, arrow1, arrow2};
+		return lines;
 	}
 
 	@Override

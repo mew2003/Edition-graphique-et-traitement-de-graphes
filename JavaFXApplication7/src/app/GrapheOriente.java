@@ -9,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.Arc;
 import static tools.clickDetection.*;
@@ -63,12 +64,10 @@ public class GrapheOriente extends Graphe {
     			i--;
     			for (int j = 0 ; j < listeLiens.size() ; j++) {
     				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
-    					System.out.println("lien noeud 1 suppr");
     					listeElements.getItems().remove(listeLiens.get(j));
     					supprimerLien(listeLiens.get(j), zoneDessin);
     					j--;
     				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
-    					System.out.println("lien noeud 2 suppr");
     					listeElements.getItems().remove(listeLiens.get(j));
     					supprimerLien(listeLiens.get(j), zoneDessin);
     					j--;
@@ -89,9 +88,9 @@ public class GrapheOriente extends Graphe {
                         return no;
                     }
                 }
-            } else if (n instanceof Line) {
+            } else if (n instanceof QuadCurve) {
                 for (Lien li : listeLiens) {
-                    if (isLinkClicked(positions[0], positions[1], li)) {
+                    if (isQuadCurvedClicked(positions[0], positions[1], li)) {
                         return li;
                     }
                 }
@@ -119,7 +118,7 @@ public class GrapheOriente extends Graphe {
     				shape.setStrokeWidth(1.0);
     			}
     		}
-    		for(Line line : li.getLine()) {
+    		for(Shape line : li.getQuadCurved()) {
     			if(line != null) {
     				line.setStrokeWidth(1.0);
     			}

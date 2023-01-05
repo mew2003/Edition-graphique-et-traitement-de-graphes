@@ -3,37 +3,30 @@
  */
 package javafxapplication7;
 
-import java.awt.Event;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.spi.LocaleNameProvider;
 
 import app.FactoryGraphe;
 import app.FactoryGrapheManager;
 import app.Graphe;
-import app.GrapheNonOriente;
 import app.GrapheProbabiliste;
 import app.Lien;
 import app.LienNonOriente;
 import app.LienOriente;
 import app.LienProbabiliste;
 import app.Noeud;
-import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
@@ -209,8 +202,6 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     public void zoneDessinEvent(MouseEvent evt) {
-    	/* Liste de tous les éléments présents sur la zone de dessin  */
-        ObservableList<Node> childrens = zoneDessin.getChildren();
         // Position de la souris de l'utilisateur lors du click
     	double[] positions = {evt.getX(), evt.getY()};
 
@@ -372,9 +363,9 @@ public class FXMLDocumentController implements Initializable {
                     LienOriente lien = (LienOriente) link;
                     for(Node n : childrens) {
                     	if(n instanceof Line) {
-                    		if(n.equals(lien.getLine()[0])) {
+                    		if(n.equals(lien.getQuadCurved()[0])) {
                     			n.setOnMouseDragged(event -> {
-                    				for(Line line : lien.getLine()) {
+                    				for(Shape line : lien.getQuadCurved()) {
                     					line.setStrokeWidth(3.0);
                     				}
                     				previewedLine.setStrokeWidth(3.0);
@@ -579,8 +570,6 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void elementSelected(ActionEvent event) {
-    	/* Liste de tous les éléments présents sur la zone de dessin  */
-        ObservableList<Node> childrens = zoneDessin.getChildren();
     	try {
             Noeud node = (Noeud) listeElements.getValue();
             editionProprietesLien.setVisible(false);
@@ -608,7 +597,7 @@ public class FXMLDocumentController implements Initializable {
             } else if(link instanceof LienOriente) {
             	LienOriente lienOR = (LienOriente) link;
             	graphe.reset();
-            	for(Line l : lienOR.getLine()) {
+            	for(Shape l : lienOR.getQuadCurved()) {
             		l.setStrokeWidth(3.0);
             	}
             	for(Shape shape : lienOR.getArc()) {
