@@ -72,6 +72,7 @@ public class GrapheNonOriente extends Graphe {
     			noeudASuppr.effacer(zoneDessin);
     			listeNoeuds.remove(noeudASuppr);
     			i--;
+    			//TODO modifier le remove de la liste d'éléments pour le passer dans 'supprimerLien'
     			for (int j = 0 ; j < listeLiens.size() ; j++) {
     				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
     					listeElements.getItems().remove(listeLiens.get(j));

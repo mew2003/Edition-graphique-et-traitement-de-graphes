@@ -8,6 +8,7 @@ import app.Noeud;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Shape;
 
 public class clickDetection {
 	
@@ -40,13 +41,9 @@ public class clickDetection {
      */
     public static boolean isLinkClicked(double mouseX, double mouseY, Lien lien) {
     	Line lienAVerif;
-    	if (lien instanceof LienNonOriente) {
-    		LienNonOriente lienM = (LienNonOriente) lien;
-    		lienAVerif = lienM.getLine();
-    	} else {
-    		LienOriente lienM = (LienOriente) lien;
-    		lienAVerif = lienM.getLine()[0];
-    	}
+    	LienNonOriente lienM = (LienNonOriente) lien;
+    	lienAVerif = lienM.getLine();
+
 		if (lienAVerif == null) {
     		return false;
     	}
@@ -75,9 +72,16 @@ public class clickDetection {
     }
     
     public static boolean isQuadCurvedClicked(double mouseX, double mouseY, Lien lien) {
-    	LienProbabiliste lienP = (LienProbabiliste) lien;
-    	QuadCurve quadCurve = lienP.getQuadCurved();
-    	if (quadCurve == null) return false; //Si le lien ne possède pas de quadCurve (si c'est une courbe)
+    	QuadCurve quadCurve;
+    	if (lien instanceof LienProbabiliste) {
+    		LienProbabiliste lienP = (LienProbabiliste) lien;
+    		quadCurve = (QuadCurve) lienP.getQuadCurved()[0];
+    	} else {
+    		LienOriente lienO = (LienOriente) lien;
+    		quadCurve = (QuadCurve) lienO.getQuadCurved()[0];
+    	}
+
+		if (quadCurve == null) return false; //Si le lien ne possède pas de quadCurve (si c'est une courbe)
     	double[] mousePos = {mouseX, mouseY};
     	double[] triangleA = {quadCurve.getStartX(), quadCurve.getStartY()};
     	double[] triangleC = {quadCurve.getEndX(), quadCurve.getEndY()};

@@ -41,6 +41,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
+import javafx.scene.shape.QuadCurve;
 
 /**
  * Contrôleur de l'application
@@ -360,9 +361,9 @@ public class FXMLDocumentController implements Initializable {
                     LienOriente lien = (LienOriente) link;
                     for(Node n : childrens) {
                     	if(n instanceof Line) {
-                    		if(n.equals(lien.getLine()[0])) {
+                    		if(n.equals(lien.getQuadCurved()[0])) {
                     			n.setOnMouseDragged(event -> {
-                    				for(Line line : lien.getLine()) {
+                    				for(Shape line : lien.getQuadCurved()) {
                     					line.setStrokeWidth(3.0);
                     				}
                     				previewedLine.setStrokeWidth(3.0);
@@ -596,7 +597,7 @@ public class FXMLDocumentController implements Initializable {
             } else if(link instanceof LienOriente) {
             	LienOriente lienOR = (LienOriente) link;
             	graphe.reset();
-            	for(Line l : lienOR.getLine()) {
+            	for(Shape l : lienOR.getQuadCurved()) {
             		l.setStrokeWidth(3.0);
             	}
             	for(Shape shape : lienOR.getArc()) {
