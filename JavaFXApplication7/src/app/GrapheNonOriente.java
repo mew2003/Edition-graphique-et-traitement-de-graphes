@@ -26,7 +26,6 @@ public class GrapheNonOriente extends Graphe {
 	
     private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
-    private ArrayList<Lien> listeASuppr = new ArrayList<>();
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 1;
     private int nbLien = 1;
@@ -75,12 +74,10 @@ public class GrapheNonOriente extends Graphe {
     			i--;
     			for (int j = 0 ; j < listeLiens.size() ; j++) {
     				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
-    					System.out.println("lien noeud 1 suppr");
     					listeElements.getItems().remove(listeLiens.get(j));
     					supprimerLien(listeLiens.get(j), zoneDessin);
     					j--;
     				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
-    					System.out.println("lien noeud 2 suppr");
     					listeElements.getItems().remove(listeLiens.get(j));
     					supprimerLien(listeLiens.get(j), zoneDessin);
     					j--;

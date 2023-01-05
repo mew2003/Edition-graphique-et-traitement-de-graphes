@@ -63,12 +63,10 @@ public class GrapheOriente extends Graphe {
     			i--;
     			for (int j = 0 ; j < listeLiens.size() ; j++) {
     				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
-    					System.out.println("lien noeud 1 suppr");
     					listeElements.getItems().remove(listeLiens.get(j));
     					supprimerLien(listeLiens.get(j), zoneDessin);
     					j--;
     				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
-    					System.out.println("lien noeud 2 suppr");
     					listeElements.getItems().remove(listeLiens.get(j));
     					supprimerLien(listeLiens.get(j), zoneDessin);
     					j--;
