@@ -419,15 +419,23 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     public void supprimerNoeud() {
-    	System.out.println("NON");
+    	Noeud noeudASuppr = (Noeud) selectedObject;
+    	listeElements.getItems().remove(selectedObject);
+    	graphe.supprimerNoeud(noeudASuppr, zoneDessin, listeElements);
+    	listeElements.getSelectionModel().clearSelection();
+        editionProprietesLien.setVisible(false);
+        editionProprietesNoeud.setVisible(false);
     }
     
 
     @FXML
     public void supprimerLien() {
     	Lien lienASuppr = (Lien) selectedObject;
-    	graphe.supprimerLien(lienASuppr, zoneDessin);
     	listeElements.getItems().remove(selectedObject);
+    	graphe.supprimerLien(lienASuppr, zoneDessin);
+    	listeElements.getSelectionModel().clearSelection();
+        editionProprietesLien.setVisible(false);
+        editionProprietesNoeud.setVisible(false);
     }
     
     /**

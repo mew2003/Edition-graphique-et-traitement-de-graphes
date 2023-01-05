@@ -49,6 +49,12 @@ public abstract class Noeud {
     public abstract void dessiner(AnchorPane zoneDessin);
     
     /**
+     * Efface le noeud sur la zone de dessin
+     * @param zoneDessin la zone graphique qui contient le dessin
+     */
+    public abstract void effacer(AnchorPane zoneDessin);
+    
+    /**
      * Modifie le nom du noeud par le nouveau en argument
      * @param nom nouveau nom du noeud
      */
