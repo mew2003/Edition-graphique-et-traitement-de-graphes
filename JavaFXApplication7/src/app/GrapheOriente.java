@@ -56,22 +56,12 @@ public class GrapheOriente extends Graphe {
             } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
                     if (isLinkClicked(positions[0], positions[1], li, ((Line) n).getStrokeWidth() / 10)) {
-                    	LienOriente lienOR = (LienOriente) li;
-                    	reset();
-                    	for(Line line : lienOR.getLine()) {
-                    		line.setStrokeWidth(3.0);
-                    	}
                         return li;
                     }
                 }
             } else if (n instanceof Arc) {
             	for (Lien li : listeLiens) {
                     if (isArcClicked(positions[0], positions[1], li)) {
-                    	LienOriente lienOR = (LienOriente) li;
-                    	reset();
-                    	for(Shape shape : lienOR.getArc()) {
-                    		shape.setStrokeWidth(3.0);
-                    	}
                         return li;
                     }
                 }
@@ -162,16 +152,4 @@ public class GrapheOriente extends Graphe {
 			}
 		}
 	}
-
-	@Override
-    public void reset() {
-    	for (Noeud n : listeNoeuds) {
-    		n.getCircle().setStrokeWidth(1.0);
-    	}
-    	for (Lien l : listeLiens) {
-    		LienNonOriente li = (LienNonOriente) l;
-    		li.getLine().setStrokeWidth(1.0);
-    	}
-    }
-
 }

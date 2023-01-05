@@ -80,9 +80,7 @@ public class GrapheNonOriente extends Graphe {
             } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
                     if (isLinkClicked(positions[0], positions[1], li, ((Line) n).getStrokeWidth() / 10)) {
-                        LienNonOriente lienN = (LienNonOriente) li;
                         reset();
-                        lienN.getLine().setStrokeWidth(3.0);
                     	return li;
                     }
                 }
