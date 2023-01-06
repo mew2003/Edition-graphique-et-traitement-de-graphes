@@ -5,7 +5,6 @@ package javafxapplication7;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import app.FactoryGraphe;
 import app.FactoryGrapheManager;
 import app.Graphe;
@@ -409,7 +408,16 @@ public class FXMLDocumentController implements Initializable {
                     						}
                     					}
                         				if(ok) {
-                        					lien.setNoeuds(noeuds, zoneDessin);
+                        					for(int i = 0; i < listeElements.getItems().size() ; i++) {
+                        						String test = listeElements.getItems().get(i).toString();
+                        						if(test.equals(lien.toString())) {
+                        							listeElements.getItems().remove(i);
+                        						}		
+                        					}
+                        					graphe.supprimerLien(lien, zoneDessin);
+                        					Lien nouveauLien = graphe.creerLien(noeuds[0], noeuds[1]);
+                        					nouveauLien.dessiner(zoneDessin);
+                        					listeElements.getItems().addAll(nouveauLien);
                         				}
                     				}
                     			});
@@ -437,14 +445,24 @@ public class FXMLDocumentController implements Initializable {
                     					Noeud noeud = (Noeud) graphe.elementClicked(pos, zoneDessin);
                     					Noeud[] noeuds = {link.getNoeuds()[0], noeud};
                     					boolean ok = true;
+                    					
                     					for(int i = 0; i < listeElements.getItems().size() ; i++) {
                     						String test = listeElements.getItems().get(i).toString();
                     						if(test.equals("Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]")) {
                     							ok = false;
                     						}
                     					}
-                        				if(ok) {
-                        					lien.setNoeuds(noeuds, zoneDessin);
+                        				if(ok && !(noeuds[0].equals(noeud))) {
+                        					for(int i = 0; i < listeElements.getItems().size() ; i++) {
+                        						String test = listeElements.getItems().get(i).toString();
+                        						if(test.equals(lien.toString())) {
+                        							listeElements.getItems().remove(i);
+                        						}		
+                        					}
+                        					graphe.supprimerLien(lien, zoneDessin);
+                        					Lien nouveauLien = graphe.creerLien(noeuds[0], noeuds[1]);
+                        					nouveauLien.dessiner(zoneDessin);
+                        					listeElements.getItems().addAll(nouveauLien);
                         				}
                     				}
                     			});
@@ -616,12 +634,14 @@ public class FXMLDocumentController implements Initializable {
             } else if(link instanceof LienOriente) {
             	LienOriente lienOR = (LienOriente) link;
             	graphe.reset();
-            	for(Shape l : lienOR.getQuadCurved()) {
-            		l.setStrokeWidth(3.0);
-            	}
-            	for(Shape shape : lienOR.getArc()) {
-            		shape.setStrokeWidth(3.0);
-            	}
+            	try {
+            		for(Shape shape : lienOR.getArc()) {
+            			shape.setStrokeWidth(3.0);
+            		}
+            	} catch (NullPointerException e) {}
+            	for(Line line : lienOR.getLine()) {
+        			line.setStrokeWidth(3.0);
+        		}	
             }            
     	} catch (Exception e) {}
     	
