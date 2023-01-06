@@ -204,7 +204,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     void matriceDeTransition(ActionEvent event) {
-    	
+    	probabilite.matriceDeTransition();
     }
     
     @FXML
