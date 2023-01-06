@@ -176,7 +176,7 @@ public class GrapheProbabiliste extends Graphe {
 		Noeud noeudAVerif = lien.getNoeuds()[0];
 		double ActualLeaving = 0.0;
 		for (Lien li : listeLiens) {
-			if (li.getNoeuds()[0] == noeudAVerif) {
+			if (li.getNoeuds()[0] == noeudAVerif && lien != li) {
 				LienProbabiliste lie = (LienProbabiliste) li;
 				ActualLeaving += lie.getValue();
 			}
