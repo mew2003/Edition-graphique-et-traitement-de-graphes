@@ -414,7 +414,7 @@ public class FXMLDocumentController implements Initializable {
                         							listeElements.getItems().remove(i);
                         						}		
                         					}
-                        					graphe.supprimerLien(lien, zoneDessin);
+                        					graphe.supprimerLien(lien, zoneDessin, listeElements);
                         					Lien nouveauLien = graphe.creerLien(noeuds[0], noeuds[1]);
                         					nouveauLien.dessiner(zoneDessin);
                         					listeElements.getItems().addAll(nouveauLien);
@@ -459,7 +459,7 @@ public class FXMLDocumentController implements Initializable {
                         							listeElements.getItems().remove(i);
                         						}		
                         					}
-                        					graphe.supprimerLien(lien, zoneDessin);
+                        					graphe.supprimerLien(lien, zoneDessin, listeElements);
                         					Lien nouveauLien = graphe.creerLien(noeuds[0], noeuds[1]);
                         					nouveauLien.dessiner(zoneDessin);
                         					listeElements.getItems().addAll(nouveauLien);
@@ -639,7 +639,7 @@ public class FXMLDocumentController implements Initializable {
             			shape.setStrokeWidth(3.0);
             		}
             	} catch (NullPointerException e) {}
-            	for(Line line : lienOR.getLine()) {
+            	for(Shape line : lienOR.getQuadCurved()) {
         			line.setStrokeWidth(3.0);
         		}	
             }            
