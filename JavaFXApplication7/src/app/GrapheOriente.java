@@ -85,7 +85,6 @@ public class GrapheOriente extends Graphe {
 	        if (n instanceof Circle) {
 	            for (Noeud no : listeNoeuds) {
 	                if (isNodeClicked(positions[0], positions[1], no)) {    
-	                	reset();
 	                    return no;
 	                }
 	            }
