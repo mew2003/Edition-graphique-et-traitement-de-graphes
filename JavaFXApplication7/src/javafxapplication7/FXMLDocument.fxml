@@ -41,6 +41,8 @@
             <MenuButton fx:id="menuTraitement" layoutX="147.0" layoutY="2.0" mnemonicParsing="false" text="Traitement">
                <items>
                   <MenuItem fx:id="verifierGrapheId" disable="true" mnemonicParsing="false" onAction="#verifierGraphe" text="Verifier le graphe" />
+                  <MenuItem fx:id="matriceDeTransitionId" disable="true" mnemonicParsing="false" onAction="#matriceDeTransition" text="Afficher la matrice de transition" />
+                  <MenuItem fx:id="existenceCheminId" disable="true" mnemonicParsing="false" onAction="#existenceChemin" text="Tester l'existence d'un chemin" />
                </items>
             </MenuButton>
             <MenuButton fx:id="menuAide" layoutX="239.0" layoutY="2.0" mnemonicParsing="false" text="Aide">

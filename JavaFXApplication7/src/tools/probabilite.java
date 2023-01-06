@@ -43,5 +43,7 @@ public class probabilite {
 		return true;
 	}
 	
-	
+	public static void matriceDeTransition() {
+		
+	}
 }

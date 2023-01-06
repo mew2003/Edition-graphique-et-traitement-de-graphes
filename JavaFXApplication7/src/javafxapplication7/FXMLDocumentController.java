@@ -104,6 +104,10 @@ public class FXMLDocumentController implements Initializable {
     private AnchorPane aside;    
     @FXML
     private MenuItem verifierGrapheId;
+    @FXML
+    private MenuItem existenceCheminId;
+    @FXML
+    private MenuItem matriceDeTransitionId;
     
     // Création du manager permettant de créer toutes les factories
     FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
@@ -164,6 +168,8 @@ public class FXMLDocumentController implements Initializable {
     	initialisation();
     	valeurLien.setDisable(true);
     	verifierGrapheId.setDisable(true);
+    	matriceDeTransitionId.setDisable(true);
+    	existenceCheminId.setDisable(true);
         factory = manager.creerFactory("GrapheNonOriente");
         graphe = factory.creerGraphe();
     }
@@ -173,6 +179,8 @@ public class FXMLDocumentController implements Initializable {
     	initialisation();
     	valeurLien.setDisable(true);
     	verifierGrapheId.setDisable(true);
+    	matriceDeTransitionId.setDisable(true);
+    	existenceCheminId.setDisable(true);
         factory = manager.creerFactory("GrapheOriente");
         graphe = factory.creerGraphe();
     }
@@ -182,6 +190,8 @@ public class FXMLDocumentController implements Initializable {
     	initialisation();
     	valeurLien.setDisable(false);
     	verifierGrapheId.setDisable(false);
+    	matriceDeTransitionId.setDisable(false);
+    	existenceCheminId.setDisable(false);
         factory = manager.creerFactory("GrapheProbabiliste");
         graphe = factory.creerGraphe();
     }
@@ -191,6 +201,16 @@ public class FXMLDocumentController implements Initializable {
     	boolean result;
     	result = probabilite.verifierGraphe((GrapheProbabiliste) graphe);
     	System.out.println(result);
+    }
+    
+    @FXML
+    void matriceDeTransition(ActionEvent event) {
+    	probabilite.matriceDeTransition();
+    }
+    
+    @FXML
+    void existenceChemin(ActionEvent event) {
+    	
     }
     
     /**

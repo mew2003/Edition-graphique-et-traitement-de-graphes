@@ -118,7 +118,7 @@ public class GrapheProbabiliste extends Graphe {
     		if (nouveauNom.equals(n.getNom())) {
     			return;
     		}
-    	}
+		}
     	noeud.setNom(nouveauNom);
 	}
 
