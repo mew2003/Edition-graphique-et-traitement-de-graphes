@@ -26,7 +26,6 @@ public class GrapheNonOriente extends Graphe {
 	
     private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
-    private ArrayList<Lien> listeASuppr = new ArrayList<>();
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 1;
     private int nbLien = 1;
@@ -55,11 +54,12 @@ public class GrapheNonOriente extends Graphe {
     }
     
     @Override
-    public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
+    public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
     	for (int i = 0 ; i < listeLiens.size() ; i++)  {
     		if (listeLiens.get(i) == lienASuppr) {
     			lienASuppr.effacer(zoneDessin);
     			listeLiens.remove(lienASuppr);
+    			listeElements.getItems().remove(lienASuppr);
     			i--;
     		}
     	}
@@ -73,16 +73,13 @@ public class GrapheNonOriente extends Graphe {
     			noeudASuppr.effacer(zoneDessin);
     			listeNoeuds.remove(noeudASuppr);
     			i--;
+    			//TODO modifier le remove de la liste d'éléments pour le passer dans 'supprimerLien'
     			for (int j = 0 ; j < listeLiens.size() ; j++) {
     				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
-    					System.out.println("lien noeud 1 suppr");
-    					listeElements.getItems().remove(listeLiens.get(j));
-    					supprimerLien(listeLiens.get(j), zoneDessin);
+    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
     					j--;
     				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
-    					System.out.println("lien noeud 2 suppr");
-    					listeElements.getItems().remove(listeLiens.get(j));
-    					supprimerLien(listeLiens.get(j), zoneDessin);
+    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
     					j--;
     				}
     		    }

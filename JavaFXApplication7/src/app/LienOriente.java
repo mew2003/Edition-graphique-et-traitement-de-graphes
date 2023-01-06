@@ -6,6 +6,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
+import javafx.scene.shape.QuadCurve;
 import static tools.drawingPositions.*;
 
 public class LienOriente extends Lien {
@@ -15,10 +16,10 @@ public class LienOriente extends Lien {
     
     // Représentation graphique du lien
     private Line arrow1, arrow2;
-    
-    private Line line = null;
-    
+        
     private Arc arc = null;
+    
+    private QuadCurve quadCurve;
     
     private String nom;
     
@@ -55,8 +56,8 @@ public class LienOriente extends Lien {
 		if (arc != null) {
 			zoneDessin.getChildren().remove(arc);
 		} 
-		if (line != null) {
-			zoneDessin.getChildren().remove(line);
+		if (quadCurve != null) {
+			zoneDessin.getChildren().remove(quadCurve);
 		}
 		zoneDessin.getChildren().remove(arrow1);
 		zoneDessin.getChildren().remove(arrow2);
@@ -81,10 +82,19 @@ public class LienOriente extends Lien {
     		zoneDessin.getChildren().addAll(arc);
     	} else {
     		linePos = lineDrawingPositions(noeuds);
-            this.line = new Line(linePos[0], linePos[1], linePos[2], linePos[3]);
-            line.setFill(Color.TRANSPARENT);
-            line.setStroke(Color.BLACK);
-            zoneDessin.getChildren().addAll(line);
+    		double[] pointCentral = {(linePos[0] + linePos[2])/2, (linePos[1] + linePos[3])/2};
+            // (Y2 - Y1)/5     (X1 - X2)/5 © Mewen
+            double[] vecteur = {(linePos[3] - linePos[1])/5, (linePos[0] - linePos[2])/5};
+            double[] pointC = {pointCentral[0] + vecteur[0], pointCentral[1] + vecteur[1]};
+            quadCurve = new QuadCurve(
+            		linePos[0], linePos[1],
+                    pointCentral[0] + vecteur[0], pointCentral[1] + vecteur[1],
+                	linePos[2], linePos[3]);
+            quadCurve.setFill(Color.TRANSPARENT);
+            quadCurve.setStroke(Color.BLACK);
+            zoneDessin.getChildren().addAll(quadCurve);
+            linePos[0] = pointC[0];
+    		linePos[1] = pointC[1];
     	}
     	arrowPos = arrowPositions(linePos);
     	this.arrow1 = new Line(linePos[2], linePos[3], arrowPos[0], arrowPos[1]);
@@ -98,14 +108,13 @@ public class LienOriente extends Lien {
     
     @Override
     public void effacer(AnchorPane zoneDessin) {
-    	if (line != null) {
-    		zoneDessin.getChildren().remove(line);
+    	if (quadCurve != null) {
+    		zoneDessin.getChildren().remove(quadCurve);
     	} else {
     		zoneDessin.getChildren().remove(arc);
     	}
     	zoneDessin.getChildren().remove(arrow1);
     	zoneDessin.getChildren().remove(arrow2);
-    	
     }
     
 	@Override
@@ -125,13 +134,19 @@ public class LienOriente extends Lien {
     		arrowPos = arrowPositions(linePos);
 		} else {
 			linePos = lineDrawingPositions(noeuds);
-			arrowPos = arrowPositions(linePos);
-	        line.setStartX(linePos[0]);
-	        line.setStartY(linePos[1]);
-	        line.setEndX(linePos[2]);
-	        line.setEndY(linePos[3]);
+			double[] pointCentral = {(linePos[0] + linePos[2])/2, (linePos[1] + linePos[3])/2};
+            // (Y2 - Y1)/5     (X1 - X2)/5 © Mewen
+            double[] vecteur = {(linePos[3] - linePos[1])/5, (linePos[0] - linePos[2])/5};
+            double[] pointC = {pointCentral[0] + vecteur[0], pointCentral[1] + vecteur[1]};
+			quadCurve.setStartX(linePos[0]);
+			quadCurve.setStartY(linePos[1]);
+			quadCurve.setEndX(linePos[2]);
+			quadCurve.setEndY(linePos[3]);
+			quadCurve.setControlX(pointCentral[0] + vecteur[0]);
+            quadCurve.setControlY(pointCentral[1] + vecteur[1]);
 		}
-		arrow1.setStartX(linePos[2]);
+    	arrowPos = arrowPositions(linePos);
+    	arrow1.setStartX(linePos[2]);
 		arrow1.setStartY(linePos[3]);
 		arrow1.setEndX(arrowPos[0]);
 		arrow1.setEndY(arrowPos[1]);
@@ -141,8 +156,8 @@ public class LienOriente extends Lien {
 		arrow2.setEndY(arrowPos[3]);
     }
 
-	public Line[] getLine() {
-		Line[] lines = {line, arrow1, arrow2};
+	public Shape[] getQuadCurved() {
+		Shape[] lines = {quadCurve, arrow1, arrow2};
 		return lines;
 	}
 

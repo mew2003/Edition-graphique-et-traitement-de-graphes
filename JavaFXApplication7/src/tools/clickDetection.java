@@ -8,6 +8,7 @@ import app.Noeud;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Shape;
 
 public class clickDetection {
 	
@@ -40,13 +41,9 @@ public class clickDetection {
      */
     public static boolean isLinkClicked(double mouseX, double mouseY, Lien lien) {
     	Line lienAVerif;
-    	if (lien instanceof LienNonOriente) {
-    		LienNonOriente lienM = (LienNonOriente) lien;
-    		lienAVerif = lienM.getLine();
-    	} else {
-    		LienOriente lienM = (LienOriente) lien;
-    		lienAVerif = lienM.getLine()[0];
-    	}
+    	LienNonOriente lienM = (LienNonOriente) lien;
+    	lienAVerif = lienM.getLine();
+
 		if (lienAVerif == null) {
     		return false;
     	}
@@ -62,20 +59,33 @@ public class clickDetection {
     }
     
     public static boolean isArcClicked(double mouseX, double mouseY, Lien lien) {
-    	LienOriente lienO = (LienOriente) lien;
-    	Arc arc = (Arc) lienO.getArc()[0];
-    	return arc != null && mouseX > arc.getCenterX() - arc.getRadiusX() && mouseX < arc.getCenterX() + arc.getRadiusX()
+    	Arc arc = null;
+    	if (lien instanceof LienOriente) {
+    		LienOriente lienO = (LienOriente) lien;
+    		arc = (Arc) lienO.getArc()[0];
+    	} else if (lien instanceof LienProbabiliste) {
+    		LienProbabiliste lienP = (LienProbabiliste) lien;
+    		arc = (Arc) lienP.getArc();
+    	}
+		return arc != null && mouseX > arc.getCenterX() - arc.getRadiusX() && mouseX < arc.getCenterX() + arc.getRadiusX()
         	   && mouseY > arc.getCenterY() - arc.getRadiusX() && mouseY < arc.getCenterY() + arc.getRadiusX();
     }
     
     public static boolean isQuadCurvedClicked(double mouseX, double mouseY, Lien lien) {
-    	//TODO: Refaire depuis 0 vu que c'est de la merde et que ça marche pas
-    	LienProbabiliste lienP = (LienProbabiliste) lien;
-    	QuadCurve quadCurve = lienP.getQuadCurved();
+    	QuadCurve quadCurve;
+    	if (lien instanceof LienProbabiliste) {
+    		LienProbabiliste lienP = (LienProbabiliste) lien;
+    		quadCurve = (QuadCurve) lienP.getQuadCurved()[0];
+    	} else {
+    		LienOriente lienO = (LienOriente) lien;
+    		quadCurve = (QuadCurve) lienO.getQuadCurved()[0];
+    	}
+
+		if (quadCurve == null) return false; //Si le lien ne possède pas de quadCurve (si c'est une courbe)
     	double[] mousePos = {mouseX, mouseY};
     	double[] triangleA = {quadCurve.getStartX(), quadCurve.getStartY()};
-    	double[] triangleB = {quadCurve.getControlX(), quadCurve.getControlY()};
     	double[] triangleC = {quadCurve.getEndX(), quadCurve.getEndY()};
+    	double[] triangleB = {quadCurve.getControlX(), quadCurve.getControlY()};
     	double triangleArea = triangleArea(triangleA, triangleB, triangleC);
     	double PBC = triangleArea(mousePos, triangleB, triangleC);
     	double APC = triangleArea(triangleA, mousePos, triangleC);
@@ -83,13 +93,13 @@ public class clickDetection {
     	double areaFind = PBC + APC + ABP;
     	double floor = triangleArea - precisionLigne;
         double ceil = triangleArea + precisionLigne;
-        System.out.println(triangleArea + " " + areaFind);
-        return floor < areaFind && areaFind < ceil;
+        return floor < areaFind && areaFind < ceil;	
     }
     
     public static double triangleArea(double[] point1, double[] point2, double[] point3) {
-		return (point1[0] * (point2[1] - point3[1]) + point2[0] * (point3[1] - point1[1])
-				+ point3[0] * (point1[1] + point2[1])) / 2;
+    	return Math.abs((point1[0] * (point2[1] - point3[1]) 
+    			+ point2[0] * (point3[1] - point1[1]) 
+    			+ point3[0] * (point1[1] - point2[1]))/2);
     }
     
     /**

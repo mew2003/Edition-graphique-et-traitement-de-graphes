@@ -33,7 +33,7 @@ public abstract class Graphe {
      * @param lienASuppr le lien à supprimer
      * @param zoneDessin la zone graphique sur laquelle supprimer la représentation du lien
      */
-	public abstract void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin);
+	public abstract void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements);
 	
 	/**
 	 * Supprime un noeud et sa représentation graphique

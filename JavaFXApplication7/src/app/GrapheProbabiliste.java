@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
@@ -39,6 +40,40 @@ public class GrapheProbabiliste extends Graphe {
         listeLiens.add(l);
         return l;
 	}
+    
+    @Override
+    public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
+    	for (int i = 0 ; i < listeLiens.size() ; i++)  {
+    		if (listeLiens.get(i) == lienASuppr) {
+    			lienASuppr.effacer(zoneDessin);
+    			listeLiens.remove(lienASuppr);
+    			listeElements.getItems().remove(lienASuppr);
+    			i--;
+    		}
+    	}
+    }
+    
+    @Override
+    public void supprimerNoeud(Noeud noeudASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
+    	
+    	for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
+    		if (listeNoeuds.get(i) == noeudASuppr) {
+    			noeudASuppr.effacer(zoneDessin);
+    			listeNoeuds.remove(noeudASuppr);
+    			i--;
+    			//TODO modifier le remove de la liste d'éléments pour le passer dans 'supprimerLien'
+    			for (int j = 0 ; j < listeLiens.size() ; j++) {
+    				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
+    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+    					j--;
+    				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
+    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+    					j--;
+    				}
+    		    }
+			}
+		}
+    }
 
 	@Override
 	public Object elementClicked(double[] positions, AnchorPane zoneDessin) {
@@ -101,7 +136,8 @@ public class GrapheProbabiliste extends Graphe {
 	public void modifLien(Lien lien, Noeud[] noeuds, AnchorPane zoneDessin) {
 		for (Lien l : listeLiens) {
 			if (l.getNoeuds()[0] == noeuds[0] 
-			    && l.getNoeuds()[1] == noeuds[1]) {
+			    && l.getNoeuds()[1] == noeuds[1]
+			    && l != lien) {
 				throw new IllegalArgumentException("Deux liens ne peuvent pas avoir en commun les mêmes noeuds");
 			}
 		}
@@ -130,14 +166,34 @@ public class GrapheProbabiliste extends Graphe {
     }
 
 	@Override
-	public Lien supprimerLien(Lien lienASuppr, AnchorPane zoneDessin) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void relocalisation() {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void modifValeur(Lien lien, double newValue) {
+		LienProbabiliste l = (LienProbabiliste) lien;
+		Noeud noeudAVerif = lien.getNoeuds()[0];
+		double ActualLeaving = 0.0;
+		for (Lien li : listeLiens) {
+			if (li.getNoeuds()[0] == noeudAVerif && lien != li) {
+				LienProbabiliste lie = (LienProbabiliste) li;
+				ActualLeaving += lie.getValue();
+			}
+		}
+		ActualLeaving += newValue;
+		if (ActualLeaving > 1.0) {
+			throw new IllegalArgumentException("La somme des valeurs partant d'un noeud ne peut pas être supérieur à 1.0");
+		}
+		l.setValue(newValue);
+	}
+
+	public ArrayList<Noeud> getListeNoeuds() {
+		return listeNoeuds;
+	}
+
+	public ArrayList<Lien> getListeLiens() {
+		return listeLiens;
+	}
+	
 }
