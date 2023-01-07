@@ -7,6 +7,8 @@ import app.GrapheProbabiliste;
 import app.Lien;
 import app.LienProbabiliste;
 import app.Noeud;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class probabilite {
 
@@ -43,7 +45,12 @@ public class probabilite {
 		return true;
 	}
 	
-	public static void matriceDeTransition() {
-		
+	public static TableView<Object> matriceDeTransition(GrapheProbabiliste graphe) {
+		TableView<Object> table = new TableView<>();
+		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
+		for (Noeud n : listeNoeuds) {
+			table.getColumns().addAll(new TableColumn<>(n.getNom()));
+		}
+		return table;
 	}
 }

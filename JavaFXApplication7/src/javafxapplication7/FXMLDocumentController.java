@@ -20,14 +20,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
@@ -197,14 +203,24 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     void verifierGraphe(ActionEvent event) {
-    	boolean result;
-    	result = probabilite.verifierGraphe((GrapheProbabiliste) graphe);
-    	System.out.println(result);
+    	boolean result = probabilite.verifierGraphe((GrapheProbabiliste) graphe);
+    	Alert alert = new Alert(result ? AlertType.INFORMATION : AlertType.ERROR);
+		alert.setTitle("Vérification du graphe");
+		alert.setHeaderText("Résultat : ");
+		String text = result ? "Le graphe est valide !" : "Le graphe comporte des erreurs";
+		alert.setContentText(text);
+		alert.showAndWait();
     }
     
     @FXML
     void matriceDeTransition(ActionEvent event) {
-    	probabilite.matriceDeTransition();
+    	TableView<Object> tableView = probabilite.matriceDeTransition((GrapheProbabiliste) graphe);
+    	Dialog<ButtonType> dialog = new Dialog<>();
+    	dialog.getDialogPane().setContent(tableView);
+    	dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+    	dialog.showAndWait();
     }
     
     @FXML
