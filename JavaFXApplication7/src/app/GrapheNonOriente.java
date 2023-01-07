@@ -109,14 +109,12 @@ public class GrapheNonOriente extends Graphe {
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
                     if (isNodeClicked(positions[0], positions[1], no)) {  
-                    	reset();
                         return no;
                     }
                 }
             } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
                     if (isLinkClicked(positions[0], positions[1], li)) {
-                        reset();
                     	return li;
                     }
                 }
