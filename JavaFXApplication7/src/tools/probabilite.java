@@ -46,4 +46,32 @@ public class probabilite {
 	public static void matriceDeTransition() {
 		
 	}
+	/**
+	 * Vérifie l'existence d'un chemin entre 2 noeuds
+	 * @param noeud1  le premier noeud
+	 * @param noeud2  le deuxième noeud (peut être identique au premier)
+	 * @param graphe  le graphe d'où sont issus les noeuds
+	 * @return true si il y a un chemin, false si il n'y en a pas
+	 */
+	public static boolean existenceChemin(Noeud noeud1, Noeud noeud2, GrapheProbabiliste graphe) {
+		boolean isChemin = false;
+		/* parcours tous les liens du graphe */
+		for (Lien lien : graphe.getListeLiens()) {
+			/* si les 2 noeuds du lien sont différents et que le noeud1 du lien est identique à noeud1*/
+			if (lien.getNoeuds()[0] != lien.getNoeuds()[1] && lien.getNoeuds()[0] == noeud1) {
+				/* si le noeud2 du lien correspond au noeud2 alors il y a un chemin */
+				if (lien.getNoeuds()[1] == noeud2) {
+					return true;
+				}
+				/* vérifie si à partir du noeud suivant le chemin continue jusqu'au noeud2 */
+				isChemin = existenceChemin(lien.getNoeuds()[1], noeud2, graphe);
+			/* si les 2 noeuds du lien sont identique et que 
+			 * le noeud1 est identique au noeud1 du lien et que le noeud2 est identique au noeud2 du lien 
+			 * alors il y a un chemin entre ces 2 noeuds */
+			} else if (noeud1 == lien.getNoeuds()[0] && noeud2 == lien.getNoeuds()[1]) {
+				return true;
+			}
+		}
+		return isChemin;
+	}
 }
