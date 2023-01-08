@@ -10,6 +10,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Shape;
 
 import static tools.clickDetection.*;
 
@@ -154,22 +155,36 @@ public class GrapheProbabiliste extends Graphe {
 		}
 	}
 	
-	@Override
+    @Override
     public void reset() {
     	for (Noeud n : listeNoeuds) {
     		n.getCircle().setStrokeWidth(1.0);
     	}
     	for (Lien l : listeLiens) {
-    		LienNonOriente li = (LienNonOriente) l;
-    		li.getLine().setStrokeWidth(1.0);
+    		LienProbabiliste li = (LienProbabiliste) l;
+    		for(Shape shape : li.getArc()) {
+    			if(shape != null) {
+    				shape.setStrokeWidth(1.0);
+    			}
+    		}
+    		for(Shape line : li.getQuadCurved()) {
+    			if(line != null) {
+    				line.setStrokeWidth(1.0);
+    			}
+    		}
     	}
     }
 
-	@Override
-	public void relocalisation() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void relocalisation() {
+    	for(Lien l : listeLiens) {
+    		for(Noeud n : listeNoeuds) {
+    			if(l.getNoeuds()[0].getNom().equals(n.getNom())) {
+    				l.actualiser();
+    			}
+    		}
+    	}
+    }
 	
 	public void modifValeur(Lien lien, double newValue) {
 		LienProbabiliste l = (LienProbabiliste) lien;
