@@ -75,52 +75,59 @@ public class probabilite {
 	 * Calcule la matrice de transition d'un graphe
 	 * @param graphe le graphe à calculer
 	 */
-	public static void matriceDeTransition(GrapheProbabiliste graphe) {
+	public static double[][] matriceDeTransition(GrapheProbabiliste graphe) {
 		//Si le graphe n'es pas correct, ne pas effectuer le calcul
-		if (!verifierGraphe(graphe, false)) return; 
+		if (!verifierGraphe(graphe, false)) return null;
 		
-		HBox columns = new HBox();
-		VBox row = new VBox();
-		Label text = new Label();
 		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
 		ArrayList<Lien> listeLiens = graphe.getListeLiens();
 		LienProbabiliste lienP = null;
 		
-		//Affichage de la première colonne
+		double[][] matrix = new double[listeNoeuds.size()][listeNoeuds.size()];
+		for (Lien lien : listeLiens) {
+			lienP = (LienProbabiliste) lien;
+			matrix[listeNoeuds.indexOf(lien.getNoeuds()[1])][listeNoeuds.indexOf(lien.getNoeuds()[0])] = lienP.getValue();
+		}
+		return matrix;
+	}
+	
+	public static void showMatrix(GrapheProbabiliste graphe) {
+		double[][] matrix = matriceDeTransition(graphe);
+		if (matrix == null) return;
+		int nbElements = graphe.getListeNoeuds().size();
+		showMatrix(createVisualsMatrix(matrix, graphe), 50 * nbElements, 20 * nbElements);
+	}
+	
+	public static HBox createVisualsMatrix(double[][] matrix, GrapheProbabiliste graphe) {
+		HBox columns = new HBox();
+		VBox row = new VBox();
+		VBox newRow = new VBox();
+		
 		columns.getChildren().add(new VBox());
 		row = (VBox) columns.getChildren().get(0);
 		row.getChildren().add(new Label("X"));
-		for (Noeud n : listeNoeuds) {
+		for (Noeud n : graphe.getListeNoeuds()) {
 			row.getChildren().add(new Label(n.getNom()));
+			newRow = new VBox();
+			newRow.getChildren().add(new Label(n.getNom()));
+			columns.getChildren().add(newRow);
 		}
 		
-		//Affichage des autres colonnes et initialisation des valeurs de chaque cellules par 0.0
-		for (Noeud n : listeNoeuds) {
-			columns.getChildren().add(new VBox());
-			row = (VBox) columns.getChildren().get(columns.getChildren().size() - 1);
-			row.getChildren().add(new Label(n.getNom()));
-			for (int i = 1; i <= listeNoeuds.size(); i++) {
-				row.getChildren().add(new Label("0.0"));
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				row = (VBox) columns.getChildren().get(i + 1);
+				row.getChildren().add(new Label("" + matrix[i][j]));
 			}
 		}
 		
-		//Assignation des valeurs pour chaque cellules
-		for (Lien lien : listeLiens) {
-			lienP = (LienProbabiliste) lien;
-			int indexN1 = listeNoeuds.indexOf(lienP.getNoeuds()[0]);
-			int indexN2 = listeNoeuds.indexOf(lienP.getNoeuds()[1]);
-			text = (Label) ((VBox) columns.getChildren().get(indexN2 + 1)).getChildren().get(indexN1 + 1);
-			text.setText("" + lienP.getValue());
-		}
-		
-		//Permet la bonne lisibilité du graphe lors de l'affichage graphique
 		for (Node rows : columns.getChildren()) {
 			row = (VBox) rows;
 			for (Node cell : row.getChildren()) {
 				((Label) cell).setMinSize(50, 20);
 			}
 		}
-		showMatrix(columns, 50*listeNoeuds.size(), 20*listeNoeuds.size());
+		
+		return columns;
 	}
 	
 	/**
@@ -135,7 +142,6 @@ public class probabilite {
     	dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
         closeButton.managedProperty().bind(closeButton.visibleProperty());
-        
         dialog.getDialogPane().setMinSize(width + 50, height + 75);
         dialog.setResizable(true);
     	dialog.showAndWait();

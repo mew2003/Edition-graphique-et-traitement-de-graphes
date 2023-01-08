@@ -209,7 +209,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     void matriceDeTransition(ActionEvent event) {
-    	probabilite.matriceDeTransition((GrapheProbabiliste) graphe);
+    	probabilite.showMatrix((GrapheProbabiliste) graphe);
     }
     
     @FXML
