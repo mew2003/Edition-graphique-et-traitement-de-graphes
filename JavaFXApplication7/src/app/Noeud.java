@@ -61,4 +61,6 @@ public abstract class Noeud {
     public abstract void setNom(String nom);
 
 	public abstract Circle getCircle();
+	
+	public abstract Noeud clone();
 }

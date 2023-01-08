@@ -1,6 +1,7 @@
 package app;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -187,6 +188,42 @@ public class GrapheOriente extends Graphe {
 				l.actualiser();
 			}
 		}
+	}
+
+	@Override
+	public void setEtat(Graphe graphe) {
+		if(graphe != null && graphe instanceof GrapheOriente) {
+			this.listeLiens = ((GrapheOriente) graphe).listeLiens;
+			this.listeNoeuds = ((GrapheOriente) graphe).listeNoeuds;
+			this.nbLien = ((GrapheOriente) graphe).nbLien;
+			this.nbNoeud = ((GrapheOriente) graphe).nbNoeud;
+		}		
+	}
+
+	@Override
+	public Graphe clone() {
+		GrapheOriente clone = new GrapheOriente();
+	    clone.listeLiens = new ArrayList<>();
+	    for (Lien lien : this.listeLiens) {
+	      clone.listeLiens.add((Lien) lien.clone());
+	    }
+	    clone.listeNoeuds = new ArrayList<>();
+	    for (Noeud noeud : this.listeNoeuds) {
+	      clone.listeNoeuds.add((Noeud) noeud.clone());
+	    }
+		clone.nbLien = this.nbLien;
+		clone.nbNoeud = this.nbNoeud;
+		return clone;
+	}
+
+	@Override
+	public List<Noeud> getListeNoeuds() {
+		return this.listeNoeuds;
+	}
+
+	@Override
+	public List<Lien> getListeLiens() {
+		return this.listeLiens;
 	}
 
 }

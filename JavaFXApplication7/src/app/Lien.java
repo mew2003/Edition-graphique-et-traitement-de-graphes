@@ -41,4 +41,6 @@ public abstract class Lien {
      */
     public abstract void actualiser();
     
+    public abstract Lien clone();
+    
 }

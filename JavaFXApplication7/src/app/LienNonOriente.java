@@ -95,4 +95,13 @@ public class LienNonOriente extends Lien {
 	public Line getLine() {
 		return line;
 	}
+
+	@Override
+	public LienNonOriente clone() {
+		LienNonOriente lienNOR = new LienNonOriente(noeuds, 0);
+		lienNOR.line = this.line;
+		lienNOR.noeuds = this.noeuds;
+		lienNOR.nom = this.nom;
+		return lienNOR;
+	}
 }

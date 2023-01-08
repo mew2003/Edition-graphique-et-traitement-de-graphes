@@ -4,6 +4,8 @@
 package app;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -196,5 +198,41 @@ public class GrapheNonOriente extends Graphe {
 				l.actualiser();
 			}
 		}
+	}
+
+	@Override
+	public void setEtat(Graphe graphe) {
+		if(graphe != null && graphe instanceof GrapheNonOriente) {
+			this.listeLiens = ((GrapheNonOriente) graphe).listeLiens;
+			this.listeNoeuds = ((GrapheNonOriente) graphe).listeNoeuds;
+			this.nbLien = ((GrapheNonOriente) graphe).nbLien;
+			this.nbNoeud = ((GrapheNonOriente) graphe).nbNoeud;
+		}		
+	}
+
+	@Override
+	public Graphe clone() {
+		GrapheNonOriente clone = new GrapheNonOriente();
+	    clone.listeLiens = new ArrayList<>();
+	    for (Lien lien : this.listeLiens) {
+	        clone.listeLiens.add(lien.clone());
+	    }
+	    clone.listeNoeuds = new ArrayList<>();
+	    for (Noeud noeud : this.listeNoeuds) {
+	        clone.listeNoeuds.add(noeud.clone());
+	    }
+		clone.nbLien = this.nbLien;
+		clone.nbNoeud = this.nbNoeud;
+		return clone;
+	}
+
+	@Override
+	public List<Noeud> getListeNoeuds() {
+		return this.listeNoeuds;
+	}
+
+	@Override
+	public List<Lien> getListeLiens() {
+		return this.listeLiens;
 	}
 }

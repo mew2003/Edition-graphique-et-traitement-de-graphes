@@ -192,4 +192,18 @@ public class LienProbabiliste extends Lien {
 		this.valeur = newValue;
 	}
 
+	@Override
+	public LienProbabiliste clone() {
+		LienProbabiliste lienProba = new LienProbabiliste(noeuds, 0);
+		lienProba.arc = this.arc;
+		lienProba.arrow1 = this.arrow1;
+		lienProba.arrow2 = this.arrow2;
+		lienProba.noeuds = this.noeuds;
+		lienProba.label = this.label;
+		lienProba.nom = this.nom;
+		lienProba.quadCurve = this.quadCurve;
+		lienProba.valeur = this.valeur;
+		return lienProba;
+	}
+
 }

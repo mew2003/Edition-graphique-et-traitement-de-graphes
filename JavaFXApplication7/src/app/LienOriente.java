@@ -161,4 +161,16 @@ public class LienOriente extends Lien {
 		return lines;
 	}
 
+	@Override
+	public LienOriente clone() {
+		LienOriente lienOR = new LienOriente(noeuds, 0);
+		lienOR.arc = this.arc;
+		lienOR.arrow1 = this.arrow1;
+		lienOR.arrow2 = this.arrow2;
+		lienOR.noeuds = this.noeuds;
+		lienOR.nom = this.nom;
+		lienOR.quadCurve = this.quadCurve;
+		return lienOR;
+	}
+
 }

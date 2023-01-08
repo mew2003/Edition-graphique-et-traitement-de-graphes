@@ -3,6 +3,8 @@
  */
 package app;
 
+import java.util.List;
+
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.AnchorPane;
@@ -85,4 +87,11 @@ public abstract class Graphe {
     public abstract void reset();
     
     public abstract void relocalisation();
+    
+    public abstract void setEtat(Graphe graphe);
+    
+    public abstract Graphe clone();
+
+    public abstract List<Noeud> getListeNoeuds();
+    public abstract List<Lien> getListeLiens();
 }
