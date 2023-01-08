@@ -50,8 +50,9 @@ public class LienProbabiliste extends Lien {
 		return noeuds;
 	}
 
-	public Arc getArc() {
-		return arc;
+	public Shape[] getArc() {
+		Shape[] shape = {arc, arrow1, arrow2};
+		return shape;
 	}
 
 	@Override

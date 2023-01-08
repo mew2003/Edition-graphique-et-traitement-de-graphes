@@ -364,6 +364,20 @@ public class FXMLDocumentController implements Initializable {
                     		draggedLink(n, lien);
                     	}
                     }
+                /* Si le graphe est un graphe probabiliste */
+            	} else if(link instanceof LienProbabiliste) {
+            		/* Initialisation de la variable lien si l'élément sélectoinné est un lien probabiliste */
+            		LienProbabiliste lien = (LienProbabiliste) link;
+            		for(Node n : childrens) {
+            			/* Si le lien est un QuadCurve */
+                    	if(n instanceof QuadCurve) {
+                    		draggedLink(n, lien);
+                    	/* Si le lien est un Arc */
+                    	} else if(n instanceof Arc) {
+                    		draggedLink(n, lien);
+                    	}
+            		}
+            		
             	}
             }
         } else {
@@ -423,9 +437,19 @@ public class FXMLDocumentController implements Initializable {
         				line.setStrokeWidth(3.0);
         			}
         		} catch (NullPointerException e) {}
-        	/* Si ce n'est pas un lien orienté on met en gras le lien non orienté */
+        	/* Met en gras un lien non orienté */
     		} else if(o instanceof LienNonOriente) {
     			((LienNonOriente) o).getLine().setStrokeWidth(3.0);
+    		/* Met en gras un lien probabiliste  */
+    		} else if(o instanceof LienProbabiliste) {
+    			try {
+            		for(Shape line : ((LienProbabiliste) o).getQuadCurved()) {
+            			line.setStrokeWidth(3.0);
+            		}
+        			for(Shape line : ((LienProbabiliste) o).getArc()) {
+        				line.setStrokeWidth(3.0);
+        			}
+        		} catch (NullPointerException e) {}
     		}
     		/* Aperçu de la ligne en temps réel quand on déplace le lien */
     		previewedLine.setStrokeWidth(3.0);
@@ -454,14 +478,14 @@ public class FXMLDocumentController implements Initializable {
         				if(test.equals("Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]")) {
         					ok = false;
         				}
-        				/* Si le lien n'existe pas alors on créer un nouveau lien à l'emplacement souhaité */
-            			if(ok) {
-            				graphe.supprimerLien((Lien) o, zoneDessin, listeElements);
-            				Lien nouveauLien = graphe.creerLien(noeuds[0], noeuds[1]);
-            				nouveauLien.dessiner(zoneDessin);
-            				listeElements.getItems().addAll(nouveauLien);
-            			}
         			} 
+    				/* Si le lien n'existe pas alors on créer un nouveau lien à l'emplacement souhaité */
+        			if(ok) {
+        				graphe.supprimerLien((Lien) o, zoneDessin, listeElements);
+        				Lien nouveauLien = graphe.creerLien(noeuds[0], noeuds[1]);
+        				nouveauLien.dessiner(zoneDessin);
+        				listeElements.getItems().addAll(nouveauLien);
+        			}
     			} catch (Exception e) {}
     		}
     	});
@@ -631,7 +655,18 @@ public class FXMLDocumentController implements Initializable {
             	for(Shape quadCurved : lienOR.getQuadCurved()) {
             		quadCurved.setStrokeWidth(3.0);
         		}	
-            }            
+            } else if(link instanceof LienProbabiliste) {
+            	LienProbabiliste lienProba = (LienProbabiliste) link;
+            	graphe.reset();
+            	try {
+            		for(Shape shape : lienProba.getArc()) {
+            			shape.setStrokeWidth(3.0);
+            		}
+            	} catch (NullPointerException e) {}
+            	for(Shape quadCurved : lienProba.getQuadCurved()) {
+            		quadCurved.setStrokeWidth(3.0);
+        		}	
+            }
     	} catch (Exception e) {}
     	
     }

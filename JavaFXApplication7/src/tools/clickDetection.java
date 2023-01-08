@@ -65,7 +65,7 @@ public class clickDetection {
     		arc = (Arc) lienO.getArc()[0];
     	} else if (lien instanceof LienProbabiliste) {
     		LienProbabiliste lienP = (LienProbabiliste) lien;
-    		arc = (Arc) lienP.getArc();
+    		arc = (Arc) lienP.getArc()[0];
     	}
 		return arc != null && mouseX > arc.getCenterX() - arc.getRadiusX() && mouseX < arc.getCenterX() + arc.getRadiusX()
         	   && mouseY > arc.getCenterY() - arc.getRadiusX() && mouseY < arc.getCenterY() + arc.getRadiusX();
