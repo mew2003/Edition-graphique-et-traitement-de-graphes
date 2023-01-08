@@ -7,6 +7,14 @@ import app.GrapheProbabiliste;
 import app.Lien;
 import app.LienProbabiliste;
 import app.Noeud;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Alert.AlertType;
 
 public class probabilite {
 
@@ -19,11 +27,14 @@ public class probabilite {
 	 *   pour tous les noeuds du graphe
 	 * - Un lien doit posséder une valeur se situant entre 0 et 1
 	 * @param grapheProbabiliste un graphe à vérifier
+	 * @param showValidMessage false -> n'affiche pas de message si le graphe est valide
+	 *                         true -> affiche un message dans tous les cas
 	 * @return true si le graphe est valide, false sinon
 	 */
-	public static boolean verifierGraphe(GrapheProbabiliste graphe) {
+	public static boolean verifierGraphe(GrapheProbabiliste graphe, boolean showValidMessage) {
+		boolean result = true;
 		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
-		if (listeNoeuds.size() < 1) return false; // Moins d'un noeud sur le graphe
+		if (listeNoeuds.size() < 1) result = false; // Moins d'un noeud sur le graphe
 		HashMap<Noeud, Double> nodesValues = new HashMap<>();
 		
 		for (Noeud n : listeNoeuds) {
@@ -38,13 +49,102 @@ public class probabilite {
 		}
 		
 		for (Double values : nodesValues.values()) {
-			if (values != 1.0) return false;
+			if (values != 1.0) result = false;
 		}
-		return true;
+		showVerif(result, showValidMessage);
+		return result;
 	}
 	
-	public static void matriceDeTransition() {
+	/**
+	 * Affichage graphique de la validité d'un graphe
+	 * @param estValide graphe valide ou non
+	 * @param showValidMessage false -> n'affiche pas de message si le graphe est valide
+	 *                         true -> affiche un message dans tous les cas
+	 */
+	private static void showVerif(boolean estValide, boolean showValidMessage) {
+		if (estValide && !showValidMessage) return;
+		Alert alert = new Alert(estValide ? AlertType.INFORMATION : AlertType.ERROR);
+		alert.setTitle("Vérification du graphe");
+		alert.setHeaderText("Résultat : ");
+		String text = estValide ? "Le graphe est valide !" : "Le graphe comporte des erreurs";
+		alert.setContentText(text);
+		alert.showAndWait();
+	}
+	
+	/**
+	 * Calcule la matrice de transition d'un graphe
+	 * @param graphe le graphe à calculer
+	 */
+	public static double[][] matriceDeTransition(GrapheProbabiliste graphe) {
+		//Si le graphe n'es pas correct, ne pas effectuer le calcul
+		if (!verifierGraphe(graphe, false)) return null;
 		
+		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
+		ArrayList<Lien> listeLiens = graphe.getListeLiens();
+		LienProbabiliste lienP = null;
+		
+		double[][] matrix = new double[listeNoeuds.size()][listeNoeuds.size()];
+		for (Lien lien : listeLiens) {
+			lienP = (LienProbabiliste) lien;
+			matrix[listeNoeuds.indexOf(lien.getNoeuds()[1])][listeNoeuds.indexOf(lien.getNoeuds()[0])] = lienP.getValue();
+		}
+		return matrix;
+	}
+	
+	public static void showMatrix(GrapheProbabiliste graphe) {
+		double[][] matrix = matriceDeTransition(graphe);
+		if (matrix == null) return;
+		int nbElements = graphe.getListeNoeuds().size();
+		showMatrix(createVisualsMatrix(matrix, graphe), 50 * nbElements, 20 * nbElements);
+	}
+	
+	public static HBox createVisualsMatrix(double[][] matrix, GrapheProbabiliste graphe) {
+		HBox columns = new HBox();
+		VBox row = new VBox();
+		VBox newRow = new VBox();
+		
+		columns.getChildren().add(new VBox());
+		row = (VBox) columns.getChildren().get(0);
+		row.getChildren().add(new Label("X"));
+		for (Noeud n : graphe.getListeNoeuds()) {
+			row.getChildren().add(new Label(n.getNom()));
+			newRow = new VBox();
+			newRow.getChildren().add(new Label(n.getNom()));
+			columns.getChildren().add(newRow);
+		}
+		
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				row = (VBox) columns.getChildren().get(i + 1);
+				row.getChildren().add(new Label("" + matrix[i][j]));
+			}
+		}
+		
+		for (Node rows : columns.getChildren()) {
+			row = (VBox) rows;
+			for (Node cell : row.getChildren()) {
+				((Label) cell).setMinSize(50, 20);
+			}
+		}
+		
+		return columns;
+	}
+	
+	/**
+	 * Affichage graphique de la matrice de transition
+	 * @param columns tableau résultant du calcule de la matrice de transition
+	 * @param width largeur des cellules
+	 * @param height hauteur des cellules
+	 */
+	public static void showMatrix(HBox columns, double width, double height) {
+		Dialog<ButtonType> dialog = new Dialog<>();
+		dialog.getDialogPane().getChildren().add(columns);
+    	dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        dialog.getDialogPane().setMinSize(width + 50, height + 75);
+        dialog.setResizable(true);
+    	dialog.showAndWait();
 	}
 	/**
 	 * Vérifie l'existence d'un chemin entre 2 noeuds
