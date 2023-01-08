@@ -317,17 +317,29 @@ public class FXMLDocumentController implements Initializable {
     	double[] positions = {evt.getX(), evt.getY()};
 
         if (actualMode == 1) {
+        	Graphe previousState = graphe.clone();
             // Réinitialisation des noeuds à relier
             noeudARelier = new Noeud[2];
             creerNoeud(positions);
+            Graphe nextState = graphe.clone();
+            GraphAction action = new GraphAction(previousState, nextState);	
+            actionManager.executeAction(action);
         } else if (actualMode == 2) {
+        	Graphe previousState = graphe.clone();
         	// Si la création du lien réussis, réinitialisation des noeuds à relier
             if (creerLien(positions)) {
             	noeudARelier = new Noeud[2];
             }
+            Graphe nextState = graphe.clone();
+            GraphAction action = new GraphAction(previousState, nextState);	
+            actionManager.executeAction(action);
         } else if (actualMode == 3) {
+        	Graphe previousState = graphe.clone();
             noeudARelier = new Noeud[2];
             selectionner(positions);
+            Graphe nextState = graphe.clone();
+            GraphAction action = new GraphAction(previousState, nextState);	
+            actionManager.executeAction(action);
         }   
     }
     
@@ -341,7 +353,8 @@ public class FXMLDocumentController implements Initializable {
         nouveauNoeud.dessiner(zoneDessin);
         // Ajout du noeud dans la comboBox listant tous les éléments présent sur l'interface
         listeElements.getItems().addAll(nouveauNoeud);
-        GraphAction action = new GraphAction(previousState, graphe);	
+        Graphe nextState = graphe.clone();
+        GraphAction action = new GraphAction(previousState, nextState);	
         actionManager.executeAction(action);
     }
     
@@ -380,7 +393,8 @@ public class FXMLDocumentController implements Initializable {
         		return false;
         	}
         }
-        GraphAction action = new GraphAction(previousState, graphe);	
+        Graphe nextState = graphe.clone();
+        GraphAction action = new GraphAction(previousState, nextState);	
         actionManager.executeAction(action);
         return noeudARelier[1] != null;
         
@@ -497,25 +511,27 @@ public class FXMLDocumentController implements Initializable {
     
     public void setGraphe(Graphe graphe) {
     	if(graphe != null) {
-            // Supprime tous les noeuds et liens affichés actuellement dans la zone de dessin
-            zoneDessin.getChildren().clear();
-            listeElements.getItems().clear();
+    		// Supprime tous les noeuds et liens affichés actuellement dans la zone de dessin
+    		zoneDessin.getChildren().clear();
+    		listeElements.getItems().clear();
 
-            // Ajoute les noeuds et liens du graphe passé en paramètre
-            if(graphe.getListeNoeuds() != null) {
-            	for (Noeud noeud : graphe.getListeNoeuds()) {
-                    noeud.dessiner(zoneDessin);
-                    listeElements.getItems().add(noeud);
-                }
-            }
-            if(graphe.getListeNoeuds() != null) {
-    	        for (Lien lien : graphe.getListeLiens()) {
-    	            lien.dessiner(zoneDessin);
-    	            listeElements.getItems().add(lien);
-    	        }
-            }
+    		// Modifie l'attribut "graphe" 
+    		this.graphe = graphe;
+
+    		// Ajoute les noeuds et liens du graphe passé en paramètre
+    		if(graphe.getListeNoeuds() != null) {
+    			for (Noeud noeud : graphe.getListeNoeuds()) {
+    				noeud.dessiner(zoneDessin);
+    				listeElements.getItems().add(noeud);
+    			}
+    		}
+    		if(graphe.getListeNoeuds() != null) {
+    			for (Lien lien : graphe.getListeLiens()) {
+    				lien.dessiner(zoneDessin);
+    				listeElements.getItems().add(lien);
+    			}
+    		}
     	}
-
     }
     
     @FXML
@@ -545,7 +561,8 @@ public class FXMLDocumentController implements Initializable {
             noeud.setPositions(EditPosition); 
             /* Actualise les positions des liens reliés au noeud par rapport à sa position */
             graphe.relocalisation();
-            GraphAction action = new GraphAction(previousState, graphe);	
+            Graphe nextState = graphe.clone();
+            GraphAction action = new GraphAction(previousState, nextState);	
             actionManager.executeAction(action);
     	});
     }
@@ -617,7 +634,8 @@ public class FXMLDocumentController implements Initializable {
         				Lien nouveauLien = graphe.creerLien(noeuds[0], noeuds[1]);
         				nouveauLien.dessiner(zoneDessin);
         				listeElements.getItems().addAll(nouveauLien);
-                        GraphAction action = new GraphAction(previousState, graphe);	
+        				Graphe nextState = graphe.clone();
+        		        GraphAction action = new GraphAction(previousState, nextState);		
                         actionManager.executeAction(action);
         			}
     			} catch (Exception e) {}
@@ -631,11 +649,16 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void modifNoeud(ActionEvent event) {
+    	Graphe previousState = graphe.clone();
         Noeud noeudAModif = (Noeud) selectedObject;
         double[] positions = {Double.parseDouble(posXNoeud.getText()), Double.parseDouble(posYNoeud.getText())};
         graphe.modifNomNoeud(noeudAModif, nomNoeud.getText());
         graphe.modifPos(noeudAModif, positions);
         graphe.modifRadius(noeudAModif, Double.parseDouble(radiusNoeud.getText()));
+        Graphe nextState = graphe.clone();
+        GraphAction action = new GraphAction(previousState, nextState);	
+        actionManager.executeAction(action);
+        
     }
     
     /**
@@ -644,6 +667,7 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void modifLien(ActionEvent event) {
+    	Graphe previousState = graphe.clone();
         Lien lienAModif = (Lien) selectedObject;
         String[] labelNoeudARelier = {
             noeud1Lien.getText(),
@@ -662,27 +686,38 @@ public class FXMLDocumentController implements Initializable {
             System.err.println(e);
         }
         lienAModif.actualiser();
+        Graphe nextState = graphe.clone();
+        GraphAction action = new GraphAction(previousState, nextState);	
+        actionManager.executeAction(action);
     }
     
 
     @FXML
     public void supprimerNoeud() {
+    	Graphe previousState = graphe.clone();
     	Noeud noeudASuppr = (Noeud) selectedObject;
     	graphe.supprimerNoeud(noeudASuppr, zoneDessin, listeElements);
     	listeElements.getSelectionModel().clearSelection();
         editionProprietesLien.setVisible(false);
         editionProprietesNoeud.setVisible(false);
+        Graphe nextState = graphe.clone();
+        GraphAction action = new GraphAction(previousState, nextState);	
+        actionManager.executeAction(action);
     }
     
 
     @FXML
     public void supprimerLien() {
+    	Graphe previousState = graphe.clone();
     	Lien lienASuppr = (Lien) selectedObject;
     	listeElements.getItems().remove(selectedObject);
     	graphe.supprimerLien(lienASuppr, zoneDessin, listeElements);
     	listeElements.getSelectionModel().clearSelection();
         editionProprietesLien.setVisible(false);
         editionProprietesNoeud.setVisible(false);
+        Graphe nextState = graphe.clone();
+        GraphAction action = new GraphAction(previousState, nextState);	
+        actionManager.executeAction(action);
     }
     
     /**

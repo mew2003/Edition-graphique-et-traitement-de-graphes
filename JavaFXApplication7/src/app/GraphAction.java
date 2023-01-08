@@ -16,7 +16,7 @@ public class GraphAction extends Action {
 
     @Override
     public void undoAction() {
-      previousState.setEtat(previousState);
+    	previousState.setEtat(previousState);
     }
 
 	@Override
