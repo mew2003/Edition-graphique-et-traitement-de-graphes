@@ -204,24 +204,12 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     void verifierGraphe(ActionEvent event) {
-    	boolean result = probabilite.verifierGraphe((GrapheProbabiliste) graphe);
-    	Alert alert = new Alert(result ? AlertType.INFORMATION : AlertType.ERROR);
-		alert.setTitle("Vérification du graphe");
-		alert.setHeaderText("Résultat : ");
-		String text = result ? "Le graphe est valide !" : "Le graphe comporte des erreurs";
-		alert.setContentText(text);
-		alert.showAndWait();
+    	probabilite.verifierGraphe((GrapheProbabiliste) graphe, true);
     }
     
     @FXML
     void matriceDeTransition(ActionEvent event) {
-    	TableView<Object> tableView = probabilite.matriceDeTransition((GrapheProbabiliste) graphe);
-    	Dialog<ButtonType> dialog = new Dialog<>();
-    	dialog.getDialogPane().setContent(tableView);
-    	dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-        closeButton.managedProperty().bind(closeButton.visibleProperty());
-    	dialog.showAndWait();
+    	probabilite.matriceDeTransition((GrapheProbabiliste) graphe);
     }
     
     @FXML
