@@ -3,7 +3,6 @@
  */
 package javafxapplication7;
 
-import java.awt.Desktop.Action;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -24,8 +23,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
@@ -33,13 +30,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
@@ -47,9 +41,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 import tools.probabilite;
-import java.util.Stack;
-
-
 
 /**
  * Contrôleur de l'application
@@ -123,6 +114,8 @@ public class FXMLDocumentController implements Initializable {
     private MenuItem existenceCheminId;
     @FXML
     private MenuItem matriceDeTransitionId;
+    @FXML
+    private MenuItem classificationSommetsID;
     
     // Création du manager permettant de créer toutes les factories
     FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
@@ -188,6 +181,7 @@ public class FXMLDocumentController implements Initializable {
     	verifierGrapheId.setDisable(true);
     	matriceDeTransitionId.setDisable(true);
     	existenceCheminId.setDisable(true);
+    	classificationSommetsID.setDisable(true);
         factory = manager.creerFactory("GrapheNonOriente");
         graphe = factory.creerGraphe();
     }
@@ -199,6 +193,7 @@ public class FXMLDocumentController implements Initializable {
     	verifierGrapheId.setDisable(true);
     	matriceDeTransitionId.setDisable(true);
     	existenceCheminId.setDisable(true);
+    	classificationSommetsID.setDisable(true);
         factory = manager.creerFactory("GrapheOriente");
         graphe = factory.creerGraphe();
     }
@@ -210,6 +205,7 @@ public class FXMLDocumentController implements Initializable {
     	verifierGrapheId.setDisable(false);
     	matriceDeTransitionId.setDisable(false);
     	existenceCheminId.setDisable(false);
+    	classificationSommetsID.setDisable(false);
         factory = manager.creerFactory("GrapheProbabiliste");
         graphe = factory.creerGraphe();
     }
@@ -302,6 +298,11 @@ public class FXMLDocumentController implements Initializable {
         /* affiche la fenêtre */
         dialog.showAndWait();
         
+    }
+    
+    @FXML
+    void classificationSommets(ActionEvent event) {
+    	probabilite.classificationSommets((GrapheProbabiliste) graphe);
     }
     
     /**
