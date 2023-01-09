@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
+import app.Graphe;
 import app.GrapheProbabiliste;
 import app.Lien;
 import app.LienProbabiliste;
@@ -21,9 +22,13 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.control.Alert.AlertType;
 
 public class probabilite {
+	
+	private final static Color[] COULEUR = {Color.YELLOW, Color.CYAN, Color.INDIANRED};
 
 	/**
 	 * Verifies si un graphe probabiliste est valide
@@ -199,39 +204,65 @@ public class probabilite {
 	    return false;
 	}
 
+	/**
+	 * Affiche visuellement la classification des sommets
+	 * @param graphe le graphe dont ont cherche la classification
+	 */
 	public static void classificationSommets(GrapheProbabiliste graphe) {
-		List<Noeud[]> group = getNodesGroup(graphe);
+		ArrayList<Noeud[]> group = getNodesGroup(graphe);
+		ArrayList<Noeud>[] nodesStates = getNodesStates(group, graphe);
 		
-		// test console
-		for (Noeud[] nT : group) {
-			System.out.print("Groupe [");
-			for (Noeud n : nT) {
-				System.out.print(n.getNom() + ", ");
+		// Attribution pour chaque noeud d'un classe un couleur pré-définie
+		for (int i = 0; i < nodesStates.length; i++) {
+			for (Noeud n : nodesStates[i]) {
+				n.getCircle().setFill(COULEUR[i]);
 			}
-			System.out.println("]");
 		}
+		
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Légende");
+		alert.setHeaderText("Légende des couleurs du graphe");
+		String text = "Jaune = Transitoire\nCyan = Ergodique\nRouge = Absorbant";
+		alert.setContentText(text);
+		alert.showAndWait();
 	}
 	
+	/**
+	 * Crée des groupes de noeuds qui ont un lien à double sens entre eux
+	 * @param graphe le graphe dont ont cherche à regrouper les noeuds
+	 * @return groupeNoeud les noeuds groupe
+	 */
 	public static ArrayList<Noeud[]> getNodesGroup(GrapheProbabiliste graphe) {
 		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
 		ArrayList<Noeud[]> groupeNoeud = new ArrayList<>();
-		boolean add = true;
+		/* Permet de créer une nouvelle ligne dans le tableau quand on doit créer un nouveau groupe
+		 * (les noeuds ne correspondant à aucun des groupes déjà existant)
+		 */
+		boolean add = true; 
+		// Le premier noeud est déjà présent dans un groupe, ajout de l'autre dans le même groupe
 		boolean firstFound = false;
+		// Deuxième noeud est déjà présent dans un groupe, ajout de l'autre dans le même groupe
 		boolean secondFound = false;
 		
 		for (Noeud n : listeNoeuds) {
 			for (Noeud nAComparer : listeNoeuds) {
+				// Si il existe un chemin à double sens alors les deux noeuds font partis du même groupe
 				if (existenceChemin(n, nAComparer, graphe) && existenceChemin(nAComparer, n, graphe)) {
 					firstFound = false;
 					secondFound = false;
+					/* Création de l'emplacement du noeud (agrandissement d'un groupe 
+					 * déjà existant, création d'un nouveau groupe ou ne fait rien selon la situation)
+					 */
 					for (int i = 0; i < groupeNoeud.size(); i++) {
 						add = true;
 						for (int j = 0; j < groupeNoeud.get(i).length; j++) {
 							if (n == groupeNoeud.get(i)[j]) {
+								// n se situe déjà dans le regroupement des noeuds
 								firstFound = true;
 								add = false;
 							}
 							if (nAComparer == groupeNoeud.get(i)[j]) {
+								// nAComparer se situe déjà dans le regroupement des noeuds
 								secondFound = true;
 								add = false;
 							}
@@ -269,6 +300,41 @@ public class probabilite {
 			}
 		}
 		return groupeNoeud;
+	}
+	
+	/**
+	 * Permet l'obtension des états de chaque noeud d'un groupe de noeud
+	 * @param nodesGroup le groupe de noeud dont on cherche à attribuer la classification
+	 * @param graphe graphe auquel appartient la liste des noeuds
+	 * @return les noeuds classifiés
+	 */
+	public static ArrayList<Noeud>[] getNodesStates(ArrayList<Noeud[]> nodesGroup, GrapheProbabiliste graphe) {
+		ArrayList<Noeud>[] result = new ArrayList[3];
+		result[0] = new ArrayList<>(); //Transitoires
+		result[1] = new ArrayList<>(); //Ergodiques
+		result[2] = new ArrayList<>(); //Absorbant
+		boolean transitoire = false;
+		
+		for (Noeud[] group : nodesGroup) {
+			transitoire = false;
+			for (Noeud[] groupAVerif : nodesGroup) {
+				if (group != groupAVerif && existenceChemin(group[0], groupAVerif[0], graphe)) {
+					transitoire = true;
+					break;
+				}
+			}
+			if (transitoire) {
+				// groupe transitoire
+				result[0].addAll(Arrays.asList(group));
+			} else if (!transitoire && group.length != 1) {
+				// groupe ergodique
+				result[1].addAll(Arrays.asList(group));
+			} else if (group.length == 1) {
+				// groupe absorbant
+				result[2].addAll(Arrays.asList(group));
+			}
+		}
+		return result;
 	}
 
 	/**
