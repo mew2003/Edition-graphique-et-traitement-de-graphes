@@ -10,6 +10,7 @@ import app.Noeud;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -174,4 +175,104 @@ public class probabilite {
 		}
 		return isChemin;
 	}
+
+	/**
+	 * Affiche la fenêtre pour la vérification de l'existence d'un chemin entre 2 noeuds
+	 * @param graphe  le graphe courant
+	 */
+	public static void showExistenceChemin(GrapheProbabiliste graphe) {
+	
+		Dialog<ButtonType> dialog = new Dialog<>();
+
+    	ComboBox<Noeud> comboBox1 = new ComboBox<>();
+    	ComboBox<Noeud> comboBox2 = new ComboBox<>();
+    	ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
+    	HBox contentH = new HBox();
+    	ButtonType valider = new ButtonType("Valider");
+    	
+    	/* gère la taille de la fenêtre et des boîtes pour que les éléments soient bien placés */
+    	dialog.getDialogPane().setMinHeight(130.0);
+    	dialog.getDialogPane().setMinWidth(130.0);
+    	contentH.setSpacing(40.0);
+    	contentH.setMinHeight(20.0);
+    	contentH.setMinWidth(20.0);
+    	contentH.setStyle("-fx-padding: 50px 0px 0px 10px;");
+    	
+    	dialog.setTitle("Existance d'un chemin");
+    	
+    	/* Si il y a des noeuds dans le graphe */
+    	if (listeNoeuds.size() != 0) {
+         	dialog.setHeaderText("Testez l'existence d'un chemin entre 2 noeuds");
+         	/* récupère la liste des noeuds et l'ajoute dans 2 comboBox */
+    		comboBox1.getItems().addAll(listeNoeuds);
+    		comboBox2.getItems().addAll(listeNoeuds);
+    		/* gère la taille des comboBox */
+         	comboBox1.setMinWidth(150.0);
+         	comboBox2.setMinWidth(150.0);
+         	/* ajoute les comboBox dans une HBox pour qu'elles soient aligné horizontalement */
+         	contentH.getChildren().add(comboBox1);
+         	contentH.getChildren().add(comboBox2);
+         	/* Ajoute la HBox et un bouton valider à la fenêtre*/
+         	dialog.getDialogPane().getChildren().add(contentH);
+        	dialog.getDialogPane().getButtonTypes().add(valider);
+         	
+        	/* execute le code à l'intérieur quand n'importe quel bouton est cliqué */
+        	dialog.setResultConverter(buttonType -> {
+        		/* si le bouton 'valider' est cliqué */
+        	    if (buttonType.equals(valider)) {
+        	    	/* récupère les noeuds sélectionnés dans les comboBox */
+        	    	Noeud noeudATester1 = comboBox1.getSelectionModel().getSelectedItem();
+        	    	Noeud noeudATester2 = comboBox2.getSelectionModel().getSelectedItem();
+        	    	showResultExistenceChemin(noeudATester1, noeudATester2, graphe);
+        	    }
+        	    /* ne sert à rien mais est obligatoire */
+        	    return null;
+        	});
+        	
+        /* si il n'y a pas de noeud dans le graphe */
+    	} else {
+         	dialog.setHeaderText("Il n'y a aucun noeud dans ce graphe");
+    	}
+
+    	/* permet de faire fonctionner la croix en créant un bouton de type close invisible */
+    	dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        closeButton.setVisible(false);
+        /* affiche la fenêtre */
+        dialog.showAndWait();
+	
+	}
+	
+	/**
+	 * Affiche la fenêtre de résultat de l'existence d'un chemin entre 2 noeud
+	 * @param noeud1  le premier noeud
+	 * @param noeud2  le deuxième noeud (peut être identique au premier)
+	 * @param graphe  le graphe d'où sont issus les noeuds
+	 */
+	public static void showResultExistenceChemin(Noeud noeud1, Noeud noeud2, GrapheProbabiliste graphe) {
+    	Dialog<ButtonType> result = new Dialog<>();
+		
+    	/* Si aucun des noeuds est null */
+    	if (noeud1 != null && noeud2 != null) {
+    		/* vérifie l'existence d'un chemin entre ces 2 noeuds et set le texte à afficher en fonction du résultat */
+    		if (probabilite.existenceChemin(noeud1, noeud2, graphe)) {
+	        	result.setHeaderText("Il existe au moins un chemin entre ces 2 noeuds");
+	        } else {
+	        	result.setHeaderText("Il n'y a pas de chemin entre ces 2 noeuds");
+	        }
+    		/* permet de faire fonctionner la croix en créant un bouton de type close visible */
+	        result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+            Node closeButtonResult = result.getDialogPane().lookupButton(ButtonType.CLOSE);
+            closeButtonResult.managedProperty().bind(closeButtonResult.visibleProperty());
+            closeButtonResult.setVisible(true);
+            /* affiche la fenêtre de résultat */
+            result.showAndWait();
+    	}
+	}
 }
+
+
+
+
+
