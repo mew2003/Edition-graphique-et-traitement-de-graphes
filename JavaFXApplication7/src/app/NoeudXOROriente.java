@@ -130,5 +130,7 @@ public class NoeudXOROriente extends Noeud {
 		clone.radius = this.radius;
 		return clone;
 	}
+	
+	
 
 }

@@ -10,7 +10,7 @@ import javafx.scene.shape.Line;
  * Permet les différents échanges avec un lien quelconques
  * @author mewen.derruau
  */
-public abstract class Lien {
+public abstract class Lien implements Cloneable {
 
 	/**
 	 * Renvoie les noeuds que relient un lien
