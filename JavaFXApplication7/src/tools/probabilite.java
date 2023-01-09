@@ -221,7 +221,7 @@ public class probabilite {
 		
 		for (Noeud n : listeNoeuds) {
 			for (Noeud nAComparer : listeNoeuds) {
-				if (existenceChemin(n, nAComparer, graphe) && existenceChemin(n, nAComparer, graphe)) {
+				if (existenceChemin(n, nAComparer, graphe) && existenceChemin(nAComparer, n, graphe)) {
 					firstFound = false;
 					secondFound = false;
 					for (int i = 0; i < groupeNoeud.size(); i++) {
