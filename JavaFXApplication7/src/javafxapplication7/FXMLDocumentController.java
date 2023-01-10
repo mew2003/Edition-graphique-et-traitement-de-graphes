@@ -245,7 +245,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     void loiDeProbabilite(ActionEvent event) {
-    	System.out.println("hey, bonjour les amis");
+    	probabilite.showLoiDeProba((GrapheProbabiliste) graphe);
     }
     
     public void setTraitement(boolean etat) {

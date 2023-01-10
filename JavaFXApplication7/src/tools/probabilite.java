@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 
@@ -18,10 +19,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 
 public class probabilite {
 	
@@ -216,6 +220,7 @@ public class probabilite {
 			}
 		}
 		
+		// Affichage graphique de la légende
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Légende");
 		alert.setHeaderText("Légende des couleurs du graphe");
@@ -314,6 +319,7 @@ public class probabilite {
 		
 		for (Noeud[] group : nodesGroup) {
 			transitoire = false;
+			// détection groupe transitoire
 			for (Noeud[] groupAVerif : nodesGroup) {
 				if (group != groupAVerif && existenceChemin(group[0], groupAVerif[0], graphe)) {
 					transitoire = true;
@@ -428,9 +434,176 @@ public class probabilite {
             result.showAndWait();
     	}
 	}
+	
+	/**
+	 * Affiche la loi de probabilité de la matrice du graphe en argument 
+	 * selon l'état originelle qu'affecte l'utilisateur et le nombre de transition choisi
+	 * @param graphe graphe sur lequel est effectué la recherche de la loi de probabilité
+	 */
+	public static void showLoiDeProba(GrapheProbabiliste graphe) {
+		// matrice du graphe (à inverser car elle est réceptionné dans le mauvais sens)
+		double[][] originalMatrix = inverserMatrice(matriceDeTransition(graphe));
+		if (originalMatrix == null) return; //Si le graphe n'est pas valide
+		// valeurs que l'utilisateur à choisi
+		double[] userValue = demandeLoiValeur(graphe);
+		if (userValue == null) return; //Si les données de l'utilisateur ne sont pas valide
+		// résultat de la loi de probabilité
+		double[] result = getLaw(originalMatrix, userValue);
+
+		//TODO : faire l'affichage graphique
+		System.out.println();
+		System.out.println("Result ------");
+		for (double cell : result) {
+			System.out.print(cell + " ");
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * Permet d'obtenir la loi de probabilité d'un matrice selon des 
+	 * noeuds de départ et un nombre de transition choisi
+	 * @param originalMatrix matrice dont on cherche la loi de probabilité
+	 * @param userValue Valeur de départ + nombre de transition
+	 * 					Format : N + 1 (taille du tableau ou N représente 
+	 *                           le nombre de noeud dans le graphe et 
+	 *                           '1' le nombre de transition)
+	 *                  Exemple : un graphe de 3 noeuds (N1, N2, N3)
+	 *                  		 on souhaite avoir une probabilité de partir de N1 = 0.4
+	 *                           et N2 = 0.6 avec un nombre de transition = 4
+	 *                           l'array doit donc être constitué de la manière suivante :
+	 *                           {0.4, 0.6, 0.0, 4.0}
+	 * @return la loi de probabilité
+	 */
+	public static double[] getLaw(double[][] originalMatrix, double[] userValue) {
+		// Initialisation d'un tableau de même taille que userValue
+		double[] result = new double[userValue.length - 1];
+		// Elevation de la matrice à la puissance donnée
+		double[][] elevatedMatrix = power(originalMatrix, (int) userValue[userValue.length - 1]);
+		// Multiplication de la matrice avec les valeurs utilisateur
+		for (int i = 0; i < elevatedMatrix.length; i++) {
+			for (int j = 0; j < elevatedMatrix[i].length; j++) {
+				result[i] += userValue[j] * elevatedMatrix[j][i];
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Elevation d'un matrice à une puissance donnée
+	 * @param matrice matrice à élever
+	 * @param puissance puissance
+	 * @return la matrice élever à la puissance
+	 */
+    public static double[][] power(double[][] matrice, int puissance) {
+        double[][] result = new double[matrice.length][matrice.length];
+
+        // Initialisation d'une matrice identité de même taille
+        for (int i = 0; i < matrice.length; i++) {
+            result[i][i] = 1;
+        }
+
+        // Copie de la matrice pour les calculs intermédiaire
+        double[][] temp = matrice.clone(); 
+        // Boucle d'appel multiplication matrice
+        while (puissance > 0) {
+            if (puissance % 2 == 1) {
+                result = multiply(result, temp);
+            }
+            temp = multiply(temp, temp);
+            puissance /= 2;
+        }
+        return result;
+    }
+
+    /**
+     * Multiplie deux matrices entre elles
+     * @param matriceA première matrice
+     * @param matriceB deuxième matrice
+     * @return le résultat de la multiplication des deux matrices
+     */
+    private static double[][] multiply(double[][] matriceA, double[][] matriceB) {
+    	int nbRow = matriceA.length;
+    	// Création d'un matrice de même taille
+        double[][] nouvelleMatrice = new double[nbRow][nbRow];
+        // Multiplication des matrices
+        for (int i = 0; i < nbRow; i++) {
+            for (int j = 0; j < nbRow; j++) {
+                for (int k = 0; k < nbRow; k++) {
+                	nouvelleMatrice[i][j] += matriceA[i][k] * matriceB[k][j];
+                }
+            }
+        }
+        return nouvelleMatrice;
+    }
+	
+    /**
+     * Interface graphique demandant à l'utilisateur de saisir ses valeurs 
+     * pour le calcul de la loi de probabilité d'un graphe
+     * @param graphe le graphe concernée
+     * @return la saisie utilisateur
+     */
+	public static double[] demandeLoiValeur(GrapheProbabiliste graphe) {
+		ArrayList<Noeud> listeNoeud = graphe.getListeNoeuds();
+		Dialog<ButtonType> dialog = new Dialog<>();
+		dialog.setResizable(true);
+	    dialog.setTitle("Loi de probabilité");
+	    dialog.setHeaderText("Choisissez les valeurs d'origines :\n(texte = 0.0)");
+
+	    // Add the labels and text fields to a grid pane
+	    GridPane grid = new GridPane();
+	    Label label = new Label();
+	    int i = 0;
+	    TextField[] textFields = new TextField[listeNoeud.size()+1];
+	    for (; i < listeNoeud.size(); i++) {
+	    	label = new Label(listeNoeud.get(i).getNom());
+	    	label.setMaxSize(125.0, 25.0);
+	        grid.add(label, 1, i+1);
+	        textFields[i] = new TextField();
+	        grid.add(textFields[i], 2, i+1);
+	    }
+	    label = new Label("Nombre de transitions");
+	    grid.add(label, 1, i+1);
+	    textFields[i] = new TextField();
+	    grid.add(textFields[i], 2, i+1);
+	    grid.setHgap(10.0);
+	    grid.setVgap(5.0);
+
+	    dialog.getDialogPane().setContent(grid);
+
+	    // Add an OK button to the dialog
+	    ButtonType okButton = new ButtonType("OK", ButtonData.OK_DONE);
+	    dialog.getDialogPane().getButtonTypes().add(okButton);
+
+	    // Create a variable to hold the result
+	    Optional<ButtonType> result = dialog.showAndWait();
+	    
+	    double total = 0.0;
+	    double[] values = new double[textFields.length];
+	    if (result.isPresent() && result.get() == okButton) {
+	        for (i = 0; i < textFields.length; i++) {
+	        	try {
+		            values[i] = Double.parseDouble(textFields[i].getText());
+		            if (i != textFields.length - 1) {
+			            total += values[i];
+		            }
+	        	} catch (Exception e) {
+	        		System.out.println("pas un nombre");
+	        	}
+	        }
+	    }
+	    if (total != 1.0) {
+	    	values = null;
+	    }
+	    return values;
+	}
+	
+	public static double[][] inverserMatrice(double[][] matrice) {
+		double[][] inverse = new double[matrice.length][matrice[0].length];
+		for (int i = 0; i < matrice.length; i++) {
+			for (int j = 0; j < matrice[i].length; j++) {
+				inverse[j][i] = matrice[i][j];
+			}
+		}
+		return inverse;
+	}
 }
-
-
-
-
-
