@@ -13,6 +13,7 @@ import app.GrapheProbabiliste;
 import app.Lien;
 import app.LienProbabiliste;
 import app.Noeud;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -24,6 +25,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 
@@ -451,13 +453,42 @@ public class probabilite {
 		// résultat de la loi de probabilité
 		double[] result = getLaw(originalMatrix, userValue);
 
-		//TODO : faire l'affichage graphique
-		System.out.println();
-		System.out.println("Result ------");
-		for (double cell : result) {
-			System.out.print(cell + " ");
+		visualLawResult(graphe, result);
+	}
+	
+	public static void visualLawResult(GrapheProbabiliste graphe, double[] law) {
+		//TODO: faire les commentaires + faire un petit peu le design de la page + arrondis
+		Dialog<ButtonType> dialog = new Dialog<>();
+		ArrayList<Noeud> listeNoeud = graphe.getListeNoeuds();
+		Label text = new Label();
+		
+		HBox nodeName = new HBox();
+		HBox probability = new HBox();
+		VBox container = new VBox();
+		nodeName.setSpacing(5.0);
+		probability.setSpacing(5.0);
+		
+		for (int i = 0; i < listeNoeud.size(); i++) {
+			text = new Label(listeNoeud.get(i).getNom());
+			text.setMinSize(100.0, 25.0);
+			nodeName.getChildren().add(text);
+			text.setAlignment(Pos.CENTER);
+			text = new Label("" + law[i]);
+			text.setMinSize(100.0, 25.0);
+			text.setAlignment(Pos.CENTER);
+			probability.getChildren().add(text);
 		}
-		System.out.println();
+		container.getChildren().add(nodeName);
+		container.getChildren().add(probability);
+		
+		dialog.getDialogPane().getChildren().add(container);
+		
+    	dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        dialog.setResizable(true);
+        dialog.getDialogPane().setMinHeight(100.0);
+    	dialog.showAndWait();
 	}
 	
 	/**
@@ -541,63 +572,82 @@ public class probabilite {
      * Interface graphique demandant à l'utilisateur de saisir ses valeurs 
      * pour le calcul de la loi de probabilité d'un graphe
      * @param graphe le graphe concernée
-     * @return la saisie utilisateur
+     * @return la saisie utilisateur sous le format suivant :
+     *  	   {Noeud1Proba, Noeud2Proba, ..., NoeudXProba, NombreTransition}
      */
 	public static double[] demandeLoiValeur(GrapheProbabiliste graphe) {
 		ArrayList<Noeud> listeNoeud = graphe.getListeNoeuds();
+		
 		Dialog<ButtonType> dialog = new Dialog<>();
 		dialog.setResizable(true);
 	    dialog.setTitle("Loi de probabilité");
-	    dialog.setHeaderText("Choisissez les valeurs d'origines :\n(texte = 0.0)");
+	    dialog.setHeaderText("Choisissez les valeurs d'origines :"
+	                         + "\n(texte = 0.0 / vide = 0.0)");
 
-	    // Add the labels and text fields to a grid pane
+	    /* Ajout pour chaque noeud de son libellé 
+	     * + d'une zone de texte à sa droite dans une grid
+	     */
 	    GridPane grid = new GridPane();
 	    Label label = new Label();
-	    int i = 0;
 	    TextField[] textFields = new TextField[listeNoeud.size()+1];
+	    // permet de suivre le nombre de noeud/label/textField actuellement dans la grid
+	    int i = 0; 
 	    for (; i < listeNoeud.size(); i++) {
 	    	label = new Label(listeNoeud.get(i).getNom());
 	    	label.setMaxSize(125.0, 25.0);
+	    	textFields[i] = new TextField();
 	        grid.add(label, 1, i+1);
-	        textFields[i] = new TextField();
 	        grid.add(textFields[i], 2, i+1);
 	    }
+	    // Ajout du label + textField concernant le nombre de transitions
 	    label = new Label("Nombre de transitions");
-	    grid.add(label, 1, i+1);
 	    textFields[i] = new TextField();
+	    grid.add(label, 1, i+1);
 	    grid.add(textFields[i], 2, i+1);
 	    grid.setHgap(10.0);
 	    grid.setVgap(5.0);
 
 	    dialog.getDialogPane().setContent(grid);
 
-	    // Add an OK button to the dialog
+	    // Ajout d'un bouton OK
 	    ButtonType okButton = new ButtonType("OK", ButtonData.OK_DONE);
 	    dialog.getDialogPane().getButtonTypes().add(okButton);
 
-	    // Create a variable to hold the result
+	    /* Affiche la fenêtre graphique et attend une action de l'utilisateur
+	     * la valeur retournée est le bouton sur lequel l'utilisateur à clique
+	     * ou vide si il clique sur la croix pour fermer la fenêtre
+	     */
 	    Optional<ButtonType> result = dialog.showAndWait();
 	    
+	    // total des valeurs saisies par l'utilisateur sur l'interface graphique
 	    double total = 0.0;
+	    // creation d'un array du nombre de noeud présent dans le graphe
 	    double[] values = new double[textFields.length];
 	    if (result.isPresent() && result.get() == okButton) {
 	        for (i = 0; i < textFields.length; i++) {
+	        	// Vérification que la saisie de l'utilisateur soir bien un nombre
 	        	try {
 		            values[i] = Double.parseDouble(textFields[i].getText());
+		            // Ne pas prendre le dernier élément (nombre de transition)
 		            if (i != textFields.length - 1) {
 			            total += values[i];
 		            }
-	        	} catch (Exception e) {
-	        		System.out.println("pas un nombre");
-	        	}
+		            // Dans le cas d'une exception ne rien faire -> valeur par défaut 0.0
+	        	} catch (Exception e) {}
 	        }
 	    }
+	    // valeur incorrect (la somme des probabilité de démarré à un noeud doit être égale à 1)
 	    if (total != 1.0) {
 	    	values = null;
 	    }
 	    return values;
 	}
 	
+	/**
+	 * Inverse le sens d'une matrice
+	 * @param matrice matrice à inverse
+	 * @return la matrice inversé
+	 */
 	public static double[][] inverserMatrice(double[][] matrice) {
 		double[][] inverse = new double[matrice.length][matrice[0].length];
 		for (int i = 0; i < matrice.length; i++) {
@@ -670,7 +720,7 @@ public class probabilite {
 	     	/* gère la taille et le texte des labels */
 	     	texteComboBox1.setMinWidth(150);
 	     	texteComboBox1.setText("Noeud de départ :");
-	     	texteComboBox2.setMinWidth(150);
+	     	texteComboBox2.setMinWidth(150 );
 	     	texteComboBox2.setText("Noeud d'arrivée :");
 	     	texteTransition.setMinWidth(150);
 	     	texteTransition.setText("Nombre de transitions :");

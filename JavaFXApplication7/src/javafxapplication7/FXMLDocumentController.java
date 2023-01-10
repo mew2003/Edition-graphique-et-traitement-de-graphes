@@ -622,8 +622,7 @@ public class FXMLDocumentController implements Initializable {
     	
     	
     }
-     
-    @FXML
+    
     /**
      * Met en gras l'élement sélectionné, permet au noeud sélectionné de changer de position
      * par rapport à la souris
@@ -660,7 +659,6 @@ public class FXMLDocumentController implements Initializable {
     	});
     }
     
-    @FXML
     /**
      * Met en gras l'élément sélectionné, permet au lien sélectionné de changer de noeuds
      * @param Node n élément contenu dans la zone de dessin
