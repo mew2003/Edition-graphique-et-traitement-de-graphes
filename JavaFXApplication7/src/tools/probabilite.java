@@ -1,5 +1,6 @@
 package tools;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ import javafx.scene.control.ButtonBar.ButtonData;
 public class probabilite {
 	
 	private final static Color[] COULEUR = {Color.YELLOW, Color.CYAN, Color.INDIANRED};
+	
+	private final static DecimalFormat DF = new DecimalFormat("#.######");
 
 	/**
 	 * Verifies si un graphe probabiliste est valide
@@ -174,12 +177,6 @@ public class probabilite {
 	 */
 	public static void classificationSommets(GrapheProbabiliste graphe) {
 		ArrayList<Noeud[]> group = getNodesGroup(graphe);
-		for (Noeud[] list : group) {
-			System.out.print("\nGroup : ");
-			for (Noeud n : list) {
-				System.out.print(n + " ");
-			}
-		}
 		ArrayList<Noeud>[] nodesStates = getNodesStates(group, graphe);
 		
 		// Attribution pour chaque noeud d'un classe un couleur pré-définie
@@ -411,8 +408,8 @@ public class probabilite {
 	
 	/**
 	 * Affiche la fenêtre de résultat de l'existence d'un chemin entre 2 noeud
-	 * @param noeud1  le premier noeud
-	 * @param noeud2  le deuxième noeud (peut être identique au premier)
+	 * @param noeud1  le premier noeud (le départ)
+	 * @param noeud2  le deuxième noeud (l'arrivée, peut être identique au premier)
 	 * @param graphe  le graphe d'où sont issus les noeuds
 	 */
 	public static void showResultExistenceChemin(Noeud noeud1, Noeud noeud2, GrapheProbabiliste graphe) {
@@ -609,22 +606,30 @@ public class probabilite {
 	}
 
 	public static double probabiliteChemin(Noeud depart, Noeud arrivee, int transition, GrapheProbabiliste graphe) {
-		Lien[] chemin = new Lien[transition];
-	    Queue<Lien> queue = new LinkedList<>();
+		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
+		int indexDepart = listeNoeuds.indexOf(depart);
+		int indexArrivee = listeNoeuds.indexOf(depart);
+		double[] values = new double[listeNoeuds.size() + 1];
+		
+		for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
+			if (i == indexDepart) {
+				values[i] = 1;
+			} else {
+				values[i] = 0;
+			}
+		}
+		values[values.length - 1] = transition;
 
-		
-	    for (Lien lien : graphe.getListeLiens()) {
-        	if (lien.getNoeuds()[0] == depart) {
-                chemin[0] = lien;
-            } else if (2 == 2) {
-            	
-            }
-        }
-		
-		
-		return 0;
+		double[] matrix = getLaw(inverserMatrice(matriceDeTransition(graphe)), values);
+
+		return matrix[indexArrivee - 1];
 	}
 
+	/**
+	 * Affiche la fenêtre pour le calcule de la probabilité d'un chemin 
+	 * entre 2 noeuds en un certain nombre de transitions
+	 * @param graphe  le graphe courant
+	 */
 	public static void showProbabiliteChemin(GrapheProbabiliste graphe) {
 	
 		Dialog<ButtonType> dialog = new Dialog<>();
@@ -720,6 +725,14 @@ public class probabilite {
 		}
 	}
 	
+	/**
+	 * Affiche la fenêtre de résultat de la probabilité d'un chemin 
+	 * entre 2 noeud en un certain nombre de transitions
+	 * @param noeud1  le premier noeud (le départ)
+	 * @param noeud2  le deuxième noeud (l'arrivée, peut être identique au premier)
+	 * @param nbTransitions  le nombre de transitions entré par l'utilisateur
+	 * @param graphe  le graphe d'où sont issus les noeuds
+	 */
 	public static void showResultProbabiliteChemin(Noeud noeud1, Noeud noeud2, int nbTransitions, GrapheProbabiliste graphe) {
     	Dialog<ButtonType> result = new Dialog<>();
 		
@@ -749,6 +762,4 @@ public class probabilite {
             result.showAndWait();
     	}
 	}
-	
-	
 }
