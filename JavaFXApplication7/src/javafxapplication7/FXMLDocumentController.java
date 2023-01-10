@@ -222,8 +222,12 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     void existenceChemin(ActionEvent event) {
+    	probabilite.showExistenceChemin((GrapheProbabiliste) graphe); 
+    }
+    
+    @FXML
+    void probabiliteChemin(ActionEvent event) {
     	probabilite.showExistenceChemin((GrapheProbabiliste) graphe);
-        
     }
     
     @FXML

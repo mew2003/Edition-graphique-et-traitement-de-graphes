@@ -161,43 +161,6 @@ public class probabilite {
         dialog.setResizable(true);
     	dialog.showAndWait();
 	}
-	/**
-	 * Vérifie l'existence d'un chemin entre 2 noeuds
-	 * @param noeud1  le premier noeud
-	 * @param noeud2  le deuxième noeud (peut être identique au premier)
-	 * @param graphe  le graphe d'où sont issus les noeuds
-	 * @return true si il y a un chemin, false si il n'y en a pas
-	 */
-	public static boolean existenceChemin(Noeud noeud1, Noeud noeud2, GrapheProbabiliste graphe) {
-	    // create a set to store the nodes that have been visited
-	    Set<Noeud> visited = new HashSet<>();
-	    // create a queue to store the nodes that need to be visited
-	    Queue<Noeud> queue = new LinkedList<>();
-	    // add the starting node to the queue
-	    queue.add(noeud1);
-
-	    // continue searching while there are nodes in the queue
-	    while (!queue.isEmpty()) {
-	        // get the next node from the queue
-	        Noeud current = queue.poll();
-	        // if the current node is the destination node, we have found a path
-	        if (current == noeud2) {
-	            return true;
-	        }
-	        // mark the current node as visited
-	        visited.add(current);
-	        // get the links for the current node
-	        for (Lien lien : graphe.getListeLiens()) {
-	            // check if the current node is the first node in the link and the second node has not been visited
-	            if (lien.getNoeuds()[0] == current && !visited.contains(lien.getNoeuds()[1])) {
-	                queue.add(lien.getNoeuds()[1]);
-	            // check if the current node is the second node in the link and the first node has not been visited
-	            }
-	        }
-	    }
-	    // if the queue is empty and we have not found the destination node, there is no path
-	    return false;
-	}
 
 	public static void classificationSommets(GrapheProbabiliste graphe) {
 		List<Noeud[]> group = getNodesGroup(graphe);
@@ -269,6 +232,37 @@ public class probabilite {
 			}
 		}
 		return groupeNoeud;
+	}
+
+	public static boolean existenceChemin(Noeud depart, Noeud arrivee, GrapheProbabiliste graphe) {
+	    // Stock les noeuds déjà visités
+	    Set<Noeud> visited = new HashSet<>();
+	    // Stock les noeuds qui doivent être visités
+	    Queue<Noeud> queue = new LinkedList<>();
+	    // ajoute le noeud de départ à la queue
+	    queue.add(depart);
+
+	    // continue de chercher tant que il y a des noeuds dans la queue
+	    while (!queue.isEmpty()) {
+	        // récupère le noeud suivant dans la queue en l'enlevant de celle ci
+	        Noeud current = queue.poll();
+	        // si le noeud courant est égal au noeud d'arrivee, il y a un chemin
+	        if (current == arrivee) {
+	            return true;
+	        }
+	        // met le noeud courant dans la liste des noeuds déjà visité
+	        visited.add(current);
+	        // récupère la liste de tous les liens du graphe
+	        for (Lien lien : graphe.getListeLiens()) {
+	            // vérifie si le noeud courant est le premier noeud de ce lien et le que le second noeud n'a pas été visité
+	        	if (lien.getNoeuds()[0] == current && !visited.contains(lien.getNoeuds()[1])) {
+	        		// si c'est le cas ajoute le second noeud dans la queue des noeuds qui doivent être visités
+	                queue.add(lien.getNoeuds()[1]);
+	            }
+	        }
+	    }
+	    // si la queue est vide et qu'on a pas trouvé l'arrivée, il n'y a pas de chemin
+	    return false;
 	}
 
 	/**
@@ -351,7 +345,7 @@ public class probabilite {
     	/* Si aucun des noeuds est null */
     	if (noeud1 != null && noeud2 != null) {
     		/* vérifie l'existence d'un chemin entre ces 2 noeuds et set le texte à afficher en fonction du résultat */
-    		if (probabilite.existenceChemin(noeud1, noeud2, graphe)) {
+    		if (existenceChemin(noeud1, noeud2, graphe)) {
 	        	result.setHeaderText("Il existe au moins un chemin entre ces 2 noeuds");
 	        } else {
 	        	result.setHeaderText("Il n'y a pas de chemin entre ces 2 noeuds");
@@ -365,9 +359,9 @@ public class probabilite {
             result.showAndWait();
     	}
 	}
+
+public static double probabiliteChemin(Noeud noeud1, Noeud noeud2, GrapheProbabiliste graphe) {
+	
+	return 0;
+	}
 }
-
-
-
-
-
