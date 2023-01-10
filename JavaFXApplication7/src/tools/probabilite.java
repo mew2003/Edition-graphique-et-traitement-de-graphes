@@ -5,11 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import app.Graphe;
 import app.GrapheProbabiliste;
 import app.Lien;
 import app.LienProbabiliste;
@@ -23,7 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.control.Alert.AlertType;
 
 public class probabilite {

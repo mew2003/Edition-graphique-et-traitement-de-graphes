@@ -138,6 +138,8 @@ public class FXMLDocumentController implements Initializable {
     private MenuItem matriceDeTransitionId;
     @FXML
     private MenuItem classificationSommetsID;
+    @FXML
+    private MenuItem loiDeProbabiliteID;
     
     // Création du manager permettant de créer toutes les factories
     FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
@@ -199,11 +201,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void creerGrapheNonOriente(ActionEvent event) {
     	initialisation();
-    	valeurLien.setDisable(true);
-    	verifierGrapheId.setDisable(true);
-    	matriceDeTransitionId.setDisable(true);
-    	existenceCheminId.setDisable(true);
-    	classificationSommetsID.setDisable(true);
+    	setTraitement(false);
         factory = manager.creerFactory("GrapheNonOriente");
         graphe = factory.creerGraphe();
     }
@@ -211,11 +209,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void creerGrapheOriente(ActionEvent event) {
     	initialisation();
-    	valeurLien.setDisable(true);
-    	verifierGrapheId.setDisable(true);
-    	matriceDeTransitionId.setDisable(true);
-    	existenceCheminId.setDisable(true);
-    	classificationSommetsID.setDisable(true);
+    	setTraitement(false);
         factory = manager.creerFactory("GrapheOriente");
         graphe = factory.creerGraphe();
     }
@@ -223,11 +217,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void creerGrapheProbabiliste(ActionEvent event) {
     	initialisation();
-    	valeurLien.setDisable(false);
-    	verifierGrapheId.setDisable(false);
-    	matriceDeTransitionId.setDisable(false);
-    	existenceCheminId.setDisable(false);
-    	classificationSommetsID.setDisable(false);
+    	setTraitement(true);
         factory = manager.creerFactory("GrapheProbabiliste");
         graphe = factory.creerGraphe();
     }
@@ -251,6 +241,20 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void classificationSommets(ActionEvent event) {
     	probabilite.classificationSommets((GrapheProbabiliste) graphe);
+    }
+    
+    @FXML
+    void loiDeProbabilite(ActionEvent event) {
+    	System.out.println("hey, bonjour les amis");
+    }
+    
+    public void setTraitement(boolean etat) {
+    	valeurLien.setDisable(!etat);
+    	verifierGrapheId.setDisable(!etat);
+    	matriceDeTransitionId.setDisable(!etat);
+    	existenceCheminId.setDisable(!etat);
+    	classificationSommetsID.setDisable(!etat);
+    	loiDeProbabiliteID.setDisable(!etat);
     }
     
     /**
