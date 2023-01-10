@@ -137,6 +137,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private MenuItem matriceDeTransitionId;
     @FXML
+    private MenuItem probabiliteCheminId;
+    @FXML
     private MenuItem classificationSommetsID;
     @FXML
     private MenuItem loiDeProbabiliteID;
@@ -237,9 +239,9 @@ public class FXMLDocumentController implements Initializable {
     	probabilite.showExistenceChemin((GrapheProbabiliste) graphe); 
     }
     
-    @FXML
+    @FXML 
     void probabiliteChemin(ActionEvent event) {
-    	probabilite.showExistenceChemin((GrapheProbabiliste) graphe);
+    	probabilite.showProbabiliteChemin((GrapheProbabiliste) graphe);
     }
     
     @FXML
@@ -258,6 +260,7 @@ public class FXMLDocumentController implements Initializable {
     	matriceDeTransitionId.setDisable(!etat);
     	existenceCheminId.setDisable(!etat);
     	classificationSommetsID.setDisable(!etat);
+    	probabiliteCheminId.setDisable(!etat);
     	loiDeProbabiliteID.setDisable(!etat);
     }
     

@@ -18,6 +18,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -170,6 +171,12 @@ public class probabilite {
 	 */
 	public static void classificationSommets(GrapheProbabiliste graphe) {
 		ArrayList<Noeud[]> group = getNodesGroup(graphe);
+		for (Noeud[] list : group) {
+			System.out.print("\nGroup : ");
+			for (Noeud n : list) {
+				System.out.print(n + " ");
+			}
+		}
 		ArrayList<Noeud>[] nodesStates = getNodesStates(group, graphe);
 		
 		// Attribution pour chaque noeud d'un classe un couleur pré-définie
@@ -245,8 +252,9 @@ public class probabilite {
 							groupeNoeud.set(i, newGroup);
 						}
 					}
-					if (add) {
-						//Aucun des noeuds n'a été ajouté, ajouté les deux
+					if (add && !firstFound && !secondFound) {
+						/* Aucun des noeuds n'a été ajouté à un groupe déjà existant, 
+						   donc crée un groupe et ajoute les deux dans ce groupe */
 						if (n == nAComparer) {
 							groupeNoeud.add(new Noeud[1]);
 							groupeNoeud.get(groupeNoeud.size() - 1)[0] = n;
@@ -350,7 +358,7 @@ public class probabilite {
     	contentH.setMinWidth(20.0);
     	contentH.setStyle("-fx-padding: 50px 0px 0px 10px;");
     	
-    	dialog.setTitle("Existance d'un chemin");
+    	dialog.setTitle("existence d'un chemin");
     	
     	/* Si il y a des noeuds dans le graphe */
     	if (listeNoeuds.size() != 0) {
@@ -423,8 +431,147 @@ public class probabilite {
     	}
 	}
 
-public static double probabiliteChemin(Noeud noeud1, Noeud noeud2, GrapheProbabiliste graphe) {
-	
-	return 0;
+	public static double probabiliteChemin(Noeud depart, Noeud arrivee, int transition, GrapheProbabiliste graphe) {
+		Lien[] chemin = new Lien[transition];
+	    Queue<Lien> queue = new LinkedList<>();
+
+		
+	    for (Lien lien : graphe.getListeLiens()) {
+        	if (lien.getNoeuds()[0] == depart) {
+                chemin[0] = lien;
+            } else if (2 == 2) {
+            	
+            }
+        }
+		
+		
+		return 0;
 	}
+
+	public static void showProbabiliteChemin(GrapheProbabiliste graphe) {
+	
+		Dialog<ButtonType> dialog = new Dialog<>();
+	
+		ComboBox<Noeud> comboBox1 = new ComboBox<>();
+		ComboBox<Noeud> comboBox2 = new ComboBox<>();
+		TextField transitions = new TextField();
+		Label texteComboBox1 = new Label();
+		Label texteComboBox2 = new Label();
+		Label texteTransition = new Label();
+		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
+		HBox contentH1 = new HBox();
+		HBox contentH2 = new HBox();
+		VBox contentV = new VBox();
+		ButtonType valider = new ButtonType("Valider");
+		
+		dialog.setTitle("Probabilité d'un chemin");
+		
+		/* Si il y a des noeuds dans le graphe */
+		if (verifierGraphe(graphe, false)) {
+			/* gère la taille de la fenêtre et des boîtes pour que les éléments soient bien placés */
+			dialog.getDialogPane().setMinHeight(200.0);
+			dialog.getDialogPane().setMinWidth(400.0);
+			contentH1.setSpacing(40.0);
+			contentH1.setMinHeight(20.0);
+			contentH1.setMinWidth(20.0);
+			contentH2.setSpacing(40.0);
+			contentH2.setMinHeight(20.0);
+			contentH2.setMinWidth(20.0);
+			contentV.setMinHeight(100.0);
+			contentV.setMinWidth(200.0);
+			contentV.setStyle("-fx-padding: 50px 0px 0px 10px;");
+			contentV.setSpacing(10.0);
+			
+	     	dialog.setHeaderText("Testez la probabilité d'un chemin entre 2 noeuds en un certain nombre de transitions");
+	     	/* récupère la liste des noeuds et l'ajoute dans 2 comboBox */
+			comboBox1.getItems().addAll(listeNoeuds);
+			comboBox2.getItems().addAll(listeNoeuds);
+			/* gère la taille des comboBox */
+	     	comboBox1.setMinWidth(150.0);
+	     	comboBox2.setMinWidth(150.0);
+	     	transitions.setMinWidth(150.0);
+	     	/* gère la taille et le texte des labels */
+	     	texteComboBox1.setMinWidth(150);
+	     	texteComboBox1.setText("Noeud de départ :");
+	     	texteComboBox2.setMinWidth(150);
+	     	texteComboBox2.setText("Noeud d'arrivée :");
+	     	texteTransition.setMinWidth(150);
+	     	texteTransition.setText("Nombre de transitions :");
+	     	
+	     	/* ajoute les labels dans une HBox pour qu'ils soient alignés horizontalement */
+	     	contentH1.getChildren().add(texteComboBox1);
+	     	contentH1.getChildren().add(texteComboBox2);
+	     	contentH1.getChildren().add(texteTransition);
+	     	/* ajoute les champs dans une HBox pour qu'ils soient alignés horizontalement */
+	     	contentH2.getChildren().add(comboBox1);
+	     	contentH2.getChildren().add(comboBox2);
+	     	contentH2.getChildren().add(transitions);
+	     	/* ajoute les 2 HBox dans une VBox pour qu'elles soient alignées verticalement */
+	     	contentV.getChildren().add(contentH1);
+	     	contentV.getChildren().add(contentH2);
+	     	
+	     	/* Ajoute la HBox et un bouton valider à la fenêtre*/
+	     	dialog.getDialogPane().getChildren().add(contentV);
+	    	dialog.getDialogPane().getButtonTypes().add(valider);
+	     	
+	    	/* execute le code à l'intérieur quand n'importe quel bouton est cliqué */
+	    	dialog.setResultConverter(buttonType -> {
+	    		/* si le bouton 'valider' est cliqué */
+	    	    if (buttonType.equals(valider)) {
+	    	    	/* récupère les noeuds sélectionnés dans les comboBox */
+	    	    	Noeud noeudATester1 = comboBox1.getSelectionModel().getSelectedItem();
+	    	    	Noeud noeudATester2 = comboBox2.getSelectionModel().getSelectedItem();
+	    	    	String textTransitions = transitions.getText();
+	    	    	try {
+	    	    	    int nbTransitions = Integer.parseInt(textTransitions);
+	    	    	    showResultProbabiliteChemin(noeudATester1, noeudATester2, nbTransitions, graphe);
+	    	    	} catch (NumberFormatException e) {
+	    	    	    showResultProbabiliteChemin(noeudATester1, noeudATester2, 0, graphe);
+	    	    	}
+	    	    }
+	    	    /* ne sert à rien mais est obligatoire */
+	    	    return null;
+	    	});
+	    	
+			/* permet de faire fonctionner la croix en créant un bouton de type close invisible */
+			dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+		    Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+		    closeButton.managedProperty().bind(closeButton.visibleProperty());
+		    closeButton.setVisible(false);
+		    /* affiche la fenêtre */
+		    dialog.showAndWait();
+		}
+	}
+	
+	public static void showResultProbabiliteChemin(Noeud noeud1, Noeud noeud2, int nbTransitions, GrapheProbabiliste graphe) {
+    	Dialog<ButtonType> result = new Dialog<>();
+		
+    	/* Si aucun des noeuds est null */
+    	if (noeud1 != null && noeud2 != null && nbTransitions != 0) {
+    		
+    		Double proba = probabiliteChemin(noeud1, noeud2, nbTransitions, graphe);
+
+    		result.setTitle("Probabiltié d'un chemin");
+    		result.setHeaderText("En " + nbTransitions + " transition(s) il y a une probabilité de " + proba 
+    				             + " de passer du " + noeud1 + " au " + noeud2);
+    		/* permet de faire fonctionner la croix en créant un bouton de type close visible */
+	        result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+            Node closeButtonResult = result.getDialogPane().lookupButton(ButtonType.CLOSE);
+            closeButtonResult.managedProperty().bind(closeButtonResult.visibleProperty());
+            closeButtonResult.setVisible(true);
+            /* affiche la fenêtre de résultat */
+            result.showAndWait();
+    	} else {
+    		result.setTitle("Erreur");
+    		result.setHeaderText("Une des valeurs saisient est nulle ou invalide");
+    		result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+            Node closeButtonResult = result.getDialogPane().lookupButton(ButtonType.CLOSE);
+            closeButtonResult.managedProperty().bind(closeButtonResult.visibleProperty());
+            closeButtonResult.setVisible(true);
+            /* affiche la fenêtre de résultat */
+            result.showAndWait();
+    	}
+	}
+	
+	
 }
