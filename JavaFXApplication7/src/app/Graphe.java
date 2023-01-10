@@ -13,7 +13,7 @@ import javafx.scene.layout.AnchorPane;
  * Permet les différents échanges avec un graphe quelconque
  * @author mewen.derruau
  */
-public abstract class Graphe {
+public abstract class Graphe implements Cloneable {
 
 	/**
 	 * Créer un noeud de la classe {@link app.Noeud}

@@ -10,7 +10,7 @@ import javafx.scene.shape.Circle;
  * Permet les différents échanges avec un noeud quelconques
  * @author mewen.derruau
  */
-public abstract class Noeud {
+public abstract class Noeud implements Cloneable {
 
 	/**
 	 * Renvoie les positions X/Y du noeud
