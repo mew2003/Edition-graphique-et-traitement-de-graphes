@@ -3,6 +3,7 @@ package tools;
 import app.Lien;
 import app.LienNonOriente;
 import app.LienOriente;
+import app.LienOrientePondere;
 import app.LienProbabiliste;
 import app.Noeud;
 import javafx.scene.shape.Arc;
@@ -66,6 +67,9 @@ public class clickDetection {
     	} else if (lien instanceof LienProbabiliste) {
     		LienProbabiliste lienP = (LienProbabiliste) lien;
     		arc = (Arc) lienP.getArc()[0];
+    	} else {
+    		LienOrientePondere lienPO = (LienOrientePondere) lien;
+    		arc = (Arc) lienPO.getArc()[0];
     	}
 		return arc != null && mouseX > arc.getCenterX() - arc.getRadiusX() && mouseX < arc.getCenterX() + arc.getRadiusX()
         	   && mouseY > arc.getCenterY() - arc.getRadiusX() && mouseY < arc.getCenterY() + arc.getRadiusX();
@@ -76,11 +80,14 @@ public class clickDetection {
     	if (lien instanceof LienProbabiliste) {
     		LienProbabiliste lienP = (LienProbabiliste) lien;
     		quadCurve = (QuadCurve) lienP.getQuadCurved()[0];
-    	} else {
+    	} else if (lien instanceof LienOriente) {
     		LienOriente lienO = (LienOriente) lien;
     		quadCurve = (QuadCurve) lienO.getQuadCurved()[0];
+    	} else {
+    		LienOrientePondere lienPO = (LienOrientePondere) lien;
+    		quadCurve = (QuadCurve) lienPO.getQuadCurved()[0];
     	}
-
+    	
 		if (quadCurve == null) return false; //Si le lien ne possède pas de quadCurve (si c'est une courbe)
     	double[] mousePos = {mouseX, mouseY};
     	double[] triangleA = {quadCurve.getStartX(), quadCurve.getStartY()};

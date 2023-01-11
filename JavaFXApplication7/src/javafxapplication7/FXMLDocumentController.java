@@ -16,10 +16,12 @@ import app.FactoryGraphe;
 import app.FactoryGrapheManager;
 import app.GraphAction;
 import app.Graphe;
+import app.GrapheOrientePondere;
 import app.GrapheProbabiliste;
 import app.Lien;
 import app.LienNonOriente;
 import app.LienOriente;
+import app.LienOrientePondere;
 import app.LienProbabiliste;
 import app.Noeud;
 import app.NoeudXOROriente;
@@ -213,6 +215,15 @@ public class FXMLDocumentController implements Initializable {
     	initialisation();
     	setTraitement(false);
         factory = manager.creerFactory("GrapheOriente");
+        graphe = factory.creerGraphe();
+    }
+    
+    @FXML
+    void creerGrapheOrientePondere(ActionEvent event) {
+    	initialisation();
+    	setTraitement(false);
+    	valeurLien.setDisable(false);
+        factory = manager.creerFactory("GrapheOrientePondere");
         graphe = factory.creerGraphe();
     }
     
@@ -439,9 +450,25 @@ public class FXMLDocumentController implements Initializable {
                     Graphe nextState = graphe.clone();
                     GraphAction action = new GraphAction(previousState, nextState);	
                     actionManager.executeAction(action);
+                } else if(link instanceof LienOrientePondere) {
+                	/* Initialisation de la variable lien si l'élément sélectionné est un lien probabiliste */
+                	LienOrientePondere lien = (LienOrientePondere) link;
+            		valeurLien.setText("" + lien.getValue());
+            		for(Node n : childrens) {
+            			/* Si le lien est un QuadCurve */
+                    	if(n instanceof QuadCurve) {
+                    		draggedLink(n, lien);
+                    	/* Si le lien est un Arc */
+                    	} else if(n instanceof Arc) {
+                    		draggedLink(n, lien);
+                    	}
+            		}
+            		Graphe nextState = graphe.clone();
+                    GraphAction action = new GraphAction(previousState, nextState);	
+                    actionManager.executeAction(action);
                 /* Si le graphe est un graphe probabiliste */
             	} else if(link instanceof LienProbabiliste) {
-            		/* Initialisation de la variable lien si l'élément sélectoinné est un lien probabiliste */
+            		/* Initialisation de la variable lien si l'élément sélectionné est un lien probabiliste */
             		LienProbabiliste lien = (LienProbabiliste) link;
             		valeurLien.setText("" + lien.getValue());
             		for(Node n : childrens) {
@@ -678,8 +705,18 @@ public class FXMLDocumentController implements Initializable {
         				line.setStrokeWidth(3.0);
         			}
         		} catch (NullPointerException e) {}
-        	/* Met en gras un lien non orienté */
-    		} else if(o instanceof LienNonOriente) {
+        	/* Met en gras un lien orienté pondéré */
+    		} else if (o instanceof LienOrientePondere) {
+    			try {
+            		for(Shape line : ((LienOrientePondere) o).getQuadCurved()) {
+            			line.setStrokeWidth(3.0);
+            		}
+        			for(Shape line : ((LienOrientePondere) o).getArc()) {
+        				line.setStrokeWidth(3.0);
+        			}
+        		} catch (NullPointerException e) {}
+    		/* Met en gras un lien non orienté */
+    		} else  if(o instanceof LienNonOriente) {
     			((LienNonOriente) o).getLine().setStrokeWidth(3.0);
     		/* Met en gras un lien probabiliste  */
     		} else if(o instanceof LienProbabiliste) {
@@ -772,6 +809,9 @@ public class FXMLDocumentController implements Initializable {
             graphe.modifLien(lienAModif, nodes, zoneDessin);
             if (graphe instanceof GrapheProbabiliste) {
             	GrapheProbabiliste g = (GrapheProbabiliste) graphe;
+            	g.modifValeur(lienAModif, Double.parseDouble(valeurLien.getText()));
+            } else if (graphe instanceof GrapheOrientePondere){
+            	GrapheOrientePondere g = (GrapheOrientePondere) graphe;
             	g.modifValeur(lienAModif, Double.parseDouble(valeurLien.getText()));
             }
         } catch (Exception e) {
@@ -917,9 +957,20 @@ public class FXMLDocumentController implements Initializable {
             			shape.setStrokeWidth(3.0);
             		}
             	} catch (NullPointerException e) {}
-            	for(Shape quadCurved : lienOR.getQuadCurved()) {
-            		quadCurved.setStrokeWidth(3.0);
-        		}	
+	            	for(Shape quadCurved : lienOR.getQuadCurved()) {
+	            		quadCurved.setStrokeWidth(3.0);
+        		}
+            } else if (link instanceof LienOrientePondere) {
+            	LienOrientePondere lienORP = (LienOrientePondere) link;
+            	graphe.reset();
+            	try {
+            		for(Shape shape : lienORP.getArc()) {
+            			shape.setStrokeWidth(3.0);
+            		}
+            	} catch (NullPointerException e) {}
+	            	for(Shape quadCurved : lienORP.getQuadCurved()) {
+	            		quadCurved.setStrokeWidth(3.0);
+        		}
             } else if(link instanceof LienProbabiliste) {
             	LienProbabiliste lienProba = (LienProbabiliste) link;
             	graphe.reset();
@@ -928,8 +979,8 @@ public class FXMLDocumentController implements Initializable {
             			shape.setStrokeWidth(3.0);
             		}
             	} catch (NullPointerException e) {}
-            	for(Shape quadCurved : lienProba.getQuadCurved()) {
-            		quadCurved.setStrokeWidth(3.0);
+	            	for(Shape quadCurved : lienProba.getQuadCurved()) {
+	            		quadCurved.setStrokeWidth(3.0);
         		}	
             }
     	} catch (Exception e) {}

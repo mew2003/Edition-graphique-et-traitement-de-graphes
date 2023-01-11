@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -15,7 +20,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication7.FXMLDocumentController">
+<BorderPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication7.FXMLDocumentController">
 <top>
       <Pane prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -27,6 +32,7 @@
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#creerGrapheNonOriente" text="Graphe non orienté" />
                         <MenuItem mnemonicParsing="false" onAction="#creerGrapheOriente" text="Graphe orienté" />
+                        <MenuItem mnemonicParsing="false" onAction="#creerGrapheOrientePondere" text="Graphe orienté pondéré" />
                         <MenuItem mnemonicParsing="false" onAction="#creerGrapheProbabiliste" text="Graphe probabiliste" />
                     </items>
                   </Menu>
