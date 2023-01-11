@@ -22,6 +22,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -33,6 +35,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 
 public class probabilite {
@@ -384,7 +387,13 @@ public class probabilite {
          	/* Ajoute la HBox et un bouton valider à la fenêtre*/
          	dialog.getDialogPane().getChildren().add(contentH);
         	dialog.getDialogPane().getButtonTypes().add(valider);
-         	
+        	/* permet de pouvoir appuyer sur 'entré' pour valider */
+        	Button okButton = (Button) dialog.getDialogPane().lookupButton(valider);
+        	dialog.getDialogPane().getScene().setOnKeyPressed(event -> {
+        	    if (event.getCode() == KeyCode.ENTER) {
+        	        okButton.fire();
+        	    }
+        	});
         	/* execute le code à l'intérieur quand n'importe quel bouton est cliqué */
         	dialog.setResultConverter(buttonType -> {
         		/* si le bouton 'valider' est cliqué */
@@ -706,7 +715,7 @@ public class probabilite {
 	public static double probabiliteChemin(Noeud depart, Noeud arrivee, int transition, GrapheProbabiliste graphe) {
 		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
 		int indexDepart = listeNoeuds.indexOf(depart);
-		int indexArrivee = listeNoeuds.indexOf(depart);
+		int indexArrivee = listeNoeuds.indexOf(arrivee);
 		double[] values = new double[listeNoeuds.size() + 1];
 		
 		for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
@@ -720,7 +729,7 @@ public class probabilite {
 
 		double[] matrix = getLaw(inverserMatrice(matriceDeTransition(graphe)), values);
 
-		return matrix[indexArrivee - 1];
+		return matrix[indexArrivee];
 	}
 
 	/**
@@ -793,6 +802,13 @@ public class probabilite {
 	     	/* Ajoute la HBox et un bouton valider à la fenêtre*/
 	     	dialog.getDialogPane().getChildren().add(contentV);
 	    	dialog.getDialogPane().getButtonTypes().add(valider);
+	    	/* permet de pouvoir appuyer sur 'entré' pour valider */
+        	Button okButton = (Button) dialog.getDialogPane().lookupButton(valider);
+        	dialog.getDialogPane().getScene().setOnKeyPressed(event -> {
+        	    if (event.getCode() == KeyCode.ENTER) {
+        	        okButton.fire();
+        	    }
+        	});
 	     	
 	    	/* execute le code à l'intérieur quand n'importe quel bouton est cliqué */
 	    	dialog.setResultConverter(buttonType -> {

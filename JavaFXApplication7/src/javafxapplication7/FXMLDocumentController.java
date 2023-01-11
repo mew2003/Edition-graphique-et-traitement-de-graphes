@@ -3,6 +3,7 @@
  */
 package javafxapplication7;
 
+import javafxapplication7.Main;
 import java.awt.Desktop;
 import java.awt.Desktop.Action;
 import java.io.ByteArrayInputStream;
@@ -38,6 +39,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -131,6 +133,10 @@ public class FXMLDocumentController implements Initializable {
     private Parent root;
     @FXML
     private Button validerModifNoeud;
+    @FXML
+    private Button supprimerNoeudButton;
+    @FXML
+    private Button supprimerLienButton;
     @FXML
     private Button validerModifLien;
     @FXML
@@ -413,6 +419,14 @@ public class FXMLDocumentController implements Initializable {
                 Graphe nextState = graphe.clone();
                 GraphAction action = new GraphAction(previousState, nextState);	
                 actionManager.executeAction(action);
+                
+            	Main.getScene().setOnKeyPressed(event -> {
+            	    if (event.getCode() == KeyCode.ENTER) {
+            	    	validerModifNoeud.fire();
+            	    } else if (event.getCode() == KeyCode.DELETE){
+            	    	supprimerNoeudButton.fire();
+            	    }
+            	});
             } catch (Exception e) {
                 Lien link = (Lien) o;
                 /* Affichage des propriétés du lien */
@@ -487,6 +501,13 @@ public class FXMLDocumentController implements Initializable {
                     GraphAction action = new GraphAction(previousState, nextState);	
                     actionManager.executeAction(action);
             	}
+                Main.getScene().setOnKeyPressed(event -> {
+            	    if (event.getCode() == KeyCode.ENTER) {
+            	    	validerModifLien.fire();
+            	    } else if (event.getCode() == KeyCode.DELETE){
+            	    	supprimerLienButton.fire();
+            	    }
+            	});
             }
         } else {
         	/* Si l'élément sélectionné n'est pas un élément de la zone de dessin 

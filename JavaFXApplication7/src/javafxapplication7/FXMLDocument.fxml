@@ -125,7 +125,7 @@
                      </graphic>
                   </Label>
                   <Button fx:id="validerModifNoeud" layoutX="90.0" layoutY="271.0" mnemonicParsing="false" onAction="#modifNoeud" text="Valider" />
-                  <Button layoutX="79.0" layoutY="319.0" mnemonicParsing="false" onAction="#supprimerNoeud" text="Supprimer" />
+                  <Button fx:id="supprimerNoeudButton" layoutX="79.0" layoutY="319.0" mnemonicParsing="false" onAction="#supprimerNoeud" text="Supprimer" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="editionProprietesLien" layoutY="259.0" prefHeight="433.0" prefWidth="232.0" visible="false">
@@ -151,7 +151,7 @@
                      </graphic>
                   </Label>
                   <Button fx:id="validerModifLien" layoutX="88.0" layoutY="237.0" mnemonicParsing="false" onAction="#modifLien" text="Valider" />
-                  <Button layoutX="77.0" layoutY="280.0" mnemonicParsing="false" onAction="#supprimerLien" text="Supprimer" />
+                  <Button fx:id="supprimerLienButton" layoutX="77.0" layoutY="280.0" mnemonicParsing="false" onAction="#supprimerLien" text="Supprimer" />
                </children>
             </AnchorPane>
          </children>
