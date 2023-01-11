@@ -7,9 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.awt.Desktop;
-import java.awt.Desktop.Action;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -241,8 +238,12 @@ public class FXMLDocumentController implements Initializable {
     	initialisation();
     	setTraitement(false);
     	valeurLien.setDisable(false);
+    	enregistrerID.setDisable(false);
+    	enregistrerSousID.setDisable(false);
         factory = manager.creerFactory("GrapheOrientePondere");
         graphe = factory.creerGraphe();
+        actualMode = 3;
+        aUneSauvegarge = false;
     }
     
     @FXML
@@ -1126,8 +1127,9 @@ public class FXMLDocumentController implements Initializable {
      * Restaure les données nécessaire pour la création de graphe
      */
     public void restauration() {
-    	// Suppression de tous les éléments restant sur la zone graphique
+    	// Suppression de tous les éléments restant sur la zone graphique et dans la liste déroulante
     	zoneDessin.getChildren().clear();
+    	listeElements.getItems().clear();
     	// Réinitialisation de l'application
         initialisation();
         aside.setVisible(true);
@@ -1135,15 +1137,22 @@ public class FXMLDocumentController implements Initializable {
         // Dessin de tout les noeuds et liens du graphe ouvert
         for (Noeud n : graphe.getListeNoeuds()) {
         	n.dessiner(zoneDessin);
+        	listeElements.getItems().add(n);
         }
         for (Lien l : graphe.getListeLiens()) {
         	l.dessiner(zoneDessin);
+        	listeElements.getItems().add(l);
         }
         /* Si le graphe est un graphe probabiliste 
          * -> lancement de toute les méthodes liés à ce dernier
          */
         if (graphe instanceof GrapheProbabiliste) {
         	setTraitement(true);
+        } else if (graphe instanceof GrapheOrientePondere) {
+        	setTraitement(false);
+        	valeurLien.setDisable(false);
+        } else {
+        	setTraitement(false);
         }
         aUneSauvegarge = true;
     }
