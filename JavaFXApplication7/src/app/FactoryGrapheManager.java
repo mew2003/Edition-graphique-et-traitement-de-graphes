@@ -23,6 +23,7 @@ public class FactoryGrapheManager {
         factories = new HashMap<>();
         factories.put("GrapheNonOriente", new FactoryGrapheNonOriente());
         factories.put("GrapheOriente", new FactoryGrapheOriente());
+        factories.put("GrapheOrientePondere", new FactoryGrapheOrientePondere());
         factories.put("GrapheProbabiliste", new FactoryGrapheProbabiliste());
     }
     
