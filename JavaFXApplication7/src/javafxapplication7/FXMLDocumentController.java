@@ -3,12 +3,15 @@
  */
 package javafxapplication7;
 
+import java.awt.Desktop;
 import java.awt.Desktop.Action;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -985,5 +988,18 @@ public class FXMLDocumentController implements Initializable {
             }
     	} catch (Exception e) {}
     	
+    }
+    
+    /**
+     * Envoi sur le fichier pdf du manuel d'utilisation sur un navigateur web
+     * @param event clique sur l'option 'manuel d'utilisation' dans le menu d'aide
+     */
+    @FXML
+    void manuelUtilisation(ActionEvent event) {
+        try {
+            Desktop.getDesktop().browse(new URI("https://zzcc.store/"));
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 }

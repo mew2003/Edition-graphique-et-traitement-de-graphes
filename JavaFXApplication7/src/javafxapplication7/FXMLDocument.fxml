@@ -56,8 +56,7 @@
             </MenuButton>
             <MenuButton fx:id="menuAide" layoutX="239.0" layoutY="2.0" mnemonicParsing="false" text="Aide">
                <items>
-                  <MenuItem fx:id="obtenirDeLAide" mnemonicParsing="false" text="Obtenir de l'aide" />
-                  <MenuItem fx:id="FAQ" mnemonicParsing="false" text="FAQ" />
+                  <MenuItem mnemonicParsing="false" onAction="#manuelUtilisation" text="Manuel d'utilisation" />
                </items>
             </MenuButton>
          </children></Pane>
