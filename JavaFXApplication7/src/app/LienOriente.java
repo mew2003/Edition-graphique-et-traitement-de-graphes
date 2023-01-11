@@ -9,17 +9,19 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.QuadCurve;
 import static tools.drawingPositions.*;
 
-public class LienOriente extends Lien {
+import java.io.Serializable;
+
+public class LienOriente extends Lien implements Serializable{
 	
     // Noeud que relie le lien
     private Noeud[] noeuds;
     
     // Représentation graphique du lien
-    private Line arrow1, arrow2;
+    private transient Line arrow1, arrow2;
         
-    private Arc arc = null;
+    private transient Arc arc = null;
     
-    private QuadCurve quadCurve;
+    private transient QuadCurve quadCurve;
     
     private String nom;
     
