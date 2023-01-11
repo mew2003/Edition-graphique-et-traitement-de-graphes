@@ -125,9 +125,9 @@ public class GrapheProbabiliste extends Graphe {
 
 	@Override
 	public void modifPos(Noeud noeud, double[] pos) {
+		noeud.setPositions(pos);
 		for (Lien l : listeLiens) {
 			if (l.getNoeuds()[0] == noeud || l.getNoeuds()[1] == noeud) {
-				noeud.setPositions(pos);
 				l.actualiser();
 			}
 		}
