@@ -1177,5 +1177,7 @@ public class FXMLDocumentController implements Initializable {
         	setTraitement(false);
         }
         aUneSauvegarge = true;
+        enregistrerID.setDisable(false);
+    	enregistrerSousID.setDisable(false);
     }
 }
