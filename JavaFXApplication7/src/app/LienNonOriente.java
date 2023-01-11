@@ -8,6 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import static tools.drawingPositions.*;
 
+import java.io.Serializable;
+
 /**
  * Lien non orienté
  * Pour rappel, un lien non orienté doit respecter les principes suivants :
@@ -16,15 +18,15 @@ import static tools.drawingPositions.*;
  * - Il ne peut pas peut partir du même noeud et aller vers un autre même noeud qu'un autre lien
  * @author Mewen
  */
-public class LienNonOriente extends Lien {
+public class LienNonOriente extends Lien implements Serializable {
 
     // Noeud que relie le lien
     private Noeud[] noeuds;
     
     // Représentation graphique du lien
-    private Line line;
+    private transient Line line;
     
-    private String nom;
+    private transient String nom;
     
     // Nom par défaut d'un lien
     private final String DEFAULT_NAME = "default";

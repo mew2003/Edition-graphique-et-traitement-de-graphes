@@ -3,6 +3,8 @@
  */
 package app;
 
+import java.io.Serializable;
+
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -14,7 +16,7 @@ import javafx.scene.shape.Circle;
  * - Il possède un nom unique, permettant de le distinguer de tout autre noeud
  * @author Mewen
  */
-public class NoeudXOROriente extends Noeud {
+public class NoeudXOROriente extends Noeud implements Serializable {
 
     // Nom du noeud
     private String nom;
@@ -22,14 +24,14 @@ public class NoeudXOROriente extends Noeud {
     // Position X,Y du noeud
     private double[] pos;
 
-    // Radius du noeud
+	// Radius du noeud
     private double radius;
     
     // Représentation graphique du noeud
-    private Circle circle;
+    private transient Circle circle;
     
     // Représentation graphique du nom du noeud
-    private Label label;
+    private transient Label label;
     
     // Nom par défaut du noeud
     private final String DEFAULT_NAME = "S";

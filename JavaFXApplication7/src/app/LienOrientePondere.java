@@ -11,21 +11,23 @@ import javafx.scene.shape.Shape;
 
 import static tools.drawingPositions.*;
 
-public class LienOrientePondere extends Lien {
+import java.io.Serializable;
+
+public class LienOrientePondere extends Lien implements Serializable {
 	
 	// Noeud que relie le lien
     private Noeud[] noeuds;
     
     // Représentation graphique du lien
-    private Line arrow1, arrow2;
+    private transient Line arrow1, arrow2;
     
-    private Arc arc = null;
+    private transient Arc arc = null;
     
-    private QuadCurve quadCurve;
+    private transient QuadCurve quadCurve;
     
     private String nom;
     
-    private Label label;
+    private transient Label label;
     
     // Nom par défaut d'un lien
     private final String DEFAULT_NAME = "default";

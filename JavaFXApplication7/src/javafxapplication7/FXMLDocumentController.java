@@ -4,17 +4,16 @@
 package javafxapplication7;
 
 import javafxapplication7.Main;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.awt.Desktop;
-import java.awt.Desktop.Action;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import app.FactoryGraphe;
 import app.FactoryGrapheManager;
@@ -28,11 +27,9 @@ import app.LienOriente;
 import app.LienOrientePondere;
 import app.LienProbabiliste;
 import app.Noeud;
-import app.NoeudXOROriente;
 import app.ActionManager;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -44,9 +41,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
@@ -55,13 +50,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
+import javafx.stage.FileChooser;
 import tools.probabilite;
-import java.util.Stack;
-
-import javax.management.monitor.MonitorNotification;
-import javax.security.sasl.SaslException;
-
-
 
 /**
  * Contrôleur de l'application
@@ -153,6 +143,12 @@ public class FXMLDocumentController implements Initializable {
     private MenuItem classificationSommetsID;
     @FXML
     private MenuItem loiDeProbabiliteID;
+    @FXML
+    private MenuItem enregistrerSousID;
+    @FXML
+    private MenuItem enregistrerID;
+    @FXML
+    private MenuItem ouvrirID;
     
     // Création du manager permettant de créer toutes les factories
     FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
@@ -186,6 +182,15 @@ public class FXMLDocumentController implements Initializable {
     /* Permet de gérer les actions du graphe */
     ActionManager actionManager = new ActionManager();
     
+    // Permet de savoir si le graphe possède une sauvegarde
+    boolean aUneSauvegarge = false;
+    
+    // Sélectionneur de fichier
+    FileChooser fileChooser = new FileChooser();
+    
+    // Permet d'obtenir le dernier fichier sauvegarder
+    File lastFile = null;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
     
@@ -214,17 +219,25 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void creerGrapheNonOriente(ActionEvent event) {
     	initialisation();
+    	enregistrerID.setDisable(false);
+    	enregistrerSousID.setDisable(false);
     	setTraitement(false);
         factory = manager.creerFactory("GrapheNonOriente");
         graphe = factory.creerGraphe();
+        actualMode = 3;
+        aUneSauvegarge = false;
     }
     
     @FXML
     void creerGrapheOriente(ActionEvent event) {
     	initialisation();
     	setTraitement(false);
+    	enregistrerSousID.setDisable(false);
+    	enregistrerID.setDisable(false);
         factory = manager.creerFactory("GrapheOriente");
         graphe = factory.creerGraphe();
+        actualMode = 3;
+        aUneSauvegarge = false;
     }
     
     @FXML
@@ -232,16 +245,24 @@ public class FXMLDocumentController implements Initializable {
     	initialisation();
     	setTraitement(false);
     	valeurLien.setDisable(false);
+    	enregistrerID.setDisable(false);
+    	enregistrerSousID.setDisable(false);
         factory = manager.creerFactory("GrapheOrientePondere");
         graphe = factory.creerGraphe();
+        actualMode = 3;
+        aUneSauvegarge = false;
     }
     
     @FXML
     void creerGrapheProbabiliste(ActionEvent event) {
     	initialisation();
     	setTraitement(true);
+    	enregistrerSousID.setDisable(false);
+    	enregistrerID.setDisable(false);
         factory = manager.creerFactory("GrapheProbabiliste");
         graphe = factory.creerGraphe();
+        actualMode = 3;
+        aUneSauvegarge = false;
     }
     
     @FXML
@@ -1010,7 +1031,7 @@ public class FXMLDocumentController implements Initializable {
     	} catch (Exception e) {}
     	
     }
-    
+
     /**
      * Envoi sur le fichier pdf du manuel d'utilisation sur un navigateur web
      * @param event clique sur l'option 'manuel d'utilisation' dans le menu d'aide
@@ -1022,5 +1043,139 @@ public class FXMLDocumentController implements Initializable {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Enregistre le graphe sous quand le bouton "Enregistrer graphe" est clique
+     * @param event click souris
+     */
+    @FXML
+    void enregistrerSous(ActionEvent event) {
+    	enregistrerSousLeGraphe();
+    }
+    
+    /**
+     * Selon s'il existe déjà une sauvegarde, enregistre sous ou enregistre
+     * @param event click souris
+     */
+    @FXML
+    void enregistrer(ActionEvent event) {
+    	if (aUneSauvegarge) {
+    		enregistrerLeGraphe(lastFile);
+    	} else {
+    		enregistrerSousLeGraphe();
+    	}
+    }
+    
+    /**
+     * Ouvre la fenêtre d'enregistrement d'un graphe
+     */
+    void enregistrerSousLeGraphe() {
+    	fileChooser.setTitle("Sauvegarder un graphe");
+    	/* Si l'utilisateur a déjà sauvegarder un fichier,
+    	 * rouvrir la fenêtre d'enregistrement à ce chemin
+    	 */
+    	if (lastFile != null) {
+    		fileChooser.setInitialDirectory(lastFile.getParentFile());
+    	}
+    	// extensions de fichier autorisé
+    	fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier texte", "*.txt"));
+    	try {
+    		// récupération du chemin et nom du fichier enregistrer
+    		lastFile = fileChooser.showSaveDialog(null);
+    		if (lastFile != null) {
+    		    // création du fichier et écriture
+		        enregistrerLeGraphe(lastFile);
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
+     * Enregistre un fichier
+     * @param file fichier à sauvegarder
+     */
+    void enregistrerLeGraphe(File file) {
+    	try {
+    		FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(graphe);
+            out.close();
+            fos.close();
+            aUneSauvegarge = true;
+    	} catch (Exception e) {
+    		System.err.println(e);
+    	}
+    	
+    }
+    
+    /**
+     * Restaure un fichier contenant un graphe
+     * @param event click de souris
+     */
+    @FXML
+    void ouvrir(ActionEvent event) {
+    	fileChooser.setTitle("Sauvegarder un graphe");
+    	/* Si l'utilisateur a déjà sauvegarder un fichier,
+    	 * rouvrir la fenêtre d'enregistrement à ce chemin
+    	 */
+    	if (lastFile != null) {
+    		fileChooser.setInitialDirectory(lastFile.getParentFile());
+    	}
+    	// extensions de fichier autorisé
+    	fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier texte", "*.txt"));
+    	try {
+    		lastFile = fileChooser.showOpenDialog(null);
+        	if (lastFile != null) {
+        		try {
+                    FileInputStream fileIn = new FileInputStream(lastFile);
+                    ObjectInputStream in = new ObjectInputStream(fileIn);
+                    graphe = (Graphe) in.readObject();
+                    in.close();
+                    fileIn.close();
+                    
+                    restauration();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        	}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    /**
+     * Restaure les données nécessaire pour la création de graphe
+     */
+    public void restauration() {
+    	// Suppression de tous les éléments restant sur la zone graphique et dans la liste déroulante
+    	zoneDessin.getChildren().clear();
+    	listeElements.getItems().clear();
+    	// Réinitialisation de l'application
+        initialisation();
+        aside.setVisible(true);
+        actualMode = 3;
+        // Dessin de tout les noeuds et liens du graphe ouvert
+        for (Noeud n : graphe.getListeNoeuds()) {
+        	n.dessiner(zoneDessin);
+        	listeElements.getItems().add(n);
+        }
+        for (Lien l : graphe.getListeLiens()) {
+        	l.dessiner(zoneDessin);
+        	listeElements.getItems().add(l);
+        }
+        /* Si le graphe est un graphe probabiliste 
+         * -> lancement de toute les méthodes liés à ce dernier
+         */
+        if (graphe instanceof GrapheProbabiliste) {
+        	setTraitement(true);
+        } else if (graphe instanceof GrapheOrientePondere) {
+        	setTraitement(false);
+        	valeurLien.setDisable(false);
+        } else {
+        	setTraitement(false);
+        }
+        aUneSauvegarge = true;
     }
 }

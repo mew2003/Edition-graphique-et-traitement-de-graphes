@@ -26,8 +26,9 @@
          <children>
             <MenuButton fx:id="menuGraphe" layoutY="2.0" mnemonicParsing="false" text="Graphe">
               <items>
-                <MenuItem fx:id="ouvrir" mnemonicParsing="false" text="Ouvrir" />
-                  <MenuItem fx:id="enregistrerSous" mnemonicParsing="false" text="Enregistrer sous" />
+                <MenuItem fx:id="ouvrirID" mnemonicParsing="false" onAction="#ouvrir" text="Ouvrir" />
+                  <MenuItem fx:id="enregistrerID" disable="true" mnemonicParsing="false" onAction="#enregistrer" text="Enregistrer" />
+                  <MenuItem fx:id="enregistrerSousID" disable="true" mnemonicParsing="false" onAction="#enregistrerSous" text="Enregistrer sous" />
                   <Menu mnemonicParsing="false" text="Nouveau">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#creerGrapheNonOriente" text="Graphe non orienté" />

@@ -3,6 +3,7 @@
  */
 package app;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javafx.scene.control.ComboBox;
@@ -13,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
  * Permet les différents échanges avec un graphe quelconque
  * @author mewen.derruau
  */
-public abstract class Graphe implements Cloneable {
+public abstract class Graphe implements Serializable {
 
 	/**
 	 * Créer un noeud de la classe {@link app.Noeud}
