@@ -455,7 +455,7 @@ public class probabilite {
 		// valeurs que l'utilisateur à choisi
 		double[] userValue = demandeLoiValeur(graphe);
 		if (userValue == null) { //Si les données de l'utilisateur ne sont pas valide
-			System.err.println("Données saisies non valide");
+			System.out.println("Données saisies invalides");
 			return; 
 		}
 		// résultat de la loi de probabilité
@@ -549,8 +549,6 @@ public class probabilite {
 			for (int j = 0; j < elevatedMatrix[i].length; j++) {
 				result[i] += userValue[j] * elevatedMatrix[j][i];
 			}
-			/* arrondi la valeur à maximum 6 chiffres après la virgule */
-			result[i] = (double) Math.round(result[i] * 1000000) / 1000000;
 		}
 		return result;
 	}
@@ -656,15 +654,17 @@ public class probabilite {
 	    
 	    // total des valeurs saisies par l'utilisateur sur l'interface graphique
 	    double total = 0.0;
+	    // creation d'un array du nombre de noeud présent dans le graphe
+	    double[] values = new double[textFields.length];
 	    try {
 	    	if (Double.parseDouble(textFields[textFields.length - 1].getText()) < 0) {
 		    	return null;
+		    } else {
+		    	values[values.length - 1] = Double.parseDouble(textFields[textFields.length - 1].getText());
 		    }
 	    } catch (Exception e) {
 	    	return null;
 	    }
-	    // creation d'un array du nombre de noeud présent dans le graphe
-	    double[] values = new double[textFields.length];
 	    if (result.isPresent() && result.get() == okButton) {
 	        for (i = 0; i < textFields.length - 1; i++) {
 	        	// Vérification que la saisie de l'utilisateur soir bien un nombre
@@ -703,21 +703,12 @@ public class probabilite {
 		return inverse;
 	}
 
-	/**
-	 * détermine la probabilité de passer d'un noeud à un autre en un certain nombre de transition
-	 * @param depart  le noeud de départ
-	 * @param arrivee  le noeud d'arrivée
-	 * @param transition  le nombre de transitions
-	 * @param graphe  le graphe d'où sont issus les noeuds
-	 * @return  la probabilité trouvée
-	 */
 	public static double probabiliteChemin(Noeud depart, Noeud arrivee, int transition, GrapheProbabiliste graphe) {
 		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
 		int indexDepart = listeNoeuds.indexOf(depart);
-		int indexArrivee = listeNoeuds.indexOf(arrivee);
-		/* liste des valeurs qui seront entrés en arguments de la méthode getLaw */
+		int indexArrivee = listeNoeuds.indexOf(depart);
 		double[] values = new double[listeNoeuds.size() + 1];
-		/* met la valeur à 1 quand la case de la liste correspond au noeud de départ */
+		
 		for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
 			if (i == indexDepart) {
 				values[i] = 1;
@@ -725,12 +716,11 @@ public class probabilite {
 				values[i] = 0;
 			}
 		}
-		/* ajoute le nombre de transition à la fin de la liste */
 		values[values.length - 1] = transition;
-		/* récupère la matrice de la loi de probabilité */
+
 		double[] matrix = getLaw(inverserMatrice(matriceDeTransition(graphe)), values);
-		/* renvoi la valeur de la matrice qui correspond au noeud d'arrivée */
-		return matrix[indexArrivee];
+
+		return matrix[indexArrivee - 1];
 	}
 
 	/**
@@ -739,9 +729,9 @@ public class probabilite {
 	 * @param graphe  le graphe courant
 	 */
 	public static void showProbabiliteChemin(GrapheProbabiliste graphe) {
-
+	
 		Dialog<ButtonType> dialog = new Dialog<>();
-		/* Création des différents champs et de leurs label, ainsi que leurs conteneur */
+	
 		ComboBox<Noeud> comboBox1 = new ComboBox<>();
 		ComboBox<Noeud> comboBox2 = new ComboBox<>();
 		TextField transitions = new TextField();
@@ -756,7 +746,7 @@ public class probabilite {
 		
 		dialog.setTitle("Probabilité d'un chemin");
 		
-		/* Si le graphe est valide */
+		/* Si il y a des noeuds dans le graphe */
 		if (verifierGraphe(graphe, false)) {
 			/* gère la taille de la fenêtre et des boîtes pour que les éléments soient bien placés */
 			dialog.getDialogPane().setMinHeight(200.0);
@@ -776,7 +766,7 @@ public class probabilite {
 	     	/* récupère la liste des noeuds et l'ajoute dans 2 comboBox */
 			comboBox1.getItems().addAll(listeNoeuds);
 			comboBox2.getItems().addAll(listeNoeuds);
-			/* gère la taille des champs */
+			/* gère la taille des comboBox */
 	     	comboBox1.setMinWidth(150.0);
 	     	comboBox2.setMinWidth(150.0);
 	     	transitions.setMinWidth(150.0);
@@ -800,24 +790,21 @@ public class probabilite {
 	     	contentV.getChildren().add(contentH1);
 	     	contentV.getChildren().add(contentH2);
 	     	
-	     	/* Ajoute la VBox et un bouton valider à la fenêtre*/
+	     	/* Ajoute la HBox et un bouton valider à la fenêtre*/
 	     	dialog.getDialogPane().getChildren().add(contentV);
 	    	dialog.getDialogPane().getButtonTypes().add(valider);
 	     	
-	    	/* execute le code à l'intérieur quand n'importe quel bouton est cliqué	 */
+	    	/* execute le code à l'intérieur quand n'importe quel bouton est cliqué */
 	    	dialog.setResultConverter(buttonType -> {
 	    		/* si le bouton 'valider' est cliqué */
 	    	    if (buttonType.equals(valider)) {
-	    	    	/* récupère les noeuds sélectionnés dans les comboBox et le texte saisi dans la zone de texte */
+	    	    	/* récupère les noeuds sélectionnés dans les comboBox */
 	    	    	Noeud noeudATester1 = comboBox1.getSelectionModel().getSelectedItem();
 	    	    	Noeud noeudATester2 = comboBox2.getSelectionModel().getSelectedItem();
 	    	    	String textTransitions = transitions.getText();
-	    	    	/* essaie de convertir le texte écrit en entier */
 	    	    	try {
 	    	    	    int nbTransitions = Integer.parseInt(textTransitions);
-	    	    	    /* si il n'y a pas d'erreur lors de la conversion le nombre est passé en paramètre de la méthode */
 	    	    	    showResultProbabiliteChemin(noeudATester1, noeudATester2, nbTransitions, graphe);
-	    	    	/* si il y a une erreur lors de la conversion cela veut dire que le texte est invalide (donc remplacé par un 0) */
 	    	    	} catch (NumberFormatException e) {
 	    	    	    showResultProbabiliteChemin(noeudATester1, noeudATester2, 0, graphe);
 	    	    	}
@@ -847,24 +834,30 @@ public class probabilite {
 	public static void showResultProbabiliteChemin(Noeud noeud1, Noeud noeud2, int nbTransitions, GrapheProbabiliste graphe) {
     	Dialog<ButtonType> result = new Dialog<>();
 		
-    	/* Si aucun des noeuds est null et que le nombre de transition est valide */
-    	if (noeud1 != null && noeud2 != null && nbTransitions > 0) {
+    	/* Si aucun des noeuds est null */
+    	if (noeud1 != null && noeud2 != null && nbTransitions != 0) {
     		
     		Double proba = probabiliteChemin(noeud1, noeud2, nbTransitions, graphe);
 
     		result.setTitle("Probabiltié d'un chemin");
     		result.setHeaderText("En " + nbTransitions + " transition(s) il y a une probabilité de " + proba 
     				             + " de passer du " + noeud1 + " au " + noeud2);
+    		/* permet de faire fonctionner la croix en créant un bouton de type close visible */
+	        result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+            Node closeButtonResult = result.getDialogPane().lookupButton(ButtonType.CLOSE);
+            closeButtonResult.managedProperty().bind(closeButtonResult.visibleProperty());
+            closeButtonResult.setVisible(true);
+            /* affiche la fenêtre de résultat */
+            result.showAndWait();
     	} else {
     		result.setTitle("Erreur");
     		result.setHeaderText("Une des valeurs saisient est nulle ou invalide");
+    		result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+            Node closeButtonResult = result.getDialogPane().lookupButton(ButtonType.CLOSE);
+            closeButtonResult.managedProperty().bind(closeButtonResult.visibleProperty());
+            closeButtonResult.setVisible(true);
+            /* affiche la fenêtre de résultat */
+            result.showAndWait();
     	}
-    	/* permet de faire fonctionner la croix en créant un bouton de type close visible */
-    	result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButtonResult = result.getDialogPane().lookupButton(ButtonType.CLOSE);
-        closeButtonResult.managedProperty().bind(closeButtonResult.visibleProperty());
-        closeButtonResult.setVisible(true);
-        /* affiche la fenêtre de résultat */
-        result.showAndWait();
 	}
 }
