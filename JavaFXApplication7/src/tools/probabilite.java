@@ -623,8 +623,7 @@ public class probabilite {
 		Dialog<ButtonType> dialog = new Dialog<>();
 		dialog.setResizable(true);
 	    dialog.setTitle("Loi de probabilité");
-	    dialog.setHeaderText("Choisissez les valeurs d'origines :"
-	                         + "\n(texte = 0.0 / vide = 0.0)");
+	    dialog.setHeaderText("Choisissez les valeurs d'origines :");
 
 	    /* Ajout pour chaque noeud de son libellé 
 	     * + d'une zone de texte à sa droite dans une grid
