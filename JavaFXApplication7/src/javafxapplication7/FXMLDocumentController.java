@@ -30,6 +30,7 @@ import app.Noeud;
 import app.ActionManager;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -37,6 +38,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -149,6 +153,8 @@ public class FXMLDocumentController implements Initializable {
     private MenuItem enregistrerID;
     @FXML
     private MenuItem ouvrirID;
+    @FXML
+    private MenuItem manuelUtilisationButton;
     
     // Création du manager permettant de créer toutes les factories
     FactoryGrapheManager manager = FactoryGrapheManager.getInstance();
@@ -191,6 +197,30 @@ public class FXMLDocumentController implements Initializable {
     // Permet d'obtenir le dernier fichier sauvegarder
     File lastFile = null;
     
+    /* gère les raccourcis claviers */
+    EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent>() {
+        public void handle(final KeyEvent keyEvent) {
+        	KeyCombination controlSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY);
+            KeyCombination controlOpen = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_ANY);
+            KeyCombination controlDelete = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_ANY);
+            KeyCombination controlHelp = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_ANY);
+            
+            if (controlSave.match(keyEvent)) {
+            	enregistrerID.fire();
+    	    } else if (controlOpen.match(keyEvent)) {
+    	    	ouvrirID.fire();
+    	    } else if (selectedObject != null && controlDelete.match(keyEvent)) {
+    	    	if (selectedObject instanceof Lien) {
+    	    		supprimerLienButton.fire();
+    	    	} else {
+    	    		supprimerNoeudButton.fire();
+    	    	}
+    	    } else if (controlHelp.match(keyEvent)) {
+    	    	manuelUtilisationButton.fire();
+    	    }
+        }
+    };
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
     
@@ -198,6 +228,8 @@ public class FXMLDocumentController implements Initializable {
      * Initialisation de base pour tout graphe
      */
     public void initialisation() {
+    	Main.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyEventHandler);
+    	
     	listeElements.getItems().clear();
         zoneDessin.getChildren().clear();
         
@@ -444,7 +476,7 @@ public class FXMLDocumentController implements Initializable {
             	Main.getScene().setOnKeyPressed(event -> {
             	    if (event.getCode() == KeyCode.ENTER) {
             	    	validerModifNoeud.fire();
-            	    } else if (event.getCode() == KeyCode.DELETE){
+            	    } else if (event.getCode() == KeyCode.DELETE) {
             	    	supprimerNoeudButton.fire();
             	    }
             	});
@@ -525,7 +557,7 @@ public class FXMLDocumentController implements Initializable {
                 Main.getScene().setOnKeyPressed(event -> {
             	    if (event.getCode() == KeyCode.ENTER) {
             	    	validerModifLien.fire();
-            	    } else if (event.getCode() == KeyCode.DELETE){
+            	    } else if (event.getCode() == KeyCode.DELETE) {
             	    	supprimerLienButton.fire();
             	    }
             	});
