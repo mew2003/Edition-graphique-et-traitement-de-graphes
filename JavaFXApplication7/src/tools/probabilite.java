@@ -22,6 +22,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -443,49 +448,80 @@ public class probabilite {
 	public static void showLoiDeProba(GrapheProbabiliste graphe) {
 		// matrice du graphe (à inverser car elle est réceptionné dans le mauvais sens)
 		double[][] originalMatrix = inverserMatrice(matriceDeTransition(graphe));
-		if (originalMatrix == null) return; //Si le graphe n'est pas valide
+		if (originalMatrix == null) { //Si le graphe n'est pas valide
+			System.err.println("Graphe non valide");
+			return; 
+		}
 		// valeurs que l'utilisateur à choisi
 		double[] userValue = demandeLoiValeur(graphe);
-		if (userValue == null) return; //Si les données de l'utilisateur ne sont pas valide
+		if (userValue == null) { //Si les données de l'utilisateur ne sont pas valide
+			System.err.println("Données saisies non valide");
+			return; 
+		}
 		// résultat de la loi de probabilité
 		double[] result = getLaw(originalMatrix, userValue);
 
-		visualLawResult(graphe, result);
+		visualLawResult(graphe, result, userValue);
 	}
 	
-	public static void visualLawResult(GrapheProbabiliste graphe, double[] law) {
-		//TODO: faire les commentaires + faire un petit peu le design de la page + arrondis
-		Dialog<ButtonType> dialog = new Dialog<>();
-		ArrayList<Noeud> listeNoeud = graphe.getListeNoeuds();
-		Label text = new Label();
-		
-		HBox nodeName = new HBox();
-		HBox probability = new HBox();
-		VBox container = new VBox();
-		nodeName.setSpacing(5.0);
-		probability.setSpacing(5.0);
-		
-		for (int i = 0; i < listeNoeud.size(); i++) {
-			text = new Label(listeNoeud.get(i).getNom());
-			text.setMinSize(100.0, 25.0);
-			nodeName.getChildren().add(text);
-			text.setAlignment(Pos.CENTER);
-			text = new Label("" + law[i]);
-			text.setMinSize(100.0, 25.0);
-			text.setAlignment(Pos.CENTER);
-			probability.getChildren().add(text);
-		}
-		container.getChildren().add(nodeName);
-		container.getChildren().add(probability);
-		
-		dialog.getDialogPane().getChildren().add(container);
-		
-    	dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-        closeButton.managedProperty().bind(closeButton.visibleProperty());
-        dialog.setResizable(true);
-        dialog.getDialogPane().setMinHeight(100.0);
-    	dialog.showAndWait();
+	/**
+	 * Permet d'afficher graphiquement le résultat du calcul de la loi de probabilité
+	 * @param graphe graphe qui a été traité
+	 * @param law loi obtenu
+	 * @param userValue valeur saisie par l'utilisateur 
+	 */
+	public static void visualLawResult(GrapheProbabiliste graphe, double[] law, double[] userValue) {
+	    Dialog<ButtonType> dialog = new Dialog<>();
+	    ArrayList<Noeud> listeNoeud = graphe.getListeNoeuds();
+
+	    HBox nodeName = new HBox();
+	    HBox probability = new HBox();
+	    VBox container = new VBox();
+	    nodeName.setSpacing(5.0);
+	    probability.setSpacing(5.0);
+
+	    /*      Affiche tous les résultats sous le format suivant :
+	     * 		NomNoeud1	|	NomNoeud2	|	...	  |   NomNoeudX
+	     * 	   ProbaNoeud1  |  ProbaNoeud2  |   ...   |  ProbaNoeudX
+	     */
+	    for (int i = 0; i < listeNoeud.size(); i++) {
+	        Label nameLabel = new Label(listeNoeud.get(i).getNom());
+	        nameLabel.setMinSize(100.0, 25.0);
+	        nameLabel.setAlignment(Pos.CENTER);
+	        nameLabel.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+	        nodeName.getChildren().add(nameLabel);
+
+	        Label probabilityLabel = new Label("" + law[i]);
+	        probabilityLabel.setMinSize(100.0, 25.0);
+	        probabilityLabel.setAlignment(Pos.CENTER);
+	        probabilityLabel.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+	        probability.getChildren().add(probabilityLabel);
+	    }
+
+	    // Pour que le container ne soit pas sur le header text
+	    container.setStyle("-fx-padding : 90px 0px 0px 10px");
+	    container.getChildren().addAll(nodeName, probability);
+
+	    /* Element déjà saisie par l'utilisateur et rappelé sous le format : 
+	     * NomNoeud1: ProbaNoeud1, NomNoeud2: ProbaNoeud2, ...: ..., NomNoeudX: ProbaNoeudX,
+	     * Pour un nombre de transition: NBTransition
+	     */
+	    String texte = "Résultat de la loi de probabilité pour les valeurs de départ :\n";
+	    for (int i = 0; i < userValue.length - 1; i++) {
+	        texte += listeNoeud.get(i).getNom() + ": " + userValue[i] + ", ";
+	    }
+	    texte += "\nPour un nombre de transition : " + userValue[userValue.length - 1];
+
+	    dialog.setHeaderText(texte);
+	    dialog.getDialogPane().getChildren().add(container);
+	    dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+	    Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+	    closeButton.managedProperty().bind(closeButton.visibleProperty());
+	    dialog.setResizable(true);
+	    dialog.getDialogPane().setMinHeight(190.0);
+	    dialog.setTitle("Loi de probabilité");
+	    dialog.showAndWait();
 	}
 	
 	/**
@@ -618,19 +654,29 @@ public class probabilite {
 	    
 	    // total des valeurs saisies par l'utilisateur sur l'interface graphique
 	    double total = 0.0;
+	    try {
+	    	if (Double.parseDouble(textFields[textFields.length - 1].getText()) < 0) {
+		    	return null;
+		    }
+	    } catch (Exception e) {
+	    	return null;
+	    }
 	    // creation d'un array du nombre de noeud présent dans le graphe
 	    double[] values = new double[textFields.length];
 	    if (result.isPresent() && result.get() == okButton) {
-	        for (i = 0; i < textFields.length; i++) {
+	        for (i = 0; i < textFields.length - 1; i++) {
 	        	// Vérification que la saisie de l'utilisateur soir bien un nombre
 	        	try {
 		            values[i] = Double.parseDouble(textFields[i].getText());
-		            // Ne pas prendre le dernier élément (nombre de transition)
-		            if (i != textFields.length - 1) {
-			            total += values[i];
+			        total += values[i];
+		            // Pas de valeur négative autorisé
+		            if (values[i] < 0) {
+		            	values = null;
 		            }
-		            // Dans le cas d'une exception ne rien faire -> valeur par défaut 0.0
-	        	} catch (Exception e) {}
+		            // Dans le cas d'une exception bloqué tout ajout de valeur
+	        	} catch (Exception e) {
+	        		values = null;
+	        	}
 	        }
 	    }
 	    // valeur incorrect (la somme des probabilité de démarré à un noeud doit être égale à 1)
