@@ -47,6 +47,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Menu;
@@ -109,6 +110,12 @@ public class FXMLDocumentController implements Initializable {
     private AnchorPane palette;
     @FXML
     private ToggleGroup boutonsPalette;
+    @FXML
+    private ImageView nodeButtonID;
+    @FXML
+    private ImageView arrowButtonID;
+    @FXML
+    private ImageView selectionButtonID;
     @FXML
     private ComboBox<String> listeNoeuds;
     @FXML
@@ -218,6 +225,7 @@ public class FXMLDocumentController implements Initializable {
     
     /* création des combinaisons de touches pour tous les raccourcis clavier */
     KeyCombination controlSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY);
+    KeyCombination controlSaveAs = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY, KeyCombination.SHIFT_ANY);
     KeyCombination controlOpen = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_ANY);
     KeyCombination controlDelete = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_ANY);
     KeyCombination controlHelp = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_ANY);
@@ -232,6 +240,9 @@ public class FXMLDocumentController implements Initializable {
     KeyCombination altLegende = new KeyCodeCombination(KeyCode.G, KeyCombination.ALT_DOWN);
     KeyCombination altProbabilite = new KeyCodeCombination(KeyCode.P, KeyCombination.ALT_DOWN);
     KeyCombination altLoiProbabilite = new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN);
+    KeyCombination altNode = new KeyCodeCombination(KeyCode.N, KeyCombination.ALT_DOWN);
+    KeyCombination altArrow = new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN);
+    KeyCombination altSelection = new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN);
     
     /* gère les raccourcis claviers */
     EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent>() {
@@ -239,6 +250,8 @@ public class FXMLDocumentController implements Initializable {
             /* vérification de chaque raccourcis clavier quand une touche est pressée */
             if (controlSave.match(keyEvent)) {
             	enregistrerID.fire();
+    	    } else if (controlSaveAs.match(keyEvent)) {
+    	    	enregistrerSousID.fire();
     	    } else if (controlOpen.match(keyEvent)) {
     	    	ouvrirID.fire();
     	    } else if (selectedObject != null && controlDelete.match(keyEvent)) {
@@ -271,6 +284,12 @@ public class FXMLDocumentController implements Initializable {
     	    	probabiliteCheminId.fire();
     	    } else if (altLoiProbabilite.match(keyEvent)) {
     	    	loiDeProbabiliteID.fire();
+    	    } else if (altNode.match(keyEvent)) {
+    	    	addNodeClicked(null);
+    	    } else if (altArrow.match(keyEvent)) {
+    	    	addLinkClicked(null);
+    	    } else if (altSelection.match(keyEvent)) {
+    	    	SelectClicked(null);
     	    }
         }
     };
@@ -961,7 +980,6 @@ public class FXMLDocumentController implements Initializable {
         Graphe nextState = graphe.clone();
         GraphAction action = new GraphAction(previousState, nextState);	
         actionManager.executeAction(action);
-        
     }
     
     /**
