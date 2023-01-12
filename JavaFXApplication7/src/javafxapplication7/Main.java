@@ -12,14 +12,17 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	
 	private static Scene scene;
+	
+	private static Stage editableStage;
     
     @Override
     public void start(Stage stage) throws Exception {
+    	editableStage = stage;
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Logiciel de graphe V1");
-        stage.show();
+        editableStage.setScene(scene);
+        editableStage.setTitle("Logiciel d'édition et de traitement de graphe");
+        editableStage.show();
     }
 
     /**
@@ -31,5 +34,9 @@ public class Main extends Application {
     
     public static Scene getScene() {
     	return scene;
+    }
+    
+    public static Stage getStage() {
+    	return editableStage;
     }
 }

@@ -26,38 +26,43 @@
          <children>
             <MenuButton fx:id="menuGraphe" layoutY="2.0" mnemonicParsing="false" text="Graphe">
               <items>
-                <MenuItem fx:id="ouvrirID" mnemonicParsing="false" onAction="#ouvrir" text="Ouvrir" />
-                  <MenuItem fx:id="enregistrerID" disable="true" mnemonicParsing="false" onAction="#enregistrer" text="Enregistrer" />
+                <MenuItem fx:id="ouvrirID" mnemonicParsing="false" onAction="#ouvrir" text="Ouvrir   (CTRL+O)" />
+                  <MenuItem fx:id="enregistrerID" disable="true" mnemonicParsing="false" onAction="#enregistrer" text="Enregistrer   (CTRL+S)" />
                   <MenuItem fx:id="enregistrerSousID" disable="true" mnemonicParsing="false" onAction="#enregistrerSous" text="Enregistrer sous" />
                   <Menu mnemonicParsing="false" text="Nouveau">
                     <items>
-                      <MenuItem mnemonicParsing="false" onAction="#creerGrapheNonOriente" text="Graphe non orienté" />
-                        <MenuItem mnemonicParsing="false" onAction="#creerGrapheOriente" text="Graphe orienté" />
-                        <MenuItem mnemonicParsing="false" onAction="#creerGrapheOrientePondere" text="Graphe orienté pondéré" />
-                        <MenuItem mnemonicParsing="false" onAction="#creerGrapheProbabiliste" text="Graphe probabiliste" />
+                      <MenuItem fx:id="nonOrienteButton" mnemonicParsing="false" onAction="#creerGrapheNonOriente" text="Graphe non orienté   (CTRL+N)" />
+                        <MenuItem fx:id="orienteButton" mnemonicParsing="false" onAction="#creerGrapheOriente" text="Graphe orienté   (CTRL+R)" />
+                        <MenuItem fx:id="orientePondereButton" mnemonicParsing="false" onAction="#creerGrapheOrientePondere" text="Graphe orienté pondéré   (CTRL+E)" />
+                        <MenuItem fx:id="probabilisteButton" mnemonicParsing="false" onAction="#creerGrapheProbabiliste" text="Graphe probabiliste   (CTRL+P))" />
                     </items>
                   </Menu>
               </items>
             </MenuButton>
             <MenuButton fx:id="menuEdition" layoutX="75.0" layoutY="2.0" mnemonicParsing="false" text="Edition">
                <items>
-                  <MenuItem fx:id="annuler" mnemonicParsing="false" onAction="#undo" text="Annuler" />
-                  <MenuItem fx:id="retablir" mnemonicParsing="false" onAction="#redo" text="Rétablir" />
+                  <MenuItem fx:id="annuler" mnemonicParsing="false" onAction="#undo" text="Annuler   (CTRL+Z)" />
+                  <MenuItem fx:id="retablir" mnemonicParsing="false" onAction="#redo" text="Rétablir   (CTRL+Y)" />
                </items>
             </MenuButton>
             <MenuButton fx:id="menuTraitement" layoutX="147.0" layoutY="2.0" mnemonicParsing="false" text="Traitement">
                <items>
-                  <MenuItem fx:id="verifierGrapheId" disable="true" mnemonicParsing="false" onAction="#verifierGraphe" text="Verifier le graphe" />
-                  <MenuItem fx:id="matriceDeTransitionId" disable="true" mnemonicParsing="false" onAction="#matriceDeTransition" text="Afficher la matrice de transition" />
-                  <MenuItem fx:id="existenceCheminId" disable="true" mnemonicParsing="false" onAction="#existenceChemin" text="Tester l'existence d'un chemin" />
-                  <MenuItem fx:id="classificationSommetsID" disable="true" mnemonicParsing="false" onAction="#classificationSommets" text="Classification des sommets du graphe" />
-                  <MenuItem fx:id="probabiliteCheminId" disable="true" mnemonicParsing="false" onAction="#probabiliteChemin" text="Probabilité d'un chemin" />
-                  <MenuItem fx:id="loiDeProbabiliteID" disable="true" mnemonicParsing="false" onAction="#loiDeProbabilite" text="Déterminer une loi de probabilité" />
+                  <MenuItem fx:id="verifierGrapheId" disable="true" mnemonicParsing="false" onAction="#verifierGraphe" text="Verifier le graphe   (ALT+V)" />
+                  <MenuItem fx:id="matriceDeTransitionId" disable="true" mnemonicParsing="false" onAction="#matriceDeTransition" text="Afficher la matrice de transition   (ALT+T)" />
+                  <MenuItem fx:id="existenceCheminId" disable="true" mnemonicParsing="false" onAction="#existenceChemin" text="Tester l'existence d'un chemin   (ALT+E)" />
+                  <Menu fx:id="listeClassificationID" disable="true" mnemonicParsing="false" text="Classification des sommets du graphe">
+                     <items>
+                        <MenuItem fx:id="classificationSommetsID" mnemonicParsing="false" onAction="#classificationSommets" text="Affichage de la classification   (ALT+C)" />
+                        <MenuItem fx:id="legendeID" mnemonicParsing="false" onAction="#legendeClassification" text="Affichage de la légende   (ALT+G)" />
+                     </items>
+                  </Menu>
+                  <MenuItem fx:id="probabiliteCheminId" disable="true" mnemonicParsing="false" onAction="#probabiliteChemin" text="Probabilité d'un chemin   (ALT+P)" />
+                  <MenuItem fx:id="loiDeProbabiliteID" disable="true" mnemonicParsing="false" onAction="#loiDeProbabilite" text="Déterminer une loi de probabilité   (ALT+L)" />
                </items>
             </MenuButton>
             <MenuButton fx:id="menuAide" layoutX="239.0" layoutY="2.0" mnemonicParsing="false" text="Aide">
                <items>
-                  <MenuItem fx:id="manuelUtilisationButton" mnemonicParsing="false" onAction="#manuelUtilisation" text="Manuel d'utilisation" />
+                  <MenuItem fx:id="manuelUtilisationButton" mnemonicParsing="false" onAction="#manuelUtilisation" text="Manuel d'utilisation   (CTRL+H)" />
                </items>
             </MenuButton>
          </children></Pane>
@@ -126,7 +131,7 @@
                      </graphic>
                   </Label>
                   <Button fx:id="validerModifNoeud" layoutX="90.0" layoutY="271.0" mnemonicParsing="false" onAction="#modifNoeud" text="Valider" />
-                  <Button fx:id="supprimerNoeudButton" layoutX="79.0" layoutY="319.0" mnemonicParsing="false" onAction="#supprimerNoeud" text="Supprimer" />
+                  <Button fx:id="supprimerNoeudButton" layoutX="41.0" layoutY="323.0" mnemonicParsing="false" onAction="#supprimerNoeud" text="Supprimer   (CTRL+D)" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="editionProprietesLien" layoutY="259.0" prefHeight="433.0" prefWidth="232.0" visible="false">
@@ -151,8 +156,8 @@
                         <TextField fx:id="noeud2Lien" />
                      </graphic>
                   </Label>
-                  <Button fx:id="validerModifLien" layoutX="88.0" layoutY="237.0" mnemonicParsing="false" onAction="#modifLien" text="Valider" />
-                  <Button fx:id="supprimerLienButton" layoutX="77.0" layoutY="280.0" mnemonicParsing="false" onAction="#supprimerLien" text="Supprimer" />
+                  <Button fx:id="validerModifLien" layoutX="88.0" layoutY="237.0" mnemonicParsing="false" onAction="#modifLien" text="Valider " />
+                  <Button fx:id="supprimerLienButton" layoutX="41.0" layoutY="289.0" mnemonicParsing="false" onAction="#supprimerLien" text="Supprimer   (CTRL+D)" />
                </children>
             </AnchorPane>
          </children>
