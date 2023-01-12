@@ -14,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
  * @author mewen.derruau
  */
 public abstract class Graphe implements Serializable {
-
+	
 	/**
 	 * 
 	 */
@@ -35,27 +35,31 @@ public abstract class Graphe implements Serializable {
     public abstract Lien creerLien(Noeud noeud1, Noeud noeud2);
     
     /**
-     * Supprime un lien et sa représentation graphique
-     * @param lienASuppr le lien à supprimer
-     * @param zoneDessin la zone graphique sur laquelle supprimer la représentation du lien
+     * Supprime un lien, sa représentation graphique 
+     * et sa présence dans la liste des éléments du graphe
+     * @param lienASuppr lien à supprimer
+     * @param zoneDessin zone graphique ou se situe le lien
+     * @param listeElements liste d'élément dans laquelle se situe le lien
      */
 	public abstract void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements);
 	
 	/**
-	 * Supprime un noeud et sa représentation graphique
-	 * @param noeudASuppr le noeud à supprimer
-	 * @param zoneDessin la zone graphique sur laquelle supprimer la représentation du lien
-	 * @param listeElements la liste de tous les éléments du graphe
+	 * Supprime un noeud, sa représentation graphique
+	 * et sa présence dans la liste des éléments du graphe
+	 * @param noeudASuppr noeud à supprimer
+	 * @param zoneDessin zone graphique ou se situe le noeud
+	 * @param listeElements liste d'élément dans laquelle se situe le noeud
 	 */
 	public abstract void supprimerNoeud(Noeud noeudASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements);
-	
-     /**
-     * Permet d'obtenir l'élément cliqué sur l'interface
-     * @param positions position X/Y de la souris au moment du click
-     * @return Un object correspondant au noeud ou lien si un élément est en
-     *         effet bien clique ou renvoie la valeur null si rien n'a été
-     *         trouvé.
-     */
+
+	/**
+	 * Permet d'obtenir l'élément clique sur l'interface
+	 * @param positions position X/Y de la souris au moment du click
+	 * @param zoneDessin la zone sur laquelle c'est effectué le click
+	 * @return Un object correspondant au noeud ou lien si un élément est en
+	 *         effet bien clique ou renvoie la valeur null si rien n'a été
+	 *         trouvé.
+	 */
     public abstract Object elementClicked(double[] positions, AnchorPane zoneDessin);
     
     /**
@@ -83,19 +87,42 @@ public abstract class Graphe implements Serializable {
      * Permet de modifier les noeuds que relient un lien
      * @param lien Lien à modifier
      * @param noeuds nouveau noeuds que relient le lien
+     * @param zoneDessin zone ou se trouve le lien 
+     *                   (permet l'actualisation de l'affichage)
      */
     public abstract void modifLien(Lien lien, Noeud[] noeuds, AnchorPane zoneDessin);
     
+    /**
+     * Permet de modifier le radius d'un noeud
+     * @param noeud noeud à modifier
+     * @param radius nouveau radius du noeud
+     */
     public abstract void modifRadius(Noeud noeud, double radius);
     
+    /**
+     * Reset l'affichage de tout les noeuds / liens d'un graphe
+     * (après une sélection d'un élément)
+     */
     public abstract void reset();
     
+    /**
+     * Permet d'actualiser tout les liens du graphe
+     */
     public abstract void relocalisation();
     
     public abstract void setEtat(Graphe graphe);
     
     public abstract Graphe clone();
 
+    /**
+     * Permet d'obtenir la liste des noeuds
+     * @return la liste des noeuds
+     */
     public abstract List<Noeud> getListeNoeuds();
+    
+    /**
+     * Permet d'obtenir la liste des liens
+     * @return la liste des liens
+     */
     public abstract List<Lien> getListeLiens();
 }

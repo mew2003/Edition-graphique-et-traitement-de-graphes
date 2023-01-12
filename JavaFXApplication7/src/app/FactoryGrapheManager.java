@@ -1,5 +1,5 @@
 /*
- * Classe manager des factory de graphe 
+ * Classe manager des factories de graphe 
  */
 package app;
 
@@ -46,14 +46,13 @@ public class FactoryGrapheManager {
     /**
      * Permet de créer un factory parmi la liste de celle implémenté
      * @param type chaîne de caractères correspondant au type de factory souhaité
-     * @return la factory choisis
+     * @return la factory choisis / null si elle n'existe pas
      */
     public FactoryGraphe creerFactory(String type) {
         if (factories.get(type) != null) {
             return factories.get(type);
-        } else {
-            return null;
         }
+        return null;
     }
 
 }

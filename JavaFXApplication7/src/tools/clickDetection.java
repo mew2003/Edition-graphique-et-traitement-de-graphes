@@ -9,7 +9,6 @@ import app.Noeud;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
-import javafx.scene.shape.Shape;
 
 public class clickDetection {
 	

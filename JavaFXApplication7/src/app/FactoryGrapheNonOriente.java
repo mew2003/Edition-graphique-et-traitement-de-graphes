@@ -8,8 +8,6 @@ package app;
  * @author Mewen
  */
 public class FactoryGrapheNonOriente extends FactoryGraphe {
-
-    public FactoryGrapheNonOriente() {}
     
     @Override
     public Graphe creerGraphe() {

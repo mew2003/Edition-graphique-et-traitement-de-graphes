@@ -20,7 +20,7 @@ import java.io.Serializable;
  */
 public class LienNonOriente extends Lien implements Serializable {
 
-    // Noeud que relie le lien
+	// Noeud que relie le lien
     private Noeud[] noeuds;
     
     // Représentation graphique du lien

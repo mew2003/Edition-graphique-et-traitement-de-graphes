@@ -9,7 +9,6 @@ import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -26,20 +25,30 @@ import static tools.clickDetection.*;
  */
 public class GrapheNonOriente extends Graphe {
 	
-    private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
+	private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
+    
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
-    private int nbNoeud = 1;
+    private int nbNoeud = 0;
     private int nbLien = 1;
-
-    GrapheNonOriente() {}
 
     @Override
     public Noeud creerNoeud(double[] pos) {
-    	Noeud n = new NoeudXOROriente(pos, nbNoeud++);
+    	nbNoeud++;
+    	boolean estValide = true;
+    	do {
+    		estValide = true;
+    		for (Noeud n : listeNoeuds) {
+    			if (n.getNom().equals(n.getDEFAULT_NAME() + (nbNoeud))) {
+    				estValide = false;
+    				nbNoeud++;
+    			}
+    		}
+    	} while (!estValide);
+    	Noeud n = new NoeudXOROriente(pos, nbNoeud);
     	listeNoeuds.add(n);
         return n;
-    } 
+    }
 
     @Override
     public Lien creerLien(Noeud noeud1, Noeud noeud2) {
@@ -57,68 +66,52 @@ public class GrapheNonOriente extends Graphe {
     
     @Override
     public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
-    	for (int i = 0 ; i < listeLiens.size() ; i++)  {
-    		if (listeLiens.get(i) == lienASuppr) {
-    			lienASuppr.effacer(zoneDessin);
-    			listeLiens.remove(lienASuppr);
-    			listeElements.getItems().remove(lienASuppr);
-    			i--;
-    		}
-    	}
+		lienASuppr.effacer(zoneDessin);
+		listeElements.getItems().remove(lienASuppr);
+		listeLiens.remove(lienASuppr);
     }
     
     @Override
     public void supprimerNoeud(Noeud noeudASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
-    	
-    	for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
-    		if (listeNoeuds.get(i) == noeudASuppr) {
-    			noeudASuppr.effacer(zoneDessin);
-    			listeNoeuds.remove(noeudASuppr);
-    			i--;
-    			//TODO modifier le remove de la liste d'éléments pour le passer dans 'supprimerLien'
-    			for (int j = 0 ; j < listeLiens.size() ; j++) {
-    				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
-    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
-    					j--;
-    				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
-    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
-    					j--;
-    				}
-    		    }
+		noeudASuppr.effacer(zoneDessin);
+		listeNoeuds.remove(noeudASuppr);
+
+		for (int j = 0; j < listeLiens.size(); j++) {
+			if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
+				supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+				j--;
+			} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
+				supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+				j--;
 			}
-		}
+	    }	
     }
 
-    
     @Override
     public String toString() {
-    	String chaine = "GrapheNonOriente, noeuds [";
-    	for (Noeud i : listeNoeuds) {
-    		chaine += i.toString() + ", ";
-    	}
-    	chaine += "], liens [";
-    	for (Lien i : listeLiens) {
-    		chaine += i.toString() + ", ";
-    	}
-    	chaine += "]";
-        return chaine;
+        StringBuilder chaine = new StringBuilder("GrapheNonOriente, noeuds [");
+        for (Noeud i : listeNoeuds) {
+            chaine.append(i.toString()).append(", ");
+        }
+        chaine.append("], liens [");
+        for (Lien i : listeLiens) {
+            chaine.append(i.toString()).append(", ");
+        }
+        chaine.append("]");
+        return chaine.toString();
     }
 
     @Override
-    public Object elementClicked(double[] positions, AnchorPane zoneDessin) {
+    public Object elementClicked(double[] pos, AnchorPane zoneDessin) {
         ObservableList<Node> childrens = zoneDessin.getChildren();
         for (Node n : childrens) {
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
-                    if (isNodeClicked(positions[0], positions[1], no)) {  
-                        return no;
-                    }
+                    if (isNodeClicked(pos[0], pos[1], no)) return no;
                 }
             } else if (n instanceof Line) {
                 for (Lien li : listeLiens) {
-                    if (isLinkClicked(positions[0], positions[1], li)) {
-                    	return li;
-                    }
+                    if (isLinkClicked(pos[0], pos[1], li)) return li;
                 }
             }
         }
@@ -132,8 +125,7 @@ public class GrapheNonOriente extends Graphe {
     		n.getCircle().setStrokeWidth(1.0);
     	}
     	for (Lien l : listeLiens) {
-    		LienNonOriente li = (LienNonOriente) l;
-    		li.getLine().setStrokeWidth(1.0);
+    		((LienNonOriente) l).getLine().setStrokeWidth(1.0);
     	}
     }
     

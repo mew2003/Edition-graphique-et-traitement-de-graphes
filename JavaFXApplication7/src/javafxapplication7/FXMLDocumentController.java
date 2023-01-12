@@ -1018,31 +1018,38 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     public void supprimerNoeud() {
-    	Graphe previousState = graphe.clone();
-    	Noeud noeudASuppr = (Noeud) selectedObject;
-    	listeElements.getItems().remove(selectedObject);
-    	graphe.supprimerNoeud(noeudASuppr, zoneDessin, listeElements);
-    	listeElements.getSelectionModel().clearSelection();
-        editionProprietesLien.setVisible(false);
-        editionProprietesNoeud.setVisible(false);
-        Graphe nextState = graphe.clone();
-        GraphAction action = new GraphAction(previousState, nextState);	
-        actionManager.executeAction(action);
+    	if (selectedObject != null) {
+    		Graphe previousState = graphe.clone();
+        	Noeud noeudASuppr = (Noeud) selectedObject;
+        	graphe.supprimerNoeud(noeudASuppr, zoneDessin, listeElements);
+        	listeElements.getSelectionModel().clearSelection();
+            editionProprietesLien.setVisible(false);
+            editionProprietesNoeud.setVisible(false);
+            Graphe nextState = graphe.clone();
+            GraphAction action = new GraphAction(previousState, nextState);	
+            actionManager.executeAction(action);	
+            selectedObject = null;
+            graphe.reset();
+    	}
     }
     
 
     @FXML
     public void supprimerLien() {
-    	Graphe previousState = graphe.clone();
-    	Lien lienASuppr = (Lien) selectedObject;
-    	listeElements.getItems().remove(selectedObject);
-    	graphe.supprimerLien(lienASuppr, zoneDessin, listeElements);
-    	listeElements.getSelectionModel().clearSelection();
-        editionProprietesLien.setVisible(false);
-        editionProprietesNoeud.setVisible(false);
-        Graphe nextState = graphe.clone();
-        GraphAction action = new GraphAction(previousState, nextState);	
-        actionManager.executeAction(action);
+    	if (selectedObject != null) {
+    		Graphe previousState = graphe.clone();
+        	Lien lienASuppr = (Lien) selectedObject;
+        	listeElements.getItems().remove(selectedObject);
+        	graphe.supprimerLien(lienASuppr, zoneDessin, listeElements);
+        	listeElements.getSelectionModel().clearSelection();
+            editionProprietesLien.setVisible(false);
+            editionProprietesNoeud.setVisible(false);
+            Graphe nextState = graphe.clone();
+            GraphAction action = new GraphAction(previousState, nextState);	
+            actionManager.executeAction(action);
+            selectedObject = null;
+            graphe.reset();
+    	}
     }
     
     /**

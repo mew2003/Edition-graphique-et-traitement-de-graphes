@@ -3,7 +3,6 @@ package app;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.QuadCurve;
@@ -12,8 +11,8 @@ import static tools.drawingPositions.*;
 import java.io.Serializable;
 
 public class LienOriente extends Lien implements Serializable{
-	
-    // Noeud que relie le lien
+
+	// Noeud que relie le lien
     private Noeud[] noeuds;
     
     // Représentation graphique du lien

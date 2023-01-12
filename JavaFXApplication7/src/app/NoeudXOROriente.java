@@ -18,7 +18,7 @@ import javafx.scene.shape.Circle;
  */
 public class NoeudXOROriente extends Noeud implements Serializable {
 
-    // Nom du noeud
+	// Nom du noeud
     private String nom;
 
     // Position X,Y du noeud
@@ -39,13 +39,17 @@ public class NoeudXOROriente extends Noeud implements Serializable {
     // Radius par défaut du noeud
     private final double DEFAULT_RADIUS = 25;
     
-    /**
+    @Override
+    public String getDEFAULT_NAME() {
+		return DEFAULT_NAME;
+	}
+
+	/**
      * Crée un noeud
      * @param pos positions X/Y du noeud
      * @param nbNoeud permet le nom unique du noeud
      */
     public NoeudXOROriente(double[] pos, int nbNoeud) {
-    	//TODO: Possibilité de créer un noeud portant le même nom qu'un autre noeud précédemment crée.
         this.nom = DEFAULT_NAME + nbNoeud;
         this.pos = pos;
         this.radius = DEFAULT_RADIUS;

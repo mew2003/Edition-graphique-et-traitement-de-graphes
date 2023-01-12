@@ -5,7 +5,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 
@@ -14,7 +13,7 @@ import static tools.drawingPositions.*;
 import java.io.Serializable;
 
 public class LienOrientePondere extends Lien implements Serializable {
-	
+
 	// Noeud que relie le lien
     private Noeud[] noeuds;
     
