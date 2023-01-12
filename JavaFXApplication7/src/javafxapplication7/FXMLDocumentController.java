@@ -1002,6 +1002,7 @@ public class FXMLDocumentController implements Initializable {
     public void supprimerNoeud() {
     	Graphe previousState = graphe.clone();
     	Noeud noeudASuppr = (Noeud) selectedObject;
+    	listeElements.getItems().remove(selectedObject);
     	graphe.supprimerNoeud(noeudASuppr, zoneDessin, listeElements);
     	listeElements.getSelectionModel().clearSelection();
         editionProprietesLien.setVisible(false);
