@@ -3,7 +3,6 @@
  */
 package javafxapplication7;
 
-import javafxapplication7.Main;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,7 +13,9 @@ import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
 import app.FactoryGraphe;
 import app.FactoryGrapheManager;
 import app.GraphAction;
@@ -35,6 +36,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
@@ -250,51 +253,81 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void creerGrapheNonOriente(ActionEvent event) {
-    	initialisation();
-    	enregistrerID.setDisable(false);
-    	enregistrerSousID.setDisable(false);
-    	setTraitement(false);
-        factory = manager.creerFactory("GrapheNonOriente");
-        graphe = factory.creerGraphe();
-        actualMode = 3;
-        aUneSauvegarge = false;
+    	if (confirmerNouveauGraphe()) {
+    		initialisation();
+    		enregistrerID.setDisable(false);
+    		enregistrerSousID.setDisable(false);
+    		setTraitement(false);
+    		factory = manager.creerFactory("GrapheNonOriente");
+    		graphe = factory.creerGraphe();
+    		actualMode = 3;
+    		aUneSauvegarge = false;
+    	}
     }
     
     @FXML
     void creerGrapheOriente(ActionEvent event) {
-    	initialisation();
-    	setTraitement(false);
-    	enregistrerSousID.setDisable(false);
-    	enregistrerID.setDisable(false);
-        factory = manager.creerFactory("GrapheOriente");
-        graphe = factory.creerGraphe();
-        actualMode = 3;
-        aUneSauvegarge = false;
+    	if (confirmerNouveauGraphe()) {
+    		initialisation();
+    		setTraitement(false);
+    		enregistrerSousID.setDisable(false);
+    		enregistrerID.setDisable(false);
+    		factory = manager.creerFactory("GrapheOriente");
+    		graphe = factory.creerGraphe();
+    		actualMode = 3;
+    		aUneSauvegarge = false;
+    	}
     }
     
     @FXML
     void creerGrapheOrientePondere(ActionEvent event) {
-    	initialisation();
-    	setTraitement(false);
-    	valeurLien.setDisable(false);
-    	enregistrerID.setDisable(false);
-    	enregistrerSousID.setDisable(false);
-        factory = manager.creerFactory("GrapheOrientePondere");
-        graphe = factory.creerGraphe();
-        actualMode = 3;
-        aUneSauvegarge = false;
+    	if (confirmerNouveauGraphe()) {
+    		initialisation();
+    		setTraitement(false);
+    		valeurLien.setDisable(false);
+    		enregistrerID.setDisable(false);
+    		enregistrerSousID.setDisable(false);
+    		factory = manager.creerFactory("GrapheOrientePondere");
+    		graphe = factory.creerGraphe();
+    		actualMode = 3;
+    		aUneSauvegarge = false;
+    	}
     }
     
     @FXML
     void creerGrapheProbabiliste(ActionEvent event) {
-    	initialisation();
-    	setTraitement(true);
-    	enregistrerSousID.setDisable(false);
-    	enregistrerID.setDisable(false);
-        factory = manager.creerFactory("GrapheProbabiliste");
-        graphe = factory.creerGraphe();
-        actualMode = 3;
-        aUneSauvegarge = false;
+    	if (confirmerNouveauGraphe()) {
+    		initialisation();
+    		setTraitement(true);
+    		enregistrerSousID.setDisable(false);
+    		enregistrerID.setDisable(false);
+    		factory = manager.creerFactory("GrapheProbabiliste");
+    		graphe = factory.creerGraphe();
+    		actualMode = 3;
+    		aUneSauvegarge = false;
+    	}
+    }
+    
+    /**
+     * afficher une fenêtre de confirmation pour la création d'un nouveau graphe
+     * @return true si l'utilisateur a cliqué sur OK,
+     *         false sinon
+     */
+    boolean confirmerNouveauGraphe() {
+    	if (graphe != null) {
+    		Alert dialogueConfirmationNouveauGraphe = new Alert(AlertType.CONFIRMATION);
+    		dialogueConfirmationNouveauGraphe.setTitle("Création nouveau graphe");
+    		dialogueConfirmationNouveauGraphe.setHeaderText(null);
+    		dialogueConfirmationNouveauGraphe.setContentText("Êtes-vous sûr(e) de créer un nouveau graphe ? Vous perdrez toutes vos modifcations actuelles.");
+    		Optional<ButtonType> answer = dialogueConfirmationNouveauGraphe.showAndWait();
+    		if (answer.get() == ButtonType.OK) {
+    			return true;
+    		}
+    		else {
+    			return false;
+    		}
+    	} 
+    	return true;
     }
     
     @FXML
