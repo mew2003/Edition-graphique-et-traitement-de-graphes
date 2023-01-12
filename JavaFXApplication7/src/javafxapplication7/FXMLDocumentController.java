@@ -369,7 +369,7 @@ public class FXMLDocumentController implements Initializable {
      *         false sinon
      */
     boolean confirmerNouveauGraphe() {
-    	if (graphe != null) {
+    	if (graphe != null && !(listeElements.getItems().isEmpty())) {
     		Alert dialogueConfirmationNouveauGraphe = new Alert(AlertType.CONFIRMATION);
     		dialogueConfirmationNouveauGraphe.setTitle("Création nouveau graphe");
     		dialogueConfirmationNouveauGraphe.setHeaderText(null);
