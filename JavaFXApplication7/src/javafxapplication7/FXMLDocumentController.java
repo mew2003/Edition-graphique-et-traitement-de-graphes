@@ -46,6 +46,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
@@ -134,7 +135,15 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button validerModifLien;
     @FXML
-    private AnchorPane aside;    
+    private AnchorPane aside;
+    @FXML
+    private MenuItem nonOrienteButton;
+    @FXML
+    private MenuItem orienteButton;
+    @FXML
+    private MenuItem orientePondereButton;
+    @FXML
+    private MenuItem probabilisteButton;
     @FXML
     private MenuItem verifierGrapheId;
     @FXML
@@ -144,7 +153,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private MenuItem probabiliteCheminId;
     @FXML
+    private Menu listeClassificationID;
+    @FXML
     private MenuItem classificationSommetsID;
+    @FXML
+    private MenuItem legendeID;
     @FXML
     private MenuItem loiDeProbabiliteID;
     @FXML
@@ -197,14 +210,30 @@ public class FXMLDocumentController implements Initializable {
     // Permet d'obtenir le dernier fichier sauvegarder
     File lastFile = null;
     
+    // titre par défaut du logiciel
+    String title = "Logiciel d'édition et de traitement de graphe";
+    
+    /* création des combinaisons de touches pour tous les raccourcis clavier */
+    KeyCombination controlSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY);
+    KeyCombination controlOpen = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_ANY);
+    KeyCombination controlDelete = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_ANY);
+    KeyCombination controlHelp = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_ANY);
+    KeyCombination controlNonOriente = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_ANY);
+    KeyCombination controlOriente = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_ANY);
+    KeyCombination controlOrientePondere = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_ANY);
+    KeyCombination controlProbabiliste = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_ANY);
+    KeyCombination altVerification = new KeyCodeCombination(KeyCode.V, KeyCombination.ALT_DOWN);
+    KeyCombination altTransition = new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN);
+    KeyCombination altExistence = new KeyCodeCombination(KeyCode.E, KeyCombination.ALT_DOWN);
+    KeyCombination altClassification = new KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN);
+    KeyCombination altLegende = new KeyCodeCombination(KeyCode.G, KeyCombination.ALT_DOWN);
+    KeyCombination altProbabilite = new KeyCodeCombination(KeyCode.P, KeyCombination.ALT_DOWN);
+    KeyCombination altLoiProbabilite = new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN);
+    
     /* gère les raccourcis claviers */
     EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent>() {
         public void handle(final KeyEvent keyEvent) {
-        	KeyCombination controlSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY);
-            KeyCombination controlOpen = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_ANY);
-            KeyCombination controlDelete = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_ANY);
-            KeyCombination controlHelp = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_ANY);
-            
+            /* vérification de chaque raccourcis clavier quand une touche est pressée */
             if (controlSave.match(keyEvent)) {
             	enregistrerID.fire();
     	    } else if (controlOpen.match(keyEvent)) {
@@ -217,6 +246,28 @@ public class FXMLDocumentController implements Initializable {
     	    	}
     	    } else if (controlHelp.match(keyEvent)) {
     	    	manuelUtilisationButton.fire();
+    	    } else if (controlNonOriente.match(keyEvent)) {
+    	    	nonOrienteButton.fire();
+    	    } else if (controlOriente.match(keyEvent)) {
+    	    	orienteButton.fire();
+    	    } else if (controlOrientePondere.match(keyEvent)) {
+    	    	orientePondereButton.fire();
+    	    } else if (controlProbabiliste.match(keyEvent)) {
+    	    	probabilisteButton.fire();
+    	    } else if (altVerification.match(keyEvent)) {
+    	    	verifierGrapheId.fire();
+    	    }else if (altTransition.match(keyEvent)) {
+    	    	matriceDeTransitionId.fire();
+    	    } else if (altExistence.match(keyEvent)) {
+    	    	existenceCheminId.fire();
+    	    } else if (altClassification.match(keyEvent)) {
+    	    	classificationSommetsID.fire();
+    	    } else if (altLegende.match(keyEvent)) {
+    	    	legendeID.fire();
+    	    } else if (altProbabilite.match(keyEvent)) {
+    	    	probabiliteCheminId.fire();
+    	    } else if (altLoiProbabilite.match(keyEvent)) {
+    	    	loiDeProbabiliteID.fire();
     	    }
         }
     };
@@ -250,6 +301,7 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void creerGrapheNonOriente(ActionEvent event) {
+    	Main.getStage().setTitle(title + " : Graphe non orienté");
     	initialisation();
     	enregistrerID.setDisable(false);
     	enregistrerSousID.setDisable(false);
@@ -262,6 +314,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     void creerGrapheOriente(ActionEvent event) {
+    	Main.getStage().setTitle(title + " : Graphe orienté");
     	initialisation();
     	setTraitement(false);
     	enregistrerSousID.setDisable(false);
@@ -274,6 +327,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     void creerGrapheOrientePondere(ActionEvent event) {
+    	Main.getStage().setTitle(title + " : Graphe orienté pondéré");
     	initialisation();
     	setTraitement(false);
     	valeurLien.setDisable(false);
@@ -287,6 +341,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     void creerGrapheProbabiliste(ActionEvent event) {
+    	Main.getStage().setTitle(title + " : Graphe probabiliste");
     	initialisation();
     	setTraitement(true);
     	enregistrerSousID.setDisable(false);
@@ -323,16 +378,25 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
+    void legendeClassification(ActionEvent event) {
+    	probabilite.legendeClassification();
+    }
+    
+    @FXML
     void loiDeProbabilite(ActionEvent event) {
     	probabilite.showLoiDeProba((GrapheProbabiliste) graphe);
     }
     
+    /**
+     * met les options pour disponible que pour certains graphe dans le bon état (désactivé ou activé)
+     * @param etat  l'état dans lequel mettre les options
+     */
     public void setTraitement(boolean etat) {
     	valeurLien.setDisable(!etat);
     	verifierGrapheId.setDisable(!etat);
     	matriceDeTransitionId.setDisable(!etat);
     	existenceCheminId.setDisable(!etat);
-    	classificationSommetsID.setDisable(!etat);
+    	listeClassificationID.setDisable(!etat);
     	probabiliteCheminId.setDisable(!etat);
     	loiDeProbabiliteID.setDisable(!etat);
     }

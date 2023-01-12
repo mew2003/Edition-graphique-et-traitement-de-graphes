@@ -195,7 +195,13 @@ public class probabilite {
 				n.getCircle().setFill(COULEUR[i]);
 			}
 		}
-		
+		legendeClassification();
+	}
+	
+	/**
+	 * Affiche la légende de la classification
+	 */
+	public static void legendeClassification() {
 		// Affichage graphique de la légende
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Légende");
@@ -558,6 +564,7 @@ public class probabilite {
 			for (int j = 0; j < elevatedMatrix[i].length; j++) {
 				result[i] += userValue[j] * elevatedMatrix[j][i];
 			}
+			result[i] = (double) Math.round(result[i] * 1000000) / 1000000;
 		}
 		return result;
 	}
