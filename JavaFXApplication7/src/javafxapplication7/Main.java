@@ -21,7 +21,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         scene = new Scene(root);
         editableStage.setScene(scene);
-        editableStage.setTitle("Logiciel d'édition et de traitement de graphe");
+        editableStage.setTitle("Logiciel d'édition et de traitement de graphes");
         editableStage.show();
     }
 

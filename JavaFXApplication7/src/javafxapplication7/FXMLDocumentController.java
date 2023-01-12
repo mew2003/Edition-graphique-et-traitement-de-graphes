@@ -221,7 +221,7 @@ public class FXMLDocumentController implements Initializable {
     File lastFile = null;
     
     // titre par défaut du logiciel
-    String title = "Logiciel d'édition et de traitement de graphe";
+    String title = "Logiciel d'édition et de traitement de graphes";
     
     /* création des combinaisons de touches pour tous les raccourcis clavier */
     KeyCombination controlSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY);
@@ -390,11 +390,11 @@ public class FXMLDocumentController implements Initializable {
     boolean confirmerNouveauGraphe() {
     	if (graphe != null && !(listeElements.getItems().isEmpty())) {
     		Alert dialogueConfirmationNouveauGraphe = new Alert(AlertType.CONFIRMATION);
-    		dialogueConfirmationNouveauGraphe.setTitle("Création nouveau graphe");
+    		dialogueConfirmationNouveauGraphe.setTitle("Nouveau graphe");
     		dialogueConfirmationNouveauGraphe.setHeaderText(null);
-    		dialogueConfirmationNouveauGraphe.setContentText("Êtes-vous sûr(e) de créer un nouveau graphe ? Vous perdrez toutes vos modifcations actuelles.");
-    		Optional<ButtonType> answer = dialogueConfirmationNouveauGraphe.showAndWait();
-    		if (answer.get() == ButtonType.OK) {
+    		dialogueConfirmationNouveauGraphe.setContentText("Êtes-vous sûr(e) de vouloir créer un nouveau graphe ? Vous perdrez toutes vos modifcations actuelles.");
+    		Optional<ButtonType> reponse = dialogueConfirmationNouveauGraphe.showAndWait();
+    		if (reponse.get() == ButtonType.OK) {
     			return true;
     		}
     		else {
