@@ -188,6 +188,7 @@ public class GrapheProbabiliste extends Graphe {
 	
 	public void modifValeur(Lien lien, double newValue) {
 		LienProbabiliste l = (LienProbabiliste) lien;
+		l.setValue(0.0);
 		Noeud noeudAVerif = lien.getNoeuds()[0];
 		double ActualLeaving = 0.0;
 		for (Lien li : listeLiens) {

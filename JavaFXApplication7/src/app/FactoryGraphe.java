@@ -1,10 +1,10 @@
 /*
- * Classe parent des factory de graphe
+ * Classe parente des factories de graphes
  */
 package app;
 
 /**
- * Classe parent des factories de graphes
+ * Classe parente des factories de graphes
  * @author Mewen
  */
 public abstract class FactoryGraphe {
