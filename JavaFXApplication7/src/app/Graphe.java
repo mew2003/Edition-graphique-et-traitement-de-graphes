@@ -16,6 +16,10 @@ import javafx.scene.layout.AnchorPane;
 public abstract class Graphe implements Serializable {
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * Créer un noeud de la classe {@link app.Noeud}
 	 * @param pos positions X/Y ou doit se situer le noeud
 	 * @return le noeud créer
@@ -26,7 +30,7 @@ public abstract class Graphe implements Serializable {
      * Créer un lien de la classe {@link app.Lien}
      * @param noeud1 Premier noeud à relier
      * @param noeud2 Second noeud à relier
-     * @return le lien créer
+     * @return le lien créé
      */
     public abstract Lien creerLien(Noeud noeud1, Noeud noeud2);
     
