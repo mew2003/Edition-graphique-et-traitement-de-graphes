@@ -4,7 +4,6 @@
 package app;
 
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Line;
 
 /**
  * Permet les différents échanges avec un lien quelconques

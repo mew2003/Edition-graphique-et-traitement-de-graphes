@@ -3,7 +3,6 @@
  */
 package javafxapplication7;
 
-import javafxapplication7.Main;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,7 +35,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -903,30 +901,38 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     public void supprimerNoeud() {
-    	Graphe previousState = graphe.clone();
-    	Noeud noeudASuppr = (Noeud) selectedObject;
-    	graphe.supprimerNoeud(noeudASuppr, zoneDessin, listeElements);
-    	listeElements.getSelectionModel().clearSelection();
-        editionProprietesLien.setVisible(false);
-        editionProprietesNoeud.setVisible(false);
-        Graphe nextState = graphe.clone();
-        GraphAction action = new GraphAction(previousState, nextState);	
-        actionManager.executeAction(action);
+    	if (selectedObject != null) {
+    		Graphe previousState = graphe.clone();
+        	Noeud noeudASuppr = (Noeud) selectedObject;
+        	graphe.supprimerNoeud(noeudASuppr, zoneDessin, listeElements);
+        	listeElements.getSelectionModel().clearSelection();
+            editionProprietesLien.setVisible(false);
+            editionProprietesNoeud.setVisible(false);
+            Graphe nextState = graphe.clone();
+            GraphAction action = new GraphAction(previousState, nextState);	
+            actionManager.executeAction(action);	
+            selectedObject = null;
+            graphe.reset();
+    	}
     }
     
 
     @FXML
     public void supprimerLien() {
-    	Graphe previousState = graphe.clone();
-    	Lien lienASuppr = (Lien) selectedObject;
-    	listeElements.getItems().remove(selectedObject);
-    	graphe.supprimerLien(lienASuppr, zoneDessin, listeElements);
-    	listeElements.getSelectionModel().clearSelection();
-        editionProprietesLien.setVisible(false);
-        editionProprietesNoeud.setVisible(false);
-        Graphe nextState = graphe.clone();
-        GraphAction action = new GraphAction(previousState, nextState);	
-        actionManager.executeAction(action);
+    	if (selectedObject != null) {
+    		Graphe previousState = graphe.clone();
+        	Lien lienASuppr = (Lien) selectedObject;
+        	listeElements.getItems().remove(selectedObject);
+        	graphe.supprimerLien(lienASuppr, zoneDessin, listeElements);
+        	listeElements.getSelectionModel().clearSelection();
+            editionProprietesLien.setVisible(false);
+            editionProprietesNoeud.setVisible(false);
+            Graphe nextState = graphe.clone();
+            GraphAction action = new GraphAction(previousState, nextState);	
+            actionManager.executeAction(action);
+            selectedObject = null;
+            graphe.reset();
+    	}
     }
     
     /**

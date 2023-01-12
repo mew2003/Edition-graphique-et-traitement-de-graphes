@@ -63,4 +63,10 @@ public abstract class Noeud implements Cloneable {
 	public abstract Circle getCircle();
 	
 	public abstract Noeud clone();
+	
+	/**
+     * Permet d'obtenir le nom par défaut d'un noeud
+     * @return nom par défaut
+     */
+	public abstract String getDEFAULT_NAME();
 }

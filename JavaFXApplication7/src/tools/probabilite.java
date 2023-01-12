@@ -1,6 +1,5 @@
 package tools;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,7 +22,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -33,7 +31,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -41,8 +38,6 @@ import javafx.scene.control.ButtonBar.ButtonData;
 public class probabilite {
 	
 	private final static Color[] COULEUR = {Color.YELLOW, Color.CYAN, Color.INDIANRED};
-	
-	private final static DecimalFormat DF = new DecimalFormat("#.######");
 
 	/**
 	 * Verifies si un graphe probabiliste est valide

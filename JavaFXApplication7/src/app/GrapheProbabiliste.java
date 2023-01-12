@@ -8,7 +8,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 
@@ -19,15 +18,26 @@ public class GrapheProbabiliste extends Graphe {
 	private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
-    private int nbNoeud = 1;
+    private int nbNoeud = 0;
     private int nbLien = 1;
 	
-	@Override
-	public Noeud creerNoeud(double[] pos) {
-		Noeud n = new NoeudXOROriente(pos, nbNoeud++);
+    @Override
+    public Noeud creerNoeud(double[] pos) {
+    	nbNoeud++;
+    	boolean estValide = true;
+    	do {
+    		estValide = true;
+    		for (Noeud n : listeNoeuds) {
+    			if (n.getNom().equals(n.getDEFAULT_NAME() + (nbNoeud))) {
+    				estValide = false;
+    				nbNoeud++;
+    			}
+    		}
+    	} while (!estValide);
+    	Noeud n = new NoeudXOROriente(pos, nbNoeud);
     	listeNoeuds.add(n);
         return n;
-	}
+    } 
 
 	@Override
 	public Lien creerLien(Noeud noeud1, Noeud noeud2) {
@@ -62,7 +72,6 @@ public class GrapheProbabiliste extends Graphe {
     			noeudASuppr.effacer(zoneDessin);
     			listeNoeuds.remove(noeudASuppr);
     			i--;
-    			//TODO modifier le remove de la liste d'éléments pour le passer dans 'supprimerLien'
     			for (int j = 0 ; j < listeLiens.size() ; j++) {
     				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
     					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
@@ -179,7 +188,7 @@ public class GrapheProbabiliste extends Graphe {
     public void relocalisation() {
     	for(Lien l : listeLiens) {
     		for(Noeud n : listeNoeuds) {
-    			if(l.getNoeuds()[0].getNom().equals(n.getNom())) {
+    			if(l.getNoeuds()[0].equals(n)) {
     				l.actualiser();
     			}
     		}
