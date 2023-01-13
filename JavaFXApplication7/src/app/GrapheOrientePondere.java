@@ -1,3 +1,6 @@
+/**
+ * Représentation d'un graphe pondéré
+ */
 package app;
 
 import java.util.ArrayList;
@@ -13,10 +16,20 @@ import javafx.scene.shape.Shape;
 
 import static tools.clickDetection.*;
 
+/**
+ * Pour rappel, un graphe orienté pondéré doit respecter les principes suivants :
+ * - Il peut y avoir N nombre de noeuds
+ * - Il peut y avoir entre 0 et L = N^N nombre de liens
+ * - Il ne peut pas y avoir deux liens partant d'un noeud vers un autre même noeud
+ * - Un noeud ne peut pas y avoir plus de N lien partant et N lien arrivant vers ce même noeud.
+ * - Chaque lien peut comporter une valeur compris entre -∞ et +∞
+ * @author mewen.derruau
+ */
 public class GrapheOrientePondere extends Graphe {
 
 	private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
+    
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 0;
     private int nbLien = 1;
@@ -54,35 +67,25 @@ public class GrapheOrientePondere extends Graphe {
     
     @Override
     public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
-    	for (int i = 0 ; i < listeLiens.size() ; i++)  {
-    		if (listeLiens.get(i) == lienASuppr) {
-    			lienASuppr.effacer(zoneDessin);
-    			listeLiens.remove(lienASuppr);
-    			listeElements.getItems().remove(lienASuppr);
-    			i--;
-    		}
-    	}
+		lienASuppr.effacer(zoneDessin);
+		listeLiens.remove(lienASuppr);
+		listeElements.getItems().remove(lienASuppr);
     }
     
     @Override
     public void supprimerNoeud(Noeud noeudASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
-    	
-    	for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
-    		if (listeNoeuds.get(i) == noeudASuppr) {
-    			noeudASuppr.effacer(zoneDessin);
-    			listeNoeuds.remove(noeudASuppr);
-    			i--;
-    			for (int j = 0 ; j < listeLiens.size() ; j++) {
-    				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
-    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
-    					j--;
-    				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
-    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
-    					j--;
-    				}
-    		    }
+		noeudASuppr.effacer(zoneDessin);
+		listeNoeuds.remove(noeudASuppr);
+
+		for (int j = 0 ; j < listeLiens.size() ; j++) {
+			if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
+				supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+				j--;
+			} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
+				supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+				j--;
 			}
-		}
+	    }
     }
 
 	@Override
@@ -91,21 +94,15 @@ public class GrapheOrientePondere extends Graphe {
         for (Node n : childrens) {
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
-                    if (isNodeClicked(positions[0], positions[1], no)) {                      
-                        return no;
-                    }
+                    if (isNodeClicked(positions[0], positions[1], no)) return no;
                 }
             } else if (n instanceof Arc) {
             	for (Lien li : listeLiens) {
-                    if (isArcClicked(positions[0], positions[1], li)) {
-                        return li;
-                    }
+                    if (isArcClicked(positions[0], positions[1], li)) return li;
                 }
             } else if (n instanceof QuadCurve) {
             	for (Lien li : listeLiens) {
-                    if (isQuadCurvedClicked(positions[0], positions[1], li)) {
-                        return li;
-                    }
+                    if (isQuadCurvedClicked(positions[0], positions[1], li)) return li;
                 }
             }
         }
@@ -146,8 +143,7 @@ public class GrapheOrientePondere extends Graphe {
 	public void modifLien(Lien lien, Noeud[] noeuds, AnchorPane zoneDessin) {
 		for (Lien l : listeLiens) {
 			if (l.getNoeuds()[0] == noeuds[0] 
-			    && l.getNoeuds()[1] == noeuds[1]
-			    && l != lien) {
+			    && l.getNoeuds()[1] == noeuds[1]) {
 				throw new IllegalArgumentException("Deux liens ne peuvent pas avoir en commun les mêmes noeuds");
 			}
 		}
@@ -195,15 +191,25 @@ public class GrapheOrientePondere extends Graphe {
     	}
     }
 	
+    /**
+     * Remplace l'ancienne valeur d'un lien par la nouvelle saisie en argument
+     * @param lien le lien à modifier
+     * @param newValue nouvelle valeur du lien
+     */
 	public void modifValeur(Lien lien, double newValue) {
-		LienOrientePondere l = (LienOrientePondere) lien;
-		l.setValue(newValue);
+		((LienOrientePondere) lien).setValue(newValue);
 	}
 	
+	/**
+	 * Renvoie la liste des noeuds
+	 */
 	public ArrayList<Noeud> getListeNoeuds() {
 		return listeNoeuds;
 	}
 
+	/**
+	 * Renvoie la liste des liens
+	 */
 	public ArrayList<Lien> getListeLiens() {
 		return listeLiens;
 	}
