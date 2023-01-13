@@ -37,19 +37,20 @@ import javafx.scene.control.ButtonBar.ButtonData;
 
 public class probabilite {
 	
+	/* les couleurs utilisées pour la classification */
 	private final static Color[] COULEUR = {Color.YELLOW, Color.CYAN, Color.INDIANRED};
 
 	/**
-	 * Verifies si un graphe probabiliste est valide
+	 * Vérifie si un graphe probabiliste est valide
 	 * Pour qu'un graphe probabiliste soit considéré comme valide, 
 	 * il doit respecter les points suivants :
 	 * - Il doit comporter au minimum 1 noeud
 	 * - La somme des liens partant d'un noeud doit être égale à 1 
 	 *   pour tous les noeuds du graphe
 	 * - Un lien doit posséder une valeur se situant entre 0 et 1
-	 * @param grapheProbabiliste un graphe à vérifier
-	 * @param showValidMessage false -> n'affiche pas de message si le graphe est valide
-	 *                         true -> affiche un message dans tous les cas
+	 * @param grapheProbabiliste  le graphe à vérifier
+	 * @param showValidMessage  false -> n'affiche pas de message si le graphe est valide
+	 *                          true -> affiche un message dans tous les cas
 	 * @return true si le graphe est valide, false sinon
 	 */
 	public static boolean verifierGraphe(GrapheProbabiliste graphe, boolean showValidMessage) {
@@ -59,34 +60,38 @@ public class probabilite {
 		HashMap<Noeud, Double> nodesValues = new HashMap<>();
 		
 		for (Noeud n : listeNoeuds) {
-			nodesValues.put(n, 0.0); // Valeur attribué a 0 par noeud par défaut
+			nodesValues.put(n, 0.0); // Valeur attribué à 0 pour chaque noeud par défaut
 		}
 		
 		for (Lien lien : graphe.getListeLiens()) {
 			LienProbabiliste lienP = (LienProbabiliste) lien;
 			Noeud valuedNode = lienP.getNoeuds()[0];
-			// Ajout pour chaque noeud d'une valeur d'un lien dont il est rattaché 
+			// Ajout pour chaque noeud de la valeur d'un lien dont le départ est ce noeud
 			nodesValues.put(valuedNode, nodesValues.get(valuedNode)+lienP.getValue());
 		}
-		
+		// vérifie pour chaque noeud si la valeur d'un noeud dépasse 1, dans ce cas le graphe sera invalide
 		for (Double values : nodesValues.values()) {
 			if (values != 1.0) result = false;
 		}
+
 		showVerif(result, showValidMessage);
 		return result;
 	}
 	
 	/**
 	 * Affichage graphique de la validité d'un graphe
-	 * @param estValide graphe valide ou non
-	 * @param showValidMessage false -> n'affiche pas de message si le graphe est valide
-	 *                         true -> affiche un message dans tous les cas
+	 * @param estValide  true si le graphe valide, false sinon
+	 * @param showValidMessage  false -> n'affiche pas de message si le graphe est valide
+	 *                          true -> affiche un message dans tous les cas
 	 */
 	private static void showVerif(boolean estValide, boolean showValidMessage) {
+		// si le graphe est valide et que l'affichage du message est à false
 		if (estValide && !showValidMessage) return;
+		// change le type de l'alerte en fonction de si le graphe est valide ou non
 		Alert alert = new Alert(estValide ? AlertType.INFORMATION : AlertType.ERROR);
 		alert.setTitle("Vérification du graphe");
 		alert.setHeaderText("Résultat : ");
+		// change le message de l'alerte en fonction de si le graphe est valide ou non
 		String text = estValide ? "Le graphe est valide !" : "Le graphe comporte des erreurs";
 		alert.setContentText(text);
 		alert.showAndWait();
@@ -94,7 +99,7 @@ public class probabilite {
 	
 	/**
 	 * Calcule la matrice de transition d'un graphe
-	 * @param graphe le graphe à calculer
+	 * @param graphe  le graphe à calculer
 	 */
 	public static double[][] matriceDeTransition(GrapheProbabiliste graphe) {
 		//Si le graphe n'es pas correct, ne pas effectuer le calcul
@@ -116,7 +121,7 @@ public class probabilite {
 	
 	/**
 	 * Calcule est affiche graphiquement la matrice d'un graphe
-	 * @param graphe graphe à afficher
+	 * @param graphe  graphe à afficher
 	 */
 	public static void showMatrix(GrapheProbabiliste graphe) {
 		double[][] matrix = matriceDeTransition(graphe);
@@ -125,6 +130,12 @@ public class probabilite {
 		showMatrix(createVisualsMatrix(matrix, graphe), 50 * nbElements, 20 * nbElements);
 	}
 	
+	/**
+	 * Crée l'affichage graphique de la matrice
+	 * @param matrix  la matrice
+	 * @param graphe  le graphe d'où la matrice est issue
+	 * @return l'affichage des colonnes de la matrice
+	 */
 	public static HBox createVisualsMatrix(double[][] matrix, GrapheProbabiliste graphe) {
 		HBox columns = new HBox();
 		VBox row = new VBox();
@@ -178,13 +189,13 @@ public class probabilite {
 
 	/**
 	 * Affiche visuellement la classification des sommets
-	 * @param graphe le graphe dont ont cherche la classification
+	 * @param graphe  le graphe dont on cherche la classification
 	 */
 	public static void classificationSommets(GrapheProbabiliste graphe) {
 		ArrayList<Noeud[]> group = getNodesGroup(graphe);
 		ArrayList<Noeud>[] nodesStates = getNodesStates(group, graphe);
 		
-		// Attribution pour chaque noeud d'un classe un couleur pré-définie
+		// Attribution pour chaque noeud d'une classe une couleur pré-définie
 		for (int i = 0; i < nodesStates.length; i++) {
 			for (Noeud n : nodesStates[i]) {
 				n.getCircle().setFill(COULEUR[i]);
@@ -208,8 +219,8 @@ public class probabilite {
 	
 	/**
 	 * Crée des groupes de noeuds qui ont un lien à double sens entre eux
-	 * @param graphe le graphe dont ont cherche à regrouper les noeuds
-	 * @return groupeNoeud les noeuds groupe
+	 * @param graphe  le graphe dont ont cherche à regrouper les noeuds
+	 * @return les noeuds groupés
 	 */
 	public static ArrayList<Noeud[]> getNodesGroup(GrapheProbabiliste graphe) {
 		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
@@ -247,7 +258,7 @@ public class probabilite {
 							}
 						}
 						if (firstFound && !secondFound) {
-							//le noeud n est présent, ajouté nAComparer
+							//le noeud n est déjà présent et nAcomparer n'est pas présent, donc ajout de nAComparer dans le même groupe que n
 							Noeud[] newGroup = new Noeud[groupeNoeud.get(i).length + 1];
 							for (int k = 0; k < groupeNoeud.get(i).length; k++) {
 								newGroup[k] = groupeNoeud.get(i)[k];
@@ -255,7 +266,7 @@ public class probabilite {
 							newGroup[newGroup.length - 1] = nAComparer;
 							groupeNoeud.set(i, newGroup);
 						} else if (!firstFound && secondFound) {
-							//le noeud nAComparer est présent, ajouté n
+							//le noeud nAcomparer est déjà présent et n n'est pas présent, donc ajout de n dans le même groupe que nAcomparer
 							Noeud[] newGroup = new Noeud[groupeNoeud.get(i).length + 1];
 							for (int k = 0; k < groupeNoeud.get(i).length; k++) {
 								newGroup[k] = groupeNoeud.get(i)[k];
@@ -283,21 +294,21 @@ public class probabilite {
 	}
 	
 	/**
-	 * Permet l'obtension des états de chaque noeud d'un groupe de noeud
-	 * @param nodesGroup le groupe de noeud dont on cherche à attribuer la classification
-	 * @param graphe graphe auquel appartient la liste des noeuds
+	 * Permet l'obtention des états de chaque noeud d'un groupe de noeud
+	 * @param nodesGroup  le groupe de noeud dont on cherche à attribuer la classification
+	 * @param graphe  le graphe auquel appartient la liste des noeuds
 	 * @return les noeuds classifiés
 	 */
 	public static ArrayList<Noeud>[] getNodesStates(ArrayList<Noeud[]> nodesGroup, GrapheProbabiliste graphe) {
 		ArrayList<Noeud>[] result = new ArrayList[3];
 		result[0] = new ArrayList<>(); //Transitoires
 		result[1] = new ArrayList<>(); //Ergodiques
-		result[2] = new ArrayList<>(); //Absorbant
+		result[2] = new ArrayList<>(); //Absorbants
 		boolean transitoire = false;
 		
 		for (Noeud[] group : nodesGroup) {
 			transitoire = false;
-			// détection groupe transitoire
+			// détection des groupes transitoires
 			for (Noeud[] groupAVerif : nodesGroup) {
 				if (group != groupAVerif && existenceChemin(group[0], groupAVerif[0], graphe)) {
 					transitoire = true;
@@ -305,19 +316,26 @@ public class probabilite {
 				}
 			}
 			if (transitoire) {
-				// groupe transitoire
+				// groupes transitoires
 				result[0].addAll(Arrays.asList(group));
 			} else if (!transitoire && group.length != 1) {
-				// groupe ergodique
+				// groupes ergodiques
 				result[1].addAll(Arrays.asList(group));
 			} else if (group.length == 1) {
-				// groupe absorbant
+				// groupes absorbants
 				result[2].addAll(Arrays.asList(group));
 			}
 		}
 		return result;
 	}
 
+	/**
+	 * vérifie l'existance d'un chemin entre 2 noeuds
+	 * @param depart  le noeud de départ
+	 * @param arrivee  le noeud d'arrivée
+	 * @param graphe  le graphe d'où sont issus les noeuds
+	 * @return true si il y a un chemin entre ces 2 noeuds, sinon false
+	 */
 	public static boolean existenceChemin(Noeud depart, Noeud arrivee, GrapheProbabiliste graphe) {
 	    // Stock les noeuds déjà visités
 	    Set<Noeud> visited = new HashSet<>();
@@ -330,7 +348,7 @@ public class probabilite {
 	    while (!queue.isEmpty()) {
 	        // récupère le noeud suivant dans la queue en l'enlevant de celle ci
 	        Noeud current = queue.poll();
-	        // si le noeud courant est égal au noeud d'arrivee, il y a un chemin
+	        // si le noeud courant est égal au noeud d'arrivée, il y a un chemin
 	        if (current == arrivee) {
 	            return true;
 	        }
@@ -388,14 +406,14 @@ public class probabilite {
          	/* Ajoute la HBox et un bouton valider à la fenêtre*/
          	dialog.getDialogPane().getChildren().add(contentH);
         	dialog.getDialogPane().getButtonTypes().add(valider);
-        	/* permet de pouvoir appuyer sur 'entré' pour valider */
+        	/* permet de pouvoir appuyer sur 'entrer' pour valider */
         	Button okButton = (Button) dialog.getDialogPane().lookupButton(valider);
         	dialog.getDialogPane().getScene().setOnKeyPressed(event -> {
         	    if (event.getCode() == KeyCode.ENTER) {
         	        okButton.fire();
         	    }
         	});
-        	/* execute le code à l'intérieur quand n'importe quel bouton est cliqué */
+        	/* exécute le code à l'intérieur quand n'importe quel bouton est cliqué */
         	dialog.setResultConverter(buttonType -> {
         		/* si le bouton 'valider' est cliqué */
         	    if (buttonType.equals(valider)) {
@@ -424,7 +442,7 @@ public class probabilite {
 	}
 	
 	/**
-	 * Affiche la fenêtre de résultat de l'existence d'un chemin entre 2 noeud
+	 * Affiche la fenêtre de résultat de l'existence d'un chemin entre 2 noeuds
 	 * @param noeud1  le premier noeud (le départ)
 	 * @param noeud2  le deuxième noeud (l'arrivée, peut être identique au premier)
 	 * @param graphe  le graphe d'où sont issus les noeuds
@@ -452,19 +470,19 @@ public class probabilite {
 	
 	/**
 	 * Affiche la loi de probabilité de la matrice du graphe en argument 
-	 * selon l'état originelle qu'affecte l'utilisateur et le nombre de transition choisi
-	 * @param graphe graphe sur lequel est effectué la recherche de la loi de probabilité
+	 * selon l'état originel qu'affecte l'utilisateur et le nombre de transition choisi
+	 * @param graphe  le graphe sur lequel est effectué la recherche de la loi de probabilité
 	 */
 	public static void showLoiDeProba(GrapheProbabiliste graphe) {
 		// matrice du graphe (à inverser car elle est réceptionné dans le mauvais sens)
 		double[][] originalMatrix = inverserMatrice(matriceDeTransition(graphe));
-		if (originalMatrix == null) { //Si le graphe n'est pas valide
+		if (originalMatrix == null) { // Si le graphe n'est pas valide
 			System.err.println("Graphe non valide");
 			return; 
 		}
-		// valeurs que l'utilisateur à choisi
+		// valeurs que l'utilisateur a choisies
 		double[] userValue = demandeLoiValeur(graphe);
-		if (userValue == null) { //Si les données de l'utilisateur ne sont pas valide
+		if (userValue == null) { // Si les données de l'utilisateur ne sont pas valides
 			System.out.println("Données saisies invalides");
 			return; 
 		}
@@ -476,9 +494,9 @@ public class probabilite {
 	
 	/**
 	 * Permet d'afficher graphiquement le résultat du calcul de la loi de probabilité
-	 * @param graphe graphe qui a été traité
-	 * @param law loi obtenu
-	 * @param userValue valeur saisie par l'utilisateur 
+	 * @param graphe  le graphe qui a été traité
+	 * @param law  la loi obtenue
+	 * @param userValue  les valeurs saisies par l'utilisateur 
 	 */
 	public static void visualLawResult(GrapheProbabiliste graphe, double[] law, double[] userValue) {
 	    Dialog<ButtonType> dialog = new Dialog<>();
@@ -535,18 +553,18 @@ public class probabilite {
 	}
 	
 	/**
-	 * Permet d'obtenir la loi de probabilité d'un matrice selon des 
+	 * Permet d'obtenir la loi de probabilité d'une matrice selon des 
 	 * noeuds de départ et un nombre de transition choisi
-	 * @param originalMatrix matrice dont on cherche la loi de probabilité
-	 * @param userValue Valeur de départ + nombre de transition
-	 * 					Format : N + 1 (taille du tableau ou N représente 
-	 *                           le nombre de noeud dans le graphe et 
-	 *                           '1' le nombre de transition)
-	 *                  Exemple : un graphe de 3 noeuds (N1, N2, N3)
-	 *                  		 on souhaite avoir une probabilité de partir de N1 = 0.4
-	 *                           et N2 = 0.6 avec un nombre de transition = 4
-	 *                           l'array doit donc être constitué de la manière suivante :
-	 *                           {0.4, 0.6, 0.0, 4.0}
+	 * @param originalMatrix  la matrice dont on cherche la loi de probabilité
+	 * @param userValue  les valeurs de départ + le nombre de transition
+	 * 					 Format : N + 1 (taille du tableau ou 'N' représente 
+	 *                            le nombre de noeud dans le graphe et 
+	 *                            '1' le nombre de transition)
+	 *                   Exemple : un graphe de 3 noeuds (N1, N2, N3)
+	 *                  		  on souhaite avoir une probabilité de partir de N1 = 0.4
+	 *                            et N2 = 0.6 avec un nombre de transition = 4
+	 *                            l'array doit donc être constitué de la manière suivante :
+	 *                            {0.4, 0.6, 0.0, 4.0}
 	 * @return la loi de probabilité
 	 */
 	public static double[] getLaw(double[][] originalMatrix, double[] userValue) {
@@ -565,10 +583,10 @@ public class probabilite {
 	}
 	
 	/**
-	 * Elevation d'un matrice à une puissance donnée
-	 * @param matrice matrice à élever
-	 * @param puissance puissance
-	 * @return la matrice élever à la puissance
+	 * Elevation d'une matrice à une puissance donnée
+	 * @param matrice  la matrice à élever
+	 * @param puissance  la puissance
+	 * @return la matrice élevée à la puissance
 	 */
     public static double[][] power(double[][] matrice, int puissance) {
         double[][] result = new double[matrice.length][matrice.length];
@@ -580,7 +598,7 @@ public class probabilite {
 
         // Copie de la matrice pour les calculs intermédiaire
         double[][] temp = matrice.clone(); 
-        // Boucle d'appel multiplication matrice
+        // Boucle d'appel de la multiplication de la matrice
         while (puissance > 0) {
             if (puissance % 2 == 1) {
                 result = multiply(result, temp);
@@ -593,13 +611,13 @@ public class probabilite {
 
     /**
      * Multiplie deux matrices entre elles
-     * @param matriceA première matrice
-     * @param matriceB deuxième matrice
+     * @param matriceA  la première matrice
+     * @param matriceB  la deuxième matrice
      * @return le résultat de la multiplication des deux matrices
      */
     private static double[][] multiply(double[][] matriceA, double[][] matriceB) {
     	int nbRow = matriceA.length;
-    	// Création d'un matrice de même taille
+    	// Création d'une matrice de même taille
         double[][] nouvelleMatrice = new double[nbRow][nbRow];
         // Multiplication des matrices
         for (int i = 0; i < nbRow; i++) {
@@ -615,8 +633,8 @@ public class probabilite {
     /**
      * Interface graphique demandant à l'utilisateur de saisir ses valeurs 
      * pour le calcul de la loi de probabilité d'un graphe
-     * @param graphe le graphe concernée
-     * @return la saisie utilisateur sous le format suivant :
+     * @param graphe  le graphe concernée
+     * @return la saisie de l'utilisateur sous le format suivant :
      *  	   {Noeud1Proba, Noeud2Proba, ..., NoeudXProba, NombreTransition}
      */
 	public static double[] demandeLoiValeur(GrapheProbabiliste graphe) {
@@ -628,12 +646,12 @@ public class probabilite {
 	    dialog.setHeaderText("Choisissez les valeurs d'origines :");
 
 	    /* Ajout pour chaque noeud de son libellé 
-	     * + d'une zone de texte à sa droite dans une grid
+	     * et d'une zone de texte à sa droite dans une grille
 	     */
 	    GridPane grid = new GridPane();
 	    Label label = new Label();
 	    TextField[] textFields = new TextField[listeNoeud.size()+1];
-	    // permet de suivre le nombre de noeud/label/textField actuellement dans la grid
+	    // permet de suivre le nombre de noeud/label/textField actuellement dans la grille
 	    int i = 0; 
 	    for (; i < listeNoeud.size(); i++) {
 	    	label = new Label(listeNoeud.get(i).getNom());
@@ -642,7 +660,7 @@ public class probabilite {
 	        grid.add(label, 1, i+1);
 	        grid.add(textFields[i], 2, i+1);
 	    }
-	    // Ajout du label + textField concernant le nombre de transitions
+	    // Ajout du label et du textField concernant le nombre de transitions
 	    label = new Label("Nombre de transitions");
 	    textFields[i] = new TextField();
 	    grid.add(label, 1, i+1);
@@ -657,7 +675,7 @@ public class probabilite {
 	    dialog.getDialogPane().getButtonTypes().add(okButton);
 
 	    /* Affiche la fenêtre graphique et attend une action de l'utilisateur
-	     * la valeur retournée est le bouton sur lequel l'utilisateur à clique
+	     * la valeur retournée est le bouton sur lequel l'utilisateur a cliqué
 	     * ou vide si il clique sur la croix pour fermer la fenêtre
 	     */
 	    Optional<ButtonType> result = dialog.showAndWait();
@@ -677,21 +695,21 @@ public class probabilite {
 	    }
 	    if (result.isPresent() && result.get() == okButton) {
 	        for (i = 0; i < textFields.length - 1; i++) {
-	        	// Vérification que la saisie de l'utilisateur soir bien un nombre
+	        	// Vérification que la saisie de l'utilisateur soit bien un nombre
 	        	try {
 		            values[i] = Double.parseDouble(textFields[i].getText());
 			        total += values[i];
-		            // Pas de valeur négative autorisé
+		            // Pas de valeur négative autorisée
 		            if (values[i] < 0) {
 		            	values = null;
 		            }
-		            // Dans le cas d'une exception bloqué tout ajout de valeur
+		            // Dans le cas d'une exception bloque tout ajout de valeur
 	        	} catch (Exception e) {
 	        		values = null;
 	        	}
 	        }
 	    }
-	    // valeur incorrect (la somme des probabilité de démarré à un noeud doit être égale à 1)
+	    // valeur incorrect (la somme des probabilité de démarrer à un noeud doit être égale à 1)
 	    if (total != 1.0) {
 	    	values = null;
 	    }
@@ -700,7 +718,7 @@ public class probabilite {
 	
 	/**
 	 * Inverse le sens d'une matrice
-	 * @param matrice matrice à inverse
+	 * @param matrice  la matrice à inverser
 	 * @return la matrice inversé
 	 */
 	public static double[][] inverserMatrice(double[][] matrice) {
@@ -713,12 +731,20 @@ public class probabilite {
 		return inverse;
 	}
 
+	/**
+	 * Calcule la probabilité de passer d'un noeud à un autre en en certain nombre de transition
+	 * @param depart  le noeud de départ
+	 * @param arrivee  le noeud d'arrivée
+	 * @param transition  le nombre de transition
+	 * @param graphe  le graphe d'où sont issus les noeuds
+	 * @return la probabilité d'arriver au noeud d'arrivée après le nombre de transition
+	 */
 	public static double probabiliteChemin(Noeud depart, Noeud arrivee, int transition, GrapheProbabiliste graphe) {
 		ArrayList<Noeud> listeNoeuds = graphe.getListeNoeuds();
 		int indexDepart = listeNoeuds.indexOf(depart);
 		int indexArrivee = listeNoeuds.indexOf(arrivee);
 		double[] values = new double[listeNoeuds.size() + 1];
-		
+		/* détermine les valeurs nécessaires au calcul de la loi de probabilité en fonction des valeurs entrées par l'utilisateur */
 		for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
 			if (i == indexDepart) {
 				values[i] = 1;
@@ -727,14 +753,14 @@ public class probabilite {
 			}
 		}
 		values[values.length - 1] = transition;
-
+		/* récupère la matrice de la loi de probabilité */
 		double[] matrix = getLaw(inverserMatrice(matriceDeTransition(graphe)), values);
-
+		/* renvoie seulement la valeur qui correspond au noeud d'arrivée */
 		return matrix[indexArrivee];
 	}
 
 	/**
-	 * Affiche la fenêtre pour le calcule de la probabilité d'un chemin 
+	 * Affiche la fenêtre pour le calcul de la probabilité d'un chemin 
 	 * entre 2 noeuds en un certain nombre de transitions
 	 * @param graphe  le graphe courant
 	 */
@@ -800,10 +826,10 @@ public class probabilite {
 	     	contentV.getChildren().add(contentH1);
 	     	contentV.getChildren().add(contentH2);
 	     	
-	     	/* Ajoute la HBox et un bouton valider à la fenêtre*/
+	     	/* Ajoute la HBox et un bouton valider à la fenêtre */
 	     	dialog.getDialogPane().getChildren().add(contentV);
 	    	dialog.getDialogPane().getButtonTypes().add(valider);
-	    	/* permet de pouvoir appuyer sur 'entré' pour valider */
+	    	/* permet de pouvoir appuyer sur 'entrer' pour valider */
         	Button okButton = (Button) dialog.getDialogPane().lookupButton(valider);
         	dialog.getDialogPane().getScene().setOnKeyPressed(event -> {
         	    if (event.getCode() == KeyCode.ENTER) {
@@ -811,7 +837,7 @@ public class probabilite {
         	    }
         	});
 	     	
-	    	/* execute le code à l'intérieur quand n'importe quel bouton est cliqué */
+	    	/* exécute le code à l'intérieur quand n'importe quel bouton est cliqué */
 	    	dialog.setResultConverter(buttonType -> {
 	    		/* si le bouton 'valider' est cliqué */
 	    	    if (buttonType.equals(valider)) {
@@ -859,22 +885,16 @@ public class probabilite {
     		result.setTitle("Probabiltié d'un chemin");
     		result.setHeaderText("En " + nbTransitions + " transition(s) il y a une probabilité de " + proba 
     				             + " de passer du " + noeud1 + " au " + noeud2);
-    		/* permet de faire fonctionner la croix en créant un bouton de type close visible */
-	        result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-            Node closeButtonResult = result.getDialogPane().lookupButton(ButtonType.CLOSE);
-            closeButtonResult.managedProperty().bind(closeButtonResult.visibleProperty());
-            closeButtonResult.setVisible(true);
-            /* affiche la fenêtre de résultat */
-            result.showAndWait();
     	} else {
     		result.setTitle("Erreur");
     		result.setHeaderText("Une des valeurs saisient est nulle ou invalide");
-    		result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-            Node closeButtonResult = result.getDialogPane().lookupButton(ButtonType.CLOSE);
-            closeButtonResult.managedProperty().bind(closeButtonResult.visibleProperty());
-            closeButtonResult.setVisible(true);
-            /* affiche la fenêtre de résultat */
-            result.showAndWait();
     	}
+    	/* permet de faire fonctionner la croix en créant un bouton de type close visible */
+        result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButtonResult = result.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButtonResult.managedProperty().bind(closeButtonResult.visibleProperty());
+        closeButtonResult.setVisible(true);
+        /* affiche la fenêtre de résultat */
+        result.showAndWait();
 	}
 }

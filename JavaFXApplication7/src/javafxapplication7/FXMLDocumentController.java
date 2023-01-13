@@ -272,7 +272,7 @@ public class FXMLDocumentController implements Initializable {
     	    	probabilisteButton.fire();
     	    } else if (altVerification.match(keyEvent)) {
     	    	verifierGrapheId.fire();
-    	    }else if (altTransition.match(keyEvent)) {
+    	    } else if (altTransition.match(keyEvent)) {
     	    	matriceDeTransitionId.fire();
     	    } else if (altExistence.match(keyEvent)) {
     	    	existenceCheminId.fire();
