@@ -464,20 +464,23 @@ public class FXMLDocumentController implements Initializable {
     /**
      * Permet de récupérer l'élément sélectionner par l'utilisateur depuis l'interface graphique,
      * Selon si c'est un noeud ou un lien, affichage du menu d'édition de propriété correspondant à l'élément.
-     * @param positions positions positions X/Y de la souris
+     * @param positions positions X/Y de la souris
      */
     public void selectionner(double[] positions) {
     	// récupère l'élément sélectionner
         Object o = graphe.elementClicked(positions, zoneDessin);
+        /* Liste de tous les éléments présents sur la zone de dessin  */
+        ObservableList<Node> childrens = zoneDessin.getChildren();
+        
         /* Si l'élement est null, ne rien afficher
          * Dans le cas contraire, affichage du menu de propriété correspondant
          */
-        /* Liste de tous les éléments présents sur la zone de dessin  */
-        ObservableList<Node> childrens = zoneDessin.getChildren();
         if (o != null) {
         	listeElements.getSelectionModel().select(o);
             try {
                 Noeud node = (Noeud) o;
+                selectedObject = node;
+                
                 /* Affichage des propriété du noeud */
                 editionProprietesLien.setVisible(false);
                 editionProprietesNoeud.setVisible(true);
@@ -485,98 +488,46 @@ public class FXMLDocumentController implements Initializable {
                 posXNoeud.setText("" + node.getPositions()[0]);
                 posYNoeud.setText("" + node.getPositions()[1]);
                 radiusNoeud.setText("" + node.getRadius());
-                selectedObject = node;
-                Circle circle = node.getCircle();
+                
                 /* On regarde tous les éléments contenus dans la zone de dessin */
+                Circle circle = node.getCircle();
                 for (Node n : childrens) {
-                	/* Si l'élément est un cercle */
-                	if(n instanceof Circle) {
-                		/* Si cet élément est égal au cercle */
-                		if(n.equals(circle)) {
-                			draggedNode(n, circle, node);
-                        }
+                	if(n.equals(circle)) {
+                		draggedNode(n, circle, node);
                 	}
                 }
-                
-            	Main.getScene().setOnKeyPressed(event -> {
-            	    if (event.getCode() == KeyCode.ENTER) {
-            	    	validerModifNoeud.fire();
-            	    } else if (event.getCode() == KeyCode.DELETE) {
-            	    	supprimerNoeudButton.fire();
-            	    }
-            	});
             } catch (Exception e) {
                 Lien link = (Lien) o;
+                selectedObject = link;
+                
                 /* Affichage des propriétés du lien */
                 editionProprietesLien.setVisible(true);
                 editionProprietesNoeud.setVisible(false);
                 noeud1Lien.setText(link.getNoeuds()[0].getNom());
                 noeud2Lien.setText(link.getNoeuds()[1].getNom());
-                selectedObject = link;
-                /* Si le graphe est un graphe non orienté */
-                if(link instanceof LienNonOriente) {
-                	/* Initialisation de la variable lien 
-                	 * si l'élément sélectionné est un lien non orienté 
-                	 */
-                    LienNonOriente lien = (LienNonOriente) link;
-                    for(Node n : childrens) {
-                    	if(n instanceof Line) {
-                    		draggedLink(n, lien);
-                    	}
-                    }
-                /* Si le graphe est un graphe orienté */
-                } else if(link instanceof LienOriente) {
-                	/* Initialisation de la variable lien si l'élément sélectionné est un lien orienté */
-                    LienOriente lien = (LienOriente) link;
-                    for(Node n : childrens) {
-                    	/* Si le lien est un QuadCurve */
-                    	if(n instanceof QuadCurve) {
-                    		draggedLink(n, lien);
-                    	/* Si le lien est un Arc */
-                    	} else if(n instanceof Arc) {
-                    		draggedLink(n, lien);
-                    	}
-                    }
-                } else if(link instanceof LienOrientePondere) {
-                	/* Initialisation de la variable lien si l'élément sélectionné est un lien probabiliste */
-                	LienOrientePondere lien = (LienOrientePondere) link;
+            	if (link instanceof LienOrientePondere) {
+            		LienOrientePondere lien = (LienOrientePondere) link;
             		valeurLien.setText("" + lien.getValue());
-            		for(Node n : childrens) {
-            			/* Si le lien est un QuadCurve */
-                    	if(n instanceof QuadCurve) {
-                    		draggedLink(n, lien);
-                    	/* Si le lien est un Arc */
-                    	} else if(n instanceof Arc) {
-                    		draggedLink(n, lien);
-                    	}
-            		}
-                /* Si le graphe est un graphe probabiliste */
-            	} else if(link instanceof LienProbabiliste) {
-            		/* Initialisation de la variable lien si l'élément sélectionné est un lien probabiliste */
+            	} else if (link instanceof LienProbabiliste) {
             		LienProbabiliste lien = (LienProbabiliste) link;
             		valeurLien.setText("" + lien.getValue());
-            		for(Node n : childrens) {
-            			/* Si le lien est un QuadCurve */
-                    	if(n instanceof QuadCurve) {
-                    		draggedLink(n, lien);
-                    	/* Si le lien est un Arc */
-                    	} else if(n instanceof Arc) {
-                    		draggedLink(n, lien);
-                    	}
-            		}
             	}
-                Main.getScene().setOnKeyPressed(event -> {
-            	    if (event.getCode() == KeyCode.ENTER) {
-            	    	validerModifLien.fire();
-            	    } else if (event.getCode() == KeyCode.DELETE) {
-            	    	supprimerLienButton.fire();
-            	    }
-            	});
+            	
+            	// Permet le drag and click
+            	for(Node n : childrens) {
+                	draggedLink(n, link);
+                }
             }
+            // Raccourcis clavier
+            Main.getScene().setOnKeyPressed(event -> {
+        	    if (event.getCode() == KeyCode.ENTER) {
+        	    	validerModifLien.fire();
+        	    } else if (event.getCode() == KeyCode.DELETE) {
+        	    	supprimerLienButton.fire();
+        	    }
+        	});
         } else {
-        	/* Si l'élément sélectionné n'est pas un élément de la zone de dessin 
-        	 * alors on affiche rien 
-        	 */
+        	// Pas d'éléments sélectionner
             listeElements.getSelectionModel().clearSelection();
             editionProprietesLien.setVisible(false);
             editionProprietesNoeud.setVisible(false);
@@ -585,27 +536,21 @@ public class FXMLDocumentController implements Initializable {
     
     /**
      * Met en gras l'élement sélectionné, permet au noeud sélectionné de changer de position
-     * par rapport à la souris
-     * @param Node n élément contenu dans la zone de dessin
-     * @param Object o l'élément cliqué
-     * @param Noeud noeud le noeud dont on veut changer la position
+     * par rapport à la position de la souris
+     * @param element élément contenu dans la zone de dessin
+     * @param objectSelected l'élément cliqué
+     * @param noeud le noeud dont on veut changer la position
      */
-    void draggedNode(Node n, Object o, Noeud noeud) {
-    	/* Lorsque le clic de la souris est maintenu et qu'elle bouge */
-    	n.setOnMouseDragged(event -> {
+    void draggedNode(Node element, Object objectSelected, Noeud noeud) {
+    	/* Lorsque qu'un drag and click est effectué */
+    	element.setOnMouseDragged(event -> {
     		/* on met en gras le noeud sélectionné */
-    		((Shape) o).setStrokeWidth(3.0);
+    		((Shape) objectSelected).setStrokeWidth(3.0);
     		/* les positions du noeuds sont actualisé par rapport à la position de la souris */
     		posXNoeud.setText("" + event.getX());
             posYNoeud.setText("" + event.getY());
-            /* Initialisation d'un tableau de double contenant les positions de la souris
-             * en temps réel 
-             */
-            double[] EditPosition = {0,0};
-            EditPosition[0] = event.getX();
-            EditPosition[1] = event.getY();
             /* Changement de position du noeud par rapport à la souris */
-            noeud.setPositions(EditPosition); 
+            noeud.setPositions(new double[] {event.getX(), event.getY()}); 
             /* Actualise les positions des liens reliés au noeud par rapport à sa position */
             graphe.relocalisation();
     	});
@@ -613,82 +558,75 @@ public class FXMLDocumentController implements Initializable {
     
     /**
      * Met en gras l'élément sélectionné, permet au lien sélectionné de changer de noeuds
-     * @param Node n élément contenu dans la zone de dessin
-     * @param Object o l'élément sélectionné
+     * @param element élément contenu dans la zone de dessin
+     * @param objectSelected l'élément sélectionné
      */
-    void draggedLink(Node n, Object o) {
-    	/* Obtention de la copie profonde de l'objet sélectionné */
-    	n.setOnMouseDragged(event -> {
-    		/* Si un lien orienté est sélectionné on le met en gras */
-    		if((o instanceof LienOriente)) {
-        		try {
-            		for(Shape line : ((LienOriente) o).getQuadCurved()) {
-            			line.setStrokeWidth(3.0);
-            		}
-        			for(Shape line : ((LienOriente) o).getArc()) {
-        				line.setStrokeWidth(3.0);
+    void draggedLink(Node element, Lien objectSelected) {
+    	// Drag
+    	element.setOnMouseDragged(event -> {
+    		// Met en gras l'object sélectionné selon sont type (ligne, flèche, arc)
+    		if (objectSelected instanceof LienNonOriente) {
+    			((LienNonOriente) objectSelected).getLine().setStrokeWidth(3.0);
+    		} else {
+        		Shape[] line;
+    			if (objectSelected instanceof LienOriente) {
+        			LienOriente lien = (LienOriente) objectSelected;
+        			line = lien.getQuadCurved();
+        			if (line[0] == null) {
+        				line = lien.getArc();
         			}
-        		} catch (NullPointerException e) {}
-        	/* Met en gras un lien orienté pondéré */
-    		} else if (o instanceof LienOrientePondere) {
-    			try {
-            		for(Shape line : ((LienOrientePondere) o).getQuadCurved()) {
-            			line.setStrokeWidth(3.0);
-            		}
-        			for(Shape line : ((LienOrientePondere) o).getArc()) {
-        				line.setStrokeWidth(3.0);
-        			}
-        		} catch (NullPointerException e) {}
-    		/* Met en gras un lien non orienté */
-    		} else  if(o instanceof LienNonOriente) {
-    			((LienNonOriente) o).getLine().setStrokeWidth(3.0);
-    		/* Met en gras un lien probabiliste  */
-    		} else if(o instanceof LienProbabiliste) {
-    			try {
-            		for(Shape line : ((LienProbabiliste) o).getQuadCurved()) {
-            			line.setStrokeWidth(3.0);
-            		}
-        			for(Shape line : ((LienProbabiliste) o).getArc()) {
-        				line.setStrokeWidth(3.0);
-        			}
-        		} catch (NullPointerException e) {}
+            	} else if (objectSelected instanceof LienOrientePondere) {
+            		LienOrientePondere lien = (LienOrientePondere) objectSelected;
+            		line = lien.getQuadCurved();
+        			if (line[0] == null) line = lien.getArc();
+            	} else {
+            		LienProbabiliste lien = (LienProbabiliste) objectSelected;
+            		line = lien.getQuadCurved();
+        			if (line[0] == null) line = lien.getArc();
+            	}
+				for(Shape l : line) {
+        			l.setStrokeWidth(3.0);
+        		}
     		}
     		/* Aperçu de la ligne en temps réel quand on déplace le lien */
     		previewedLine.setStrokeWidth(3.0);
-            previewedLine.setStartX(((Lien) o).getNoeuds()[0].getPositions()[0]);
-            previewedLine.setStartY(((Lien) o).getNoeuds()[0].getPositions()[1]);
+            previewedLine.setStartX(objectSelected.getNoeuds()[0].getPositions()[0]);
+            previewedLine.setStartY(objectSelected.getNoeuds()[0].getPositions()[1]);
             previewedLine.setEndX(event.getX());
             previewedLine.setEndY(event.getY());
     	});
-    	n.setOnMouseReleased(event -> {
+    	// Relâchement de la souris
+    	element.setOnMouseReleased(event -> {
     		/* N'affiche plus la ligne d'aperçu */
     		exitPreview(event);
-    		/* Récupère la position X et Y de la souris au moment ou le clic est relaché */
+    		/* Récupère la position X et Y de la souris au moment ou le clic est relâché */
     		double[] pos = {event.getX(), event.getY()};
-    		/* Vérifie que l'élément ou le clic de souris a été relaché est un noeud */
-    		if(graphe.elementClicked(pos, zoneDessin) != null
-    		   && graphe.elementClicked(pos, zoneDessin) != o) {
-    			/* initialisation du nouveau noeud du lien */
-    			try {
-    				Noeud noeud = (Noeud) graphe.elementClicked(pos, zoneDessin);
-        			/* Création d'un nouveau tableau de noeuds qui sera le celui du lien */
-        			Noeud[] noeuds = {((Lien) o).getNoeuds()[0], noeud};
-        			boolean ok = true;
-        			for(int i = 0; i < listeElements.getItems().size() ; i++) {
-        				String test = listeElements.getItems().get(i).toString();
-        				/* Vérifie dans la liste des éléments que le lien n'existe pas déjà */
-        				if(test.equals("Lien : [" + noeuds[0].getNom() + ", " + noeuds[1].getNom() + "]")) {
-        					ok = false;
-        				}
-        			} 
-    				/* Si le lien n'existe pas alors on créer un nouveau lien à l'emplacement souhaité */
-        			if(ok) {
-        				graphe.supprimerLien((Lien) o, zoneDessin, listeElements);
-        				Lien nouveauLien = graphe.creerLien(noeuds[0], noeuds[1]);
-        				nouveauLien.dessiner(zoneDessin);
-        				listeElements.getItems().addAll(nouveauLien);
-        			}
-    			} catch (Exception e) {}
+    		/* Effectuer une action seulement quand on relâche sur un noeud */
+    		if (graphe.elementClicked(pos, zoneDessin) instanceof Noeud) {
+    			/* Récupération du noeud sélectionner */
+				Noeud noeud = (Noeud) graphe.elementClicked(pos, zoneDessin);
+    			/* Tableau contenant le noeud de départ et le nouveau noeud d'arrivé du lien */
+    			Noeud[] noeuds = {objectSelected.getNoeuds()[0], noeud};
+    			
+    			// Pour un lienNonOriente, si l'on tente d'effectuer une boucle -> ne rien faire
+    			if (objectSelected instanceof LienNonOriente && noeuds[0] == noeuds[1]) {
+    				return ;
+    			}
+    			/*
+    			 * Si pour n'importe quel lien, si on essai de déplacer le lien sur un déjà existant 
+    			 * -> ne rien faire
+    			 */
+    			for (Lien lien : graphe.getListeLiens()) {
+    				if (lien.getNoeuds()[0] == noeuds[0] && lien.getNoeuds()[1] == noeuds[1]) {
+    					return ;
+    				}
+    			}
+    			//TODO: CONTINUER LOPTI ICI
+//    			graphe.modifLien(objectSelected, noeuds, zoneDessin);
+				graphe.supprimerLien((Lien) objectSelected, zoneDessin, listeElements);
+				Lien nouveauLien = graphe.creerLien(noeuds[0], noeuds[1]);
+				nouveauLien.dessiner(zoneDessin);
+				listeElements.getItems().addAll(nouveauLien);
     		}
     	});
     }

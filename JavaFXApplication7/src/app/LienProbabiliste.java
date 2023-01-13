@@ -30,7 +30,7 @@ public class LienProbabiliste extends Lien implements Serializable {
     
     // Représentation graphique du lien sous forme de flèche
     private transient Line arrow1, arrow2;
-    private transient QuadCurve quadCurve;
+    private transient QuadCurve quadCurve = null;
     
     // Représentation graphique du lien sous forme de boucle
     private transient Arc arc = null;
