@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Manager des factories de graphes, permet l'instantiation et la création
+ * Manager des factories de graphes, permet l'instanciation et la création
  * de toutes les factories de graphes disponibles.
  * @author Mewen
  */
@@ -16,6 +16,7 @@ public class FactoryGrapheManager {
     // Liste des factories de graphe
     private HashMap<String, FactoryGraphe> factories;
 
+    // l'instance du graphe
     private static final FactoryGrapheManager instance = new FactoryGrapheManager();
 
     // Instantiation de toutes les factories de graphe
@@ -28,7 +29,7 @@ public class FactoryGrapheManager {
     }
     
     /**
-     * Permet d'obtenir la liste de toute les factories
+     * Permet d'obtenir la liste de toutes les factories
      * @return la liste des factories
      */
     public Set<String> getRegiteredFactories() {
@@ -36,7 +37,7 @@ public class FactoryGrapheManager {
     }
 
     /**
-     * Renvoie une instantiation de la classe FactoryGrapheManager
+     * Renvoie une instanciation de la classe FactoryGrapheManager
      * @return l'instanciation
      */
     public static FactoryGrapheManager getInstance() {
@@ -44,9 +45,9 @@ public class FactoryGrapheManager {
     }
     
     /**
-     * Permet de créer un factory parmi la liste de celle implémenté
-     * @param type chaîne de caractères correspondant au type de factory souhaité
-     * @return la factory choisis / null si elle n'existe pas
+     * Permet de créer une factory parmi la liste de celles implémentées
+     * @param type  chaîne de caractères correspondant au type de factory souhaité
+     * @return la factory choisie / null si elle n'existe pas
      */
     public FactoryGraphe creerFactory(String type) {
         if (factories.get(type) != null) {
