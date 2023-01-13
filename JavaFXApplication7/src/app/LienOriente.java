@@ -1,5 +1,5 @@
 /**
- * Représentation d'un lien non orienté
+ * Représentation d'un lien orienté
  */
 package app;
 
@@ -49,22 +49,24 @@ public class LienOriente extends Lien implements Serializable{
 		return noeuds;
 	}
 
+	/**
+	 * Renvoie la représentation graphique du lien sous forme de boucle
+	 * @return la boucle
+	 */
 	public Shape[] getArc() {
-		Shape[] shape = {arc, arrow1, arrow2};
-		return shape;
+		return new Shape[]{arc, arrow1, arrow2};
 	}
 	
 	@Override
-	public void setNoeuds(Noeud[] value, AnchorPane zoneDessin) {
-		this.noeuds = value;
+	public void setNoeuds(Noeud[] noeudAAssigner, AnchorPane zoneDessin) {
+		this.noeuds = noeudAAssigner;
 		if (arc != null) {
 			zoneDessin.getChildren().remove(arc);
 		} 
 		if (quadCurve != null) {
 			zoneDessin.getChildren().remove(quadCurve);
 		}
-		zoneDessin.getChildren().remove(arrow1);
-		zoneDessin.getChildren().remove(arrow2);
+		zoneDessin.getChildren().removeAll(arrow1, arrow2);
 		dessiner(zoneDessin);
 	}
 	
@@ -75,32 +77,45 @@ public class LienOriente extends Lien implements Serializable{
 
     @Override
     public void dessiner(AnchorPane zoneDessin) {
+    	// Arrays stockant les positions X/Y départ/arrivé des objects graphiques
     	double[] linePos, arrowPos;
     	if (noeuds[0] == noeuds[1]) {
+    		// Cas d'une boucle
+    		
+    		// Point de départ de l'arc (En partant du haut du cercle ~ -30° à gauche)
     		double[] depart = departArc(noeuds);
-    		linePos = new double[]{depart[0], depart[1] - noeuds[0].getRadius() / 2.0, depart[0], depart[1]};
     		double arcRadius = noeuds[0].getRadius() / 2.0;
+    		linePos = new double[]{depart[0], depart[1] - arcRadius, depart[0], depart[1]};
+
+    		// Représentation graphique de la boucle
     		arc = new Arc(noeuds[0].getPositions()[0], noeuds[0].getPositions()[1] - noeuds[0].getRadius(), arcRadius, arcRadius, BOUCLE_ANGLE, BOUCLE_SIZE);
             arc.setFill(Color.TRANSPARENT);
     		arc.setStroke(Color.BLACK);
-    		zoneDessin.getChildren().addAll(arc);
+    		zoneDessin.getChildren().add(arc);
     	} else {
+    		// Cas d'une flèche
+    		
+    		//Permet de récupérer les points de départ et d'arriver d'un noeud à un autre
     		linePos = lineDrawingPositions(noeuds);
+    		
+    		// Calcul du point de contrôle de la ligne
     		double[] pointCentral = {(linePos[0] + linePos[2])/2, (linePos[1] + linePos[3])/2};
-            // (Y2 - Y1)/5     (X1 - X2)/5 © Mewen
             double[] vecteur = {(linePos[3] - linePos[1])/5, (linePos[0] - linePos[2])/5};
             double[] pointC = {pointCentral[0] + vecteur[0], pointCentral[1] + vecteur[1]};
+            
+            // Représentation graphique de la ligne
             quadCurve = new QuadCurve(
-            		linePos[0], linePos[1],
-                    pointCentral[0] + vecteur[0], pointCentral[1] + vecteur[1],
-                	linePos[2], linePos[3]);
+            		    linePos[0], linePos[1], pointC[0], pointC[1], linePos[2], linePos[3]);
             quadCurve.setFill(Color.TRANSPARENT);
             quadCurve.setStroke(Color.BLACK);
-            zoneDessin.getChildren().addAll(quadCurve);
+            zoneDessin.getChildren().add(quadCurve);
             linePos[0] = pointC[0];
     		linePos[1] = pointC[1];
     	}
+    	// Récupération des positions de l'embout de la flèche
     	arrowPos = arrowPositions(linePos);
+    	
+    	// Représentation graphe de l'embout de la flèche
     	this.arrow1 = new Line(linePos[2], linePos[3], arrowPos[0], arrowPos[1]);
         this.arrow2 = new Line(linePos[2], linePos[3], arrowPos[2], arrowPos[3]);
     	arrow1.setFill(Color.TRANSPARENT);
@@ -117,27 +132,38 @@ public class LienOriente extends Lien implements Serializable{
     	} else {
     		zoneDessin.getChildren().remove(arc);
     	}
-    	zoneDessin.getChildren().remove(arrow1);
-    	zoneDessin.getChildren().remove(arrow2);
+    	zoneDessin.getChildren().removeAll(arrow1, arrow2);
     }
     
 	@Override
     public void actualiser() {
+		// Arrays stockant les positions X/Y départ/arrivé des objects graphiques
 		double[] linePos, arrowPos;
     	if (noeuds[0] == noeuds[1]) {
+    		// Cas d'une boucle
+    		
+    		// Point de départ de l'arc (En partant du haut du cercle ~ -30° à gauche)
     		double[] depart = departArc(noeuds);
-    		linePos = new double[]{depart[0], depart[1] - noeuds[0].getRadius() / 2.0, depart[0], depart[1]};
     		double arcRadius = noeuds[0].getRadius() / 2.0;
+    		linePos = new double[]{depart[0], depart[1] - arcRadius, depart[0], depart[1]};
+
+    		// Représentation graphique de la boucle
     		arc.setCenterX(noeuds[0].getPositions()[0]);
     		arc.setCenterY(noeuds[0].getPositions()[1] - noeuds[0].getRadius());
     		arc.setRadiusX(arcRadius);
     		arc.setRadiusY(arcRadius);
     	} else {
+    		// Cas d'une flèche
+    		
+    		//Permet de récupérer les points de départ et d'arriver d'un noeud à un autre
     		linePos = lineDrawingPositions(noeuds);
-            double[] pointCentral = {(linePos[0] + linePos[2])/2, (linePos[1] + linePos[3])/2};
-            // (Y2 - Y1)/5     (X1 - X2)/5 © Mewen
+    		
+    		// Calcul du point de contrôle de la ligne
+    		double[] pointCentral = {(linePos[0] + linePos[2])/2, (linePos[1] + linePos[3])/2};
             double[] vecteur = {(linePos[3] - linePos[1])/5, (linePos[0] - linePos[2])/5};
             double[] pointC = {pointCentral[0] + vecteur[0], pointCentral[1] + vecteur[1]};
+            
+            // Représentation graphique de la ligne
             quadCurve.setStartX(linePos[0]);
             quadCurve.setStartY(linePos[1]);
             quadCurve.setEndX(linePos[2]);
@@ -147,7 +173,10 @@ public class LienOriente extends Lien implements Serializable{
     		linePos[0] = pointC[0];
     		linePos[1] = pointC[1];
     	}
+    	// Récupération des positions de l'embout de la flèche
     	arrowPos = arrowPositions(linePos);
+    	
+    	// Représentation graphe de l'embout de la flèche
     	arrow1.setStartX(linePos[2]);
 		arrow1.setStartY(linePos[3]);
 		arrow1.setEndX(arrowPos[0]);
@@ -158,9 +187,12 @@ public class LienOriente extends Lien implements Serializable{
 		arrow2.setEndY(arrowPos[3]);
 	}
 
+	/**
+	 * Renvoie la représentation graphique de la flèche
+	 * @return la flèche
+	 */
 	public Shape[] getQuadCurved() {
-		Shape[] lines = {quadCurve, arrow1, arrow2};
-		return lines;
+		return new Shape[] {quadCurve, arrow1, arrow2};
 	}
 
 	@Override
