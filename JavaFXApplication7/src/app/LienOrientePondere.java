@@ -40,8 +40,7 @@ public class LienOrientePondere extends Lien implements Serializable {
     
     private final double DEFAULT_VALUE = 0.0;
 
-	public LienOrientePondere(Noeud[] noeuds, int nbLien) {
-		this.nom = DEFAULT_NAME + nbLien;
+	public LienOrientePondere(Noeud[] noeuds) {
         this.noeuds = noeuds;
         this.valeur = DEFAULT_VALUE;
 	}
@@ -190,7 +189,7 @@ public class LienOrientePondere extends Lien implements Serializable {
 
 	@Override
 	public LienOrientePondere clone() {
-		LienOrientePondere lienPondere = new LienOrientePondere(noeuds, 0);
+		LienOrientePondere lienPondere = new LienOrientePondere(noeuds);
 		lienPondere.arc = this.arc;
 		lienPondere.arrow1 = this.arrow1;
 		lienPondere.arrow2 = this.arrow2;

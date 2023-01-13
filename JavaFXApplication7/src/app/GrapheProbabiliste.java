@@ -36,7 +36,6 @@ public class GrapheProbabiliste extends Graphe {
     
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 0;
-    private int nbLien = 1;
 	
     @Override
     public Noeud creerNoeud(double[] pos) {
@@ -64,7 +63,7 @@ public class GrapheProbabiliste extends Graphe {
     		}
     	}
         Noeud[] noeuds = {noeud1, noeud2};
-    	Lien l = new LienProbabiliste(noeuds, nbLien++);
+    	Lien l = new LienProbabiliste(noeuds);
         listeLiens.add(l);
         return l;
 	}
@@ -241,7 +240,6 @@ public class GrapheProbabiliste extends Graphe {
 		if(graphe != null && graphe instanceof GrapheProbabiliste) {
 			this.listeLiens = ((GrapheProbabiliste) graphe).listeLiens;
 			this.listeNoeuds = ((GrapheProbabiliste) graphe).listeNoeuds;
-			this.nbLien = ((GrapheProbabiliste) graphe).nbLien;
 			this.nbNoeud = ((GrapheProbabiliste) graphe).nbNoeud;
 		}		
 	}
@@ -257,7 +255,6 @@ public class GrapheProbabiliste extends Graphe {
 	    for (Noeud noeud : this.listeNoeuds) {
 	      clone.listeNoeuds.add((Noeud) noeud.clone());
 	    }
-		clone.nbLien = this.nbLien;
 		clone.nbNoeud = this.nbNoeud;
 		return clone;
 	}

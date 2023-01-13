@@ -15,31 +15,25 @@ import java.io.Serializable;
  * Pour rappel, un lien non orienté doit respecter les principes suivants :
  * - Il est représenter par un ligne allant d'un noeud à un autre
  * - Il ne peut pas partir d'un noeud pour aller vers ce même noeud (boucle)
- * - Il ne peut pas peut partir du même noeud et aller vers un autre même noeud qu'un autre lien
+ * - Il ne peut pas partir du même noeud et aller vers un autre même noeud qu'un autre lien
  * @author Mewen
  */
 public class LienNonOriente extends Lien implements Serializable {
 
-	// Noeud que relie le lien
+	// Noeuds que relient le lien
     private Noeud[] noeuds;
     
     // Représentation graphique du lien
     private transient Line line;
-    
-    private transient String nom;
-    
-    // Nom par défaut d'un lien
-    private final String DEFAULT_NAME = "default";
 
     /**
      * Crée un lien reliant 2 noeuds
      * @param noeuds les noeuds à relié
-     * @param nbLien permet le nom unique du lien
+     * @throws IllegalArgumentException Si les deux noeuds en arguments sont identiques
      */
-    public LienNonOriente(Noeud[] noeuds, int nbLien) {
+    public LienNonOriente(Noeud[] noeuds) {
     	if (noeuds[0] == noeuds[1]) throw new IllegalArgumentException("Impossible de créer une boucle "
                                                                       + "pour un lien simple non orienté");
-        this.nom = DEFAULT_NAME + nbLien;
         this.noeuds = noeuds;
     }
     
@@ -51,11 +45,7 @@ public class LienNonOriente extends Lien implements Serializable {
     @Override
     public void setNoeuds(Noeud[] value, AnchorPane zoneDessin) {
         this.noeuds = value;
-        double[] linePos = lineDrawingPositions(noeuds);
-        line.setStartX(linePos[0]);
-        line.setStartY(linePos[1]);
-        line.setEndX(linePos[2]);
-        line.setEndY(linePos[3]);
+        actualiser();
     }
     
     @Override
@@ -85,25 +75,20 @@ public class LienNonOriente extends Lien implements Serializable {
     public void effacer(AnchorPane zoneDessin) {
     	zoneDessin.getChildren().remove(line);
     }
-    
-    /**
-     * Renvoie le nom du lien
-     * @return le nom
-     */
-	public String getNom() {
-		return nom;
-	}
 
+    /**
+     * Renvoie l'élément graphique correspondant au lien
+     * @return la ligne graphique
+     */
 	public Line getLine() {
 		return line;
 	}
 
 	@Override
 	public LienNonOriente clone() {
-		LienNonOriente lienNOR = new LienNonOriente(noeuds, 0);
+		LienNonOriente lienNOR = new LienNonOriente(noeuds);
 		lienNOR.line = this.line;
 		lienNOR.noeuds = this.noeuds;
-		lienNOR.nom = this.nom;
 		return lienNOR;
 	}
 }

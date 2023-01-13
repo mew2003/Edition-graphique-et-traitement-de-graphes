@@ -30,9 +30,8 @@ public class GrapheOrientePondere extends Graphe {
 	private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
     
-    // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
+    // Nombre de noeuds qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 0;
-    private int nbLien = 1;
 	
     @Override
     public Noeud creerNoeud(double[] pos) {
@@ -60,7 +59,7 @@ public class GrapheOrientePondere extends Graphe {
     		}
     	}
         Noeud[] noeuds = {noeud1, noeud2};
-    	Lien l = new LienOrientePondere(noeuds, nbLien++);
+    	Lien l = new LienOrientePondere(noeuds);
         listeLiens.add(l);
         return l;
 	}
@@ -220,7 +219,6 @@ public class GrapheOrientePondere extends Graphe {
 		if(graphe != null && graphe instanceof GrapheOrientePondere) {
 			this.listeLiens = ((GrapheOrientePondere) graphe).listeLiens;
 			this.listeNoeuds = ((GrapheOrientePondere) graphe).listeNoeuds;
-			this.nbLien = ((GrapheOrientePondere) graphe).nbLien;
 			this.nbNoeud = ((GrapheOrientePondere) graphe).nbNoeud;
 		}		
 	}
@@ -236,7 +234,6 @@ public class GrapheOrientePondere extends Graphe {
 	    for (Noeud noeud : this.listeNoeuds) {
 	      clone.listeNoeuds.add((Noeud) noeud.clone());
 	    }
-		clone.nbLien = this.nbLien;
 		clone.nbNoeud = this.nbNoeud;
 		return clone;
 	}
