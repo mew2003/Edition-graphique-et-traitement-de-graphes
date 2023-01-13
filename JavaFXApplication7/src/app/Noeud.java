@@ -60,6 +60,10 @@ public abstract class Noeud implements Cloneable {
      */
     public abstract void setNom(String nom);
 
+    /**
+     * Renvoie la représentation graphique du noeud
+     * @return le cercle
+     */
 	public abstract Circle getCircle();
 	
 	public abstract Noeud clone();

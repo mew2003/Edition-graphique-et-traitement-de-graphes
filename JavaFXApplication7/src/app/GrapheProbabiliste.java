@@ -67,6 +67,11 @@ public class GrapheProbabiliste extends Graphe {
         listeLiens.add(l);
         return l;
 	}
+	
+	@Override
+    public String toString() {
+        return "Graphe probabiliste";
+    }
     
     @Override
     public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {

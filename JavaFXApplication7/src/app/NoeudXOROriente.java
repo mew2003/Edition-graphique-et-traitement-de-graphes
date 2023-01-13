@@ -1,5 +1,5 @@
 /**
- * Représentation d'un noeud non orienté
+ * Représentation d'un noeud
  */
 package app;
 
@@ -11,8 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 /**
- * Noeud non orienté
- * Pour rappel, un lien non orienté doit respecter les principes suivants :
+ * Pour rappel, un noeud doit respecter les principes suivants :
  * - Il possède un nom unique, permettant de le distinguer de tout autre noeud
  * @author Mewen
  */
@@ -59,8 +58,6 @@ public class NoeudXOROriente extends Noeud implements Serializable {
     public Circle getCircle() {
 		return circle;
 	}
-
-
 
 	@Override
     public double[] getPositions() {
@@ -117,10 +114,12 @@ public class NoeudXOROriente extends Noeud implements Serializable {
     
     @Override
     public void effacer(AnchorPane zoneDessin) {
-    	zoneDessin.getChildren().remove(circle);
-    	zoneDessin.getChildren().remove(label);
+    	zoneDessin.getChildren().removeAll(circle, label);
     }
     
+    /**
+     * Actualisation de l'affichage graphique du noeud
+     */
     public void actualiser() {
     	label.setLayoutX(pos[0] - radius);
         label.setLayoutY(pos[1] - (label.getHeight() / 2));
@@ -136,7 +135,5 @@ public class NoeudXOROriente extends Noeud implements Serializable {
 		clone.radius = this.radius;
 		return clone;
 	}
-	
-	
 
 }

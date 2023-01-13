@@ -66,6 +66,11 @@ public class GrapheOriente extends Graphe {
 	}
 	
 	@Override
+    public String toString() {
+        return "Graphe orienté";
+    }
+	
+	@Override
     public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
 		lienASuppr.effacer(zoneDessin);
 		listeLiens.remove(lienASuppr);

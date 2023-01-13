@@ -35,7 +35,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -46,12 +45,9 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
@@ -91,51 +87,13 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private AnchorPane zoneDessin;
     @FXML
-    private MenuButton menuEdition;
-    @FXML
-    private ComboBox<String> listeLiens;
-    @FXML
-    private MenuButton menuGraphe;
-    @FXML
-    private MenuButton menuAide;
-    @FXML
     private TextField nomNoeud;
     @FXML
     private TextField radiusNoeud;
     @FXML
     private TextField noeud2Lien;
     @FXML
-    private MenuButton menuTraitement;
-    @FXML
-    private AnchorPane palette;
-    @FXML
-    private ToggleGroup boutonsPalette;
-    @FXML
-    private ImageView nodeButtonID;
-    @FXML
-    private ImageView arrowButtonID;
-    @FXML
-    private ImageView selectionButtonID;
-    @FXML
-    private ComboBox<String> listeNoeuds;
-    @FXML
     private ComboBox<Object> listeElements;
-    @FXML
-    private MenuItem enregistrerSous;
-    @FXML 
-    private MenuItem nouveau;
-    @FXML
-    private MenuItem ouvrir;
-    @FXML
-    private MenuItem annuler;
-    @FXML
-    private MenuItem retablir;
-    @FXML
-    private MenuItem obtenirDeLAide;
-    @FXML
-    private MenuItem FAQ;
-    @FXML
-    private Parent root;
     @FXML
     private Button validerModifNoeud;
     @FXML
@@ -272,7 +230,7 @@ public class FXMLDocumentController implements Initializable {
     	    	probabilisteButton.fire();
     	    } else if (altVerification.match(keyEvent)) {
     	    	verifierGrapheId.fire();
-    	    }else if (altTransition.match(keyEvent)) {
+    	    } else if (altTransition.match(keyEvent)) {
     	    	matriceDeTransitionId.fire();
     	    } else if (altExistence.match(keyEvent)) {
     	    	existenceCheminId.fire();
@@ -301,86 +259,70 @@ public class FXMLDocumentController implements Initializable {
      * Initialisation de base pour tout graphe
      */
     public void initialisation() {
+    	// Ajout des raccourcis clavier
     	Main.getScene().addEventHandler(KeyEvent.KEY_PRESSED, keyEventHandler);
     	
+    	// Suppression de tous les éléments crées
     	listeElements.getItems().clear();
         zoneDessin.getChildren().clear();
         
+        // Ajout des previews
         previewedCircle.setFill(Color.TRANSPARENT);
         previewedCircle.setStroke(Color.BLACK);
         previewedLine.setFill(Color.TRANSPARENT);
         previewedLine.setStroke(Color.BLACK);
         zoneDessin.getChildren().addAll(previewedLine, previewedCircle);
         
+        // Actualisation des affichages
         aside.setVisible(true);
         editionProprietesLien.setVisible(false);
         editionProprietesNoeud.setVisible(false);
+        enregistrerSousID.setDisable(false);
+		enregistrerID.setDisable(false);
+        
+		// Création du graphe et autres mise à jour
+        valeurLien.setText("0.0");
+		actualMode = 3;
+		aUneSauvegarge = false;
+        graphe = factory.creerGraphe();
+		Main.getStage().setTitle(title + " : " + graphe);
     }
     
     /**
-     * Création d'un graphe non orienté simple
+     * Création des différents type de graphe
      * @param event click de la souris
      */
     @FXML
     void creerGrapheNonOriente(ActionEvent event) {
     	if (confirmerNouveauGraphe()) {
-            Main.getStage().setTitle(title + " : Graphe non orienté");
-    		initialisation();
-    		enregistrerID.setDisable(false);
-    		enregistrerSousID.setDisable(false);
-    		valeurLien.setText("0.0");
     		setTraitement(false);
     		factory = manager.creerFactory("GrapheNonOriente");
-    		graphe = factory.creerGraphe();
-    		actualMode = 3;
-    		aUneSauvegarge = false;
+    		initialisation();
     	}
     }
-    
     @FXML
     void creerGrapheOriente(ActionEvent event) {
     	if (confirmerNouveauGraphe()) {
-            Main.getStage().setTitle(title + " : Graphe orienté");
-    		initialisation();
     		setTraitement(false);
-    		enregistrerSousID.setDisable(false);
-    		enregistrerID.setDisable(false);
-    		valeurLien.setText("0.0");
     		factory = manager.creerFactory("GrapheOriente");
-    		graphe = factory.creerGraphe();
-    		actualMode = 3;
-    		aUneSauvegarge = false;
+    		initialisation();
     	}
     }
-    
     @FXML
     void creerGrapheOrientePondere(ActionEvent event) {
     	if (confirmerNouveauGraphe()) {
-            Main.getStage().setTitle(title + " : Graphe orienté pondéré");
-    		initialisation();
     		setTraitement(false);
     		valeurLien.setDisable(false);
-    		enregistrerID.setDisable(false);
-    		enregistrerSousID.setDisable(false);
     		factory = manager.creerFactory("GrapheOrientePondere");
-    		graphe = factory.creerGraphe();
-    		actualMode = 3;
-    		aUneSauvegarge = false;
+    		initialisation();
     	}
     }
-    
     @FXML
     void creerGrapheProbabiliste(ActionEvent event) {
     	if (confirmerNouveauGraphe()) {
-            Main.getStage().setTitle(title + " : Graphe probabiliste");
-    		initialisation();
     		setTraitement(true);
-    		enregistrerSousID.setDisable(false);
-    		enregistrerID.setDisable(false);
     		factory = manager.creerFactory("GrapheProbabiliste");
-    		graphe = factory.creerGraphe();
-    		actualMode = 3;
-    		aUneSauvegarge = false;
+    		initialisation();
     	}
     }
     
@@ -391,59 +333,53 @@ public class FXMLDocumentController implements Initializable {
      */
     boolean confirmerNouveauGraphe() {
     	if (graphe != null && !(listeElements.getItems().isEmpty())) {
-    		Alert dialogueConfirmationNouveauGraphe = new Alert(AlertType.CONFIRMATION);
-    		dialogueConfirmationNouveauGraphe.setTitle("Nouveau graphe");
-    		dialogueConfirmationNouveauGraphe.setHeaderText(null);
-    		dialogueConfirmationNouveauGraphe.setContentText("Êtes-vous sûr(e) de vouloir créer un nouveau graphe ? Vous perdrez toutes vos modifcations actuelles.");
-    		Optional<ButtonType> reponse = dialogueConfirmationNouveauGraphe.showAndWait();
-    		if (reponse.get() == ButtonType.OK) {
-    			return true;
-    		} 
-    		else {
-    			return false;
-    		}
+    		Alert alertNouveauGraphe = new Alert(AlertType.CONFIRMATION);
+    		alertNouveauGraphe.setTitle("Nouveau graphe");
+    		alertNouveauGraphe.setHeaderText(null);
+    		alertNouveauGraphe.setContentText("Êtes-vous sûr(e) de vouloir créer un nouveau graphe ?" 
+    		                                  + " Vous perdrez toutes vos modifcations actuelles.");
+    		Optional<ButtonType> reponse = alertNouveauGraphe.showAndWait();
+    		return reponse.get() == ButtonType.OK;
     	} 
     	return true;
     }
     
+    /**
+     * Appel méthode sur les traitements de graphe
+     * @param event click de souris
+     */
     @FXML
     void verifierGraphe(ActionEvent event) {
     	probabilite.verifierGraphe((GrapheProbabiliste) graphe, true);
     }
-    
     @FXML
     void matriceDeTransition(ActionEvent event) {
     	probabilite.showMatrix((GrapheProbabiliste) graphe);
     }
-    
     @FXML
     void existenceChemin(ActionEvent event) {
     	probabilite.showExistenceChemin((GrapheProbabiliste) graphe); 
     }
-    
     @FXML 
     void probabiliteChemin(ActionEvent event) {
     	probabilite.showProbabiliteChemin((GrapheProbabiliste) graphe);
     }
-    
     @FXML
     void classificationSommets(ActionEvent event) {
     	probabilite.classificationSommets((GrapheProbabiliste) graphe);
     }
-    
     @FXML
     void legendeClassification(ActionEvent event) {
     	probabilite.legendeClassification();
     }
-    
     @FXML
     void loiDeProbabilite(ActionEvent event) {
     	probabilite.showLoiDeProba((GrapheProbabiliste) graphe);
     }
     
     /**
-     * met les options pour disponible que pour certains graphe dans le bon état (désactivé ou activé)
-     * @param etat  l'état dans lequel mettre les options
+     * Active ou désactive les options de traitements de graphes
+     * @param etat l'état dans lequel mettre les options
      */
     public void setTraitement(boolean etat) {
     	valeurLien.setDisable(!etat);

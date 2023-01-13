@@ -63,6 +63,11 @@ public class GrapheOrientePondere extends Graphe {
         listeLiens.add(l);
         return l;
 	}
+	
+	@Override
+    public String toString() {
+        return "Graphe orienté pondéré";
+    }
     
     @Override
     public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {

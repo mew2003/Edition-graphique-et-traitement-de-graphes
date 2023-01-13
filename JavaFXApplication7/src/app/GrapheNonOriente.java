@@ -88,16 +88,7 @@ public class GrapheNonOriente extends Graphe {
 
     @Override
     public String toString() {
-        StringBuilder chaine = new StringBuilder("GrapheNonOriente, noeuds [");
-        for (Noeud i : listeNoeuds) {
-            chaine.append(i.toString()).append(", ");
-        }
-        chaine.append("], liens [");
-        for (Lien i : listeLiens) {
-            chaine.append(i.toString()).append(", ");
-        }
-        chaine.append("]");
-        return chaine.toString();
+        return "Graphe non orienté";
     }
 
     @Override
