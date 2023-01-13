@@ -193,23 +193,19 @@ public class GrapheOrientePondere extends Graphe {
 	
     /**
      * Remplace l'ancienne valeur d'un lien par la nouvelle saisie en argument
-     * @param lien le lien à modifier
-     * @param newValue nouvelle valeur du lien
+     * @param lien  le lien à modifier
+     * @param newValue  la nouvelle valeur du lien
      */
 	public void modifValeur(Lien lien, double newValue) {
 		((LienOrientePondere) lien).setValue(newValue);
 	}
 	
-	/**
-	 * Renvoie la liste des noeuds
-	 */
+	@Override
 	public ArrayList<Noeud> getListeNoeuds() {
 		return listeNoeuds;
 	}
 
-	/**
-	 * Renvoie la liste des liens
-	 */
+	@Override
 	public ArrayList<Lien> getListeLiens() {
 		return listeLiens;
 	}

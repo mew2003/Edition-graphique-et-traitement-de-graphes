@@ -10,7 +10,7 @@ package app;
 public abstract class FactoryGraphe {
     
 	/**
-	 * Créer un graphe
+	 * Crée un graphe
 	 * @return l'object graphe correspondant
 	 */
     public abstract Graphe creerGraphe();

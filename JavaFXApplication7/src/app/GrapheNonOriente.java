@@ -20,7 +20,7 @@ import static tools.clickDetection.*;
  * - Il peut y avoir entre 0 et L = N(N+1)/2 nombre de liens
  * - Il ne peut pas y avoir de boucle (un lien qui part d'un noeud et revient à ce même noeud)
  * - Un noeud ne peut pas avoir plus de N-1 lien
- * - Deux liens ne peuvent partir du même noeud et aller vers un autre même noeud
+ * - Deux liens ne peuvent relier les deux mêmes noeuds
  * @author mewen.derruau
  */
 public class GrapheNonOriente extends Graphe {

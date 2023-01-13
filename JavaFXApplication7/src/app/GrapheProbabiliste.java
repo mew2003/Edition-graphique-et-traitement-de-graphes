@@ -22,7 +22,7 @@ import static tools.clickDetection.*;
  * - Il peut y avoir entre 0 et L = N^N nombre de liens
  * - Il ne peut pas y avoir deux liens partant d'un noeud vers un autre même noeud
  * - Un noeud ne peut pas avoir plus de N lien partant et N lien arrivant vers ce même noeud.
- * - Chaque noeud peut posséder une valeur de départ 
+ * - Chaque noeud peut posséder une valeur
  *   (Somme des valeurs des liens partant de ce noeud) 
  *   entre 0.0 et 1.0 (si aucun lien ne pars de ce dernier, valeur = 0.0)
  * - Un lien peut avoir n'importe quelle valeur comprise 
@@ -198,13 +198,13 @@ public class GrapheProbabiliste extends Graphe {
 	
     /**
      * Remplace l'ancienne valeur d'un lien par la nouvelle saisie en argument
-     * @param lien le lien à modifier
-     * @param newValue nouvelle valeur du lien
-     * @throws IllegalArgumentException Pour le noeud duquel part le lien
-     *                                  dont on est entrain de modifier la valeur.
-     *                                  Si la somme de tout les autres liens partant de ce même noeud 
-     *                                  + la nouvelle valeur du lien actuellement modifier est supérieur à 1.0.
-     *                                  Alors l'exception est renvoyé.
+     * @param lien  le lien à modifier
+     * @param newValue  la nouvelle valeur du lien
+     * @throws IllegalArgumentException  Pour le noeud duquel part le lien
+     *                                   dont on est en train de modifier la valeur.
+     *                                   Si la somme de tous les autres liens partant de ce même noeud 
+     *                                   + la nouvelle valeur du lien actuellement modifier est supérieure à 1.0.
+     *                                   Alors l'exception est renvoyée.
      */
 	public void modifValeur(Lien lien, double newValue) {
 		LienProbabiliste l = (LienProbabiliste) lien;
@@ -221,16 +221,12 @@ public class GrapheProbabiliste extends Graphe {
 		l.setValue(newValue);
 	}
 	
-	/**
-	 * Renvoie la liste des noeuds
-	 */
+	@Override
 	public ArrayList<Noeud> getListeNoeuds() {
 		return listeNoeuds;
 	}
 
-	/**
-	 * Renvoie la liste des liens
-	 */
+	@Override
 	public ArrayList<Lien> getListeLiens() {
 		return listeLiens;
 	}
