@@ -377,7 +377,7 @@ public class FXMLDocumentController implements Initializable {
     		Optional<ButtonType> answer = dialogueConfirmationNouveauGraphe.showAndWait();
     		if (answer.get() == ButtonType.OK) {
     			return true;
-    		}
+    		} 
     		else {
     			return false;
     		}
@@ -1216,7 +1216,7 @@ public class FXMLDocumentController implements Initializable {
     		fileChooser.setInitialDirectory(lastFile.getParentFile());
     	}
     	// extensions de fichier autorisé
-    	fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier texte", "*.txt"));
+    	fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier graphe", "*.graph"));
     	try {
     		// récupération du chemin et nom du fichier enregistrer
     		lastFile = fileChooser.showSaveDialog(null);
@@ -1261,7 +1261,7 @@ public class FXMLDocumentController implements Initializable {
     		fileChooser.setInitialDirectory(lastFile.getParentFile());
     	}
     	// extensions de fichier autorisé
-    	fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichier texte", "*.txt"));
+    	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier graphe", "*.graph"));
     	try {
     		lastFile = fileChooser.showOpenDialog(null);
         	if (lastFile != null) {
@@ -1274,7 +1274,7 @@ public class FXMLDocumentController implements Initializable {
                     
                     restauration();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                	System.err.println("Le fichier n'a pas pu être lu");
                 }
         	}
     	} catch (Exception e) {
