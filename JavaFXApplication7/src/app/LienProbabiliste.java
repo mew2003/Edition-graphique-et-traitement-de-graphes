@@ -251,17 +251,4 @@ public class LienProbabiliste extends Lien implements Serializable {
 		this.valeur = newValue;
 	}
 
-	@Override
-	public LienProbabiliste clone() {
-		LienProbabiliste lienProba = new LienProbabiliste(noeuds);
-		lienProba.arc = this.arc;
-		lienProba.arrow1 = this.arrow1;
-		lienProba.arrow2 = this.arrow2;
-		lienProba.noeuds = this.noeuds;
-		lienProba.label = this.label;
-		lienProba.quadCurve = this.quadCurve;
-		lienProba.valeur = this.valeur;
-		return lienProba;
-	}
-
 }

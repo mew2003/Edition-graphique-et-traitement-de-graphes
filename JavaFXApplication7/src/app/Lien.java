@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
  * Permet les différents échanges avec un lien quelconques
  * @author mewen.derruau
  */
-public abstract class Lien implements Cloneable {
+public abstract class Lien {
 
 	/**
 	 * Renvoie les noeuds qu'un lien relie
@@ -39,7 +39,5 @@ public abstract class Lien implements Cloneable {
      * Actualise l'affichage graphique du lien
      */
     public abstract void actualiser();
-    
-    public abstract Lien clone();
     
 }

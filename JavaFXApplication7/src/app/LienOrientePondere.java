@@ -246,17 +246,4 @@ public class LienOrientePondere extends Lien implements Serializable {
 		this.valeur = newValue;
 	}
 
-	@Override
-	public LienOrientePondere clone() {
-		LienOrientePondere lienPondere = new LienOrientePondere(noeuds);
-		lienPondere.arc = this.arc;
-		lienPondere.arrow1 = this.arrow1;
-		lienPondere.arrow2 = this.arrow2;
-		lienPondere.noeuds = this.noeuds;
-		lienPondere.label = this.label;
-		lienPondere.quadCurve = this.quadCurve;
-		lienPondere.valeur = this.valeur;
-		return lienPondere;
-	}
-
 }

@@ -183,30 +183,6 @@ public class GrapheNonOriente extends Graphe {
 	}
 
 	@Override
-	public void setEtat(Graphe graphe) {
-		if(graphe != null && graphe instanceof GrapheNonOriente) {
-			this.listeLiens = ((GrapheNonOriente) graphe).listeLiens;
-			this.listeNoeuds = ((GrapheNonOriente) graphe).listeNoeuds;
-			this.nbNoeud = ((GrapheNonOriente) graphe).nbNoeud;
-		}		
-	}
-
-	@Override
-	public Graphe clone() {
-		GrapheNonOriente clone = new GrapheNonOriente();
-	    clone.listeLiens = new ArrayList<>();
-	    for (Lien lien : this.listeLiens) {
-	        clone.listeLiens.add(lien.clone());
-	    }
-	    clone.listeNoeuds = new ArrayList<>();
-	    for (Noeud noeud : this.listeNoeuds) {
-	        clone.listeNoeuds.add(noeud.clone());
-	    }
-		clone.nbNoeud = this.nbNoeud;
-		return clone;
-	}
-
-	@Override
 	public List<Noeud> getListeNoeuds() {
 		return this.listeNoeuds;
 	}

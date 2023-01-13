@@ -125,15 +125,4 @@ public class NoeudXOROriente extends Noeud implements Serializable {
         label.setLayoutY(pos[1] - (label.getHeight() / 2));
     }
 
-	@Override
-	public Noeud clone() {
-		NoeudXOROriente clone = new NoeudXOROriente(pos, 1);
-		clone.circle = this.circle;
-		clone.label = this.label;
-		clone.nom = this.nom;
-		clone.pos = this.pos;
-		clone.radius = this.radius;
-		return clone;
-	}
-
 }

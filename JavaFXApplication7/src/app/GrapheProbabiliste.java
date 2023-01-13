@@ -235,29 +235,5 @@ public class GrapheProbabiliste extends Graphe {
 	public ArrayList<Lien> getListeLiens() {
 		return listeLiens;
 	}
-
-	@Override
-	public void setEtat(Graphe graphe) {
-		if(graphe != null && graphe instanceof GrapheProbabiliste) {
-			this.listeLiens = ((GrapheProbabiliste) graphe).listeLiens;
-			this.listeNoeuds = ((GrapheProbabiliste) graphe).listeNoeuds;
-			this.nbNoeud = ((GrapheProbabiliste) graphe).nbNoeud;
-		}		
-	}
-
-	@Override
-	public Graphe clone() {
-		GrapheProbabiliste clone = new GrapheProbabiliste();
-	    clone.listeLiens = new ArrayList<>();
-	    for (Lien lien : this.listeLiens) {
-	      clone.listeLiens.add((Lien) lien.clone());
-	    }
-	    clone.listeNoeuds = new ArrayList<>();
-	    for (Noeud noeud : this.listeNoeuds) {
-	      clone.listeNoeuds.add((Noeud) noeud.clone());
-	    }
-		clone.nbNoeud = this.nbNoeud;
-		return clone;
-	}
 	
 }

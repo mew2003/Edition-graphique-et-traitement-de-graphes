@@ -83,12 +83,4 @@ public class LienNonOriente extends Lien implements Serializable {
 	public Line getLine() {
 		return line;
 	}
-
-	@Override
-	public LienNonOriente clone() {
-		LienNonOriente lienNOR = new LienNonOriente(noeuds);
-		lienNOR.line = this.line;
-		lienNOR.noeuds = this.noeuds;
-		return lienNOR;
-	}
 }

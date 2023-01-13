@@ -214,29 +214,5 @@ public class GrapheOrientePondere extends Graphe {
 	public ArrayList<Lien> getListeLiens() {
 		return listeLiens;
 	}
-
-	@Override
-	public void setEtat(Graphe graphe) {
-		if(graphe != null && graphe instanceof GrapheOrientePondere) {
-			this.listeLiens = ((GrapheOrientePondere) graphe).listeLiens;
-			this.listeNoeuds = ((GrapheOrientePondere) graphe).listeNoeuds;
-			this.nbNoeud = ((GrapheOrientePondere) graphe).nbNoeud;
-		}		
-	}
-
-	@Override
-	public Graphe clone() {
-		GrapheOrientePondere clone = new GrapheOrientePondere();
-	    clone.listeLiens = new ArrayList<>();
-	    for (Lien lien : this.listeLiens) {
-	      clone.listeLiens.add((Lien) lien.clone());
-	    }
-	    clone.listeNoeuds = new ArrayList<>();
-	    for (Noeud noeud : this.listeNoeuds) {
-	      clone.listeNoeuds.add((Noeud) noeud.clone());
-	    }
-		clone.nbNoeud = this.nbNoeud;
-		return clone;
-	}
 	
 }
