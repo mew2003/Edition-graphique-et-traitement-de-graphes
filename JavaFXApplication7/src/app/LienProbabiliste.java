@@ -40,8 +40,7 @@ public class LienProbabiliste extends Lien implements Serializable {
     
     private final double DEFAULT_VALUE = 0.0;
 
-	public LienProbabiliste(Noeud[] noeuds, int nbLien) {
-		this.nom = DEFAULT_NAME + nbLien;
+	public LienProbabiliste(Noeud[] noeuds) {
         this.noeuds = noeuds;
         this.valeur = DEFAULT_VALUE;
 	}
@@ -195,7 +194,7 @@ public class LienProbabiliste extends Lien implements Serializable {
 
 	@Override
 	public LienProbabiliste clone() {
-		LienProbabiliste lienProba = new LienProbabiliste(noeuds, 0);
+		LienProbabiliste lienProba = new LienProbabiliste(noeuds);
 		lienProba.arc = this.arc;
 		lienProba.arrow1 = this.arrow1;
 		lienProba.arrow2 = this.arrow2;

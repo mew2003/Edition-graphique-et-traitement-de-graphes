@@ -1,3 +1,6 @@
+/**
+ * Représentation d'un lien non orienté
+ */
 package app;
 
 import javafx.scene.layout.AnchorPane;
@@ -10,34 +13,34 @@ import static tools.drawingPositions.*;
 
 import java.io.Serializable;
 
+/**
+ * Lien orienté
+ * Pour rappel, un lien orienté doit respecter les principes suivants :
+ * - Il est représenter par une flèche allant d'un noeud à un autre
+ * - Il ne peut pas partir du même noeud et aller vers un autre même noeud qu'un autre lien
+ * @author Mewen
+ */
 public class LienOriente extends Lien implements Serializable{
 
-	// Noeud que relie le lien
+	// Noeuds que relient le lien
     private Noeud[] noeuds;
     
-    // Représentation graphique du lien
+    // Représentation graphique du lien sous forme de flèche
     private transient Line arrow1, arrow2;
-        
-    private transient Arc arc = null;
-    
     private transient QuadCurve quadCurve;
     
-    private String nom;
+    // Représentation graphique du lien sous forme de boucle
+    private transient Arc arc = null;
     
-    // Nom par défaut d'un lien
-    private final String DEFAULT_NAME = "default";
-    
+    // Permet la bonne création d'un boucle
     private final double BOUCLE_ANGLE = -14.49;
-    
     private final double BOUCLE_SIZE = 208.98;
     
     /**
      * Crée un lien reliant 2 noeuds
      * @param noeuds les noeuds à relié
-     * @param nbLien permet le nom unique du lien
      */
-    public LienOriente(Noeud[] noeuds, int nbLien) {
-        this.nom = DEFAULT_NAME + nbLien;
+    public LienOriente(Noeud[] noeuds) {
         this.noeuds = noeuds;
     }
 
@@ -162,12 +165,11 @@ public class LienOriente extends Lien implements Serializable{
 
 	@Override
 	public LienOriente clone() {
-		LienOriente lienOR = new LienOriente(noeuds, 0);
+		LienOriente lienOR = new LienOriente(noeuds);
 		lienOR.arc = this.arc;
 		lienOR.arrow1 = this.arrow1;
 		lienOR.arrow2 = this.arrow2;
 		lienOR.noeuds = this.noeuds;
-		lienOR.nom = this.nom;
 		lienOR.quadCurve = this.quadCurve;
 		return lienOR;
 	}

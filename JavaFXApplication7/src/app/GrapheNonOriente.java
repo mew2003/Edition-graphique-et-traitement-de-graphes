@@ -28,9 +28,8 @@ public class GrapheNonOriente extends Graphe {
 	private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
     
-    // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
+    // Nombre de noeuds qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 0;
-    private int nbLien = 1;
 
     @Override
     public Noeud creerNoeud(double[] pos) {
@@ -59,7 +58,7 @@ public class GrapheNonOriente extends Graphe {
     		}
     	}
         Noeud[] noeuds = {noeud1, noeud2};
-    	Lien l = new LienNonOriente(noeuds, nbLien++);
+    	Lien l = new LienNonOriente(noeuds);
         listeLiens.add(l);
         return l;
     }
@@ -197,7 +196,6 @@ public class GrapheNonOriente extends Graphe {
 		if(graphe != null && graphe instanceof GrapheNonOriente) {
 			this.listeLiens = ((GrapheNonOriente) graphe).listeLiens;
 			this.listeNoeuds = ((GrapheNonOriente) graphe).listeNoeuds;
-			this.nbLien = ((GrapheNonOriente) graphe).nbLien;
 			this.nbNoeud = ((GrapheNonOriente) graphe).nbNoeud;
 		}		
 	}
@@ -213,7 +211,6 @@ public class GrapheNonOriente extends Graphe {
 	    for (Noeud noeud : this.listeNoeuds) {
 	        clone.listeNoeuds.add(noeud.clone());
 	    }
-		clone.nbLien = this.nbLien;
 		clone.nbNoeud = this.nbNoeud;
 		return clone;
 	}

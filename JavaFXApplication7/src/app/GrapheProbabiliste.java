@@ -1,3 +1,6 @@
+/**
+ * Représentation d'un graphe pondéré
+ */
 package app;
 
 import java.util.ArrayList;
@@ -13,13 +16,26 @@ import javafx.scene.shape.Shape;
 
 import static tools.clickDetection.*;
 
+/**
+ * Pour rappel, un graphe orienté pondéré doit respecter les principes suivants :
+ * - Il peut y avoir N nombre de noeuds
+ * - Il peut y avoir entre 0 et L = N^N nombre de liens
+ * - Il ne peut pas y avoir deux liens partant d'un noeud vers un autre même noeud
+ * - Un noeud ne peut pas avoir plus de N lien partant et N lien arrivant vers ce même noeud.
+ * - Chaque noeud peut posséder une valeur de départ 
+ *   (Somme des valeurs des liens partant de ce noeud) 
+ *   entre 0.0 et 1.0 (si aucun lien ne pars de ce dernier, valeur = 0.0)
+ * - Un lien peut avoir n'importe quelle valeur comprise 
+ *   entre 0.0 et 1.0 tant qu'il respecte le point précédent
+ * @author mewen.derruau
+ */
 public class GrapheProbabiliste extends Graphe {
 
 	private ArrayList<Noeud> listeNoeuds = new ArrayList<>();
     private ArrayList<Lien> listeLiens = new ArrayList<>();
+    
     // Nombre de noeud/lien qui ont été crée depuis le lancement de l'application
     private int nbNoeud = 0;
-    private int nbLien = 1;
 	
     @Override
     public Noeud creerNoeud(double[] pos) {
@@ -47,42 +63,32 @@ public class GrapheProbabiliste extends Graphe {
     		}
     	}
         Noeud[] noeuds = {noeud1, noeud2};
-    	Lien l = new LienProbabiliste(noeuds, nbLien++);
+    	Lien l = new LienProbabiliste(noeuds);
         listeLiens.add(l);
         return l;
 	}
     
     @Override
     public void supprimerLien(Lien lienASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
-    	for (int i = 0 ; i < listeLiens.size() ; i++)  {
-    		if (listeLiens.get(i) == lienASuppr) {
-    			lienASuppr.effacer(zoneDessin);
-    			listeLiens.remove(lienASuppr);
-    			listeElements.getItems().remove(lienASuppr);
-    			i--;
-    		}
-    	}
+		lienASuppr.effacer(zoneDessin);
+		listeLiens.remove(lienASuppr);
+		listeElements.getItems().remove(lienASuppr);
     }
     
     @Override
     public void supprimerNoeud(Noeud noeudASuppr, AnchorPane zoneDessin, ComboBox<Object> listeElements) {
-    	
-    	for (int i = 0 ; i < listeNoeuds.size() ; i++)  {
-    		if (listeNoeuds.get(i) == noeudASuppr) {
-    			noeudASuppr.effacer(zoneDessin);
-    			listeNoeuds.remove(noeudASuppr);
-    			i--;
-    			for (int j = 0 ; j < listeLiens.size() ; j++) {
-    				if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
-    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
-    					j--;
-    				} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
-    					supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
-    					j--;
-    				}
-    		    }
+		noeudASuppr.effacer(zoneDessin);
+		listeNoeuds.remove(noeudASuppr);
+		
+		for (int j = 0 ; j < listeLiens.size() ; j++) {
+			if (listeLiens.get(j).getNoeuds()[0] == noeudASuppr) {
+				supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+				j--;
+			} else if (listeLiens.get(j).getNoeuds()[1] == noeudASuppr) {
+				supprimerLien(listeLiens.get(j), zoneDessin, listeElements);
+				j--;
 			}
-		}
+	    }
     }
 
 	@Override
@@ -91,21 +97,15 @@ public class GrapheProbabiliste extends Graphe {
         for (Node n : childrens) {
             if (n instanceof Circle) {
                 for (Noeud no : listeNoeuds) {
-                    if (isNodeClicked(positions[0], positions[1], no)) {                      
-                        return no;
-                    }
+                    if (isNodeClicked(positions[0], positions[1], no)) return no;
                 }
             } else if (n instanceof Arc) {
             	for (Lien li : listeLiens) {
-                    if (isArcClicked(positions[0], positions[1], li)) {
-                        return li;
-                    }
+                    if (isArcClicked(positions[0], positions[1], li)) return li;
                 }
             } else if (n instanceof QuadCurve) {
             	for (Lien li : listeLiens) {
-                    if (isQuadCurvedClicked(positions[0], positions[1], li)) {
-                        return li;
-                    }
+                    if (isQuadCurvedClicked(positions[0], positions[1], li)) return li;
                 }
             }
         }
@@ -196,28 +196,41 @@ public class GrapheProbabiliste extends Graphe {
     	}
     }
 	
+    /**
+     * Remplace l'ancienne valeur d'un lien par la nouvelle saisie en argument
+     * @param lien le lien à modifier
+     * @param newValue nouvelle valeur du lien
+     * @throws IllegalArgumentException Pour le noeud duquel part le lien
+     *                                  dont on est entrain de modifier la valeur.
+     *                                  Si la somme de tout les autres liens partant de ce même noeud 
+     *                                  + la nouvelle valeur du lien actuellement modifier est supérieur à 1.0.
+     *                                  Alors l'exception est renvoyé.
+     */
 	public void modifValeur(Lien lien, double newValue) {
 		LienProbabiliste l = (LienProbabiliste) lien;
 		l.setValue(0.0);
-		Noeud noeudAVerif = lien.getNoeuds()[0];
-		double ActualLeaving = 0.0;
-		for (Lien li : listeLiens) {
-			if (li.getNoeuds()[0] == noeudAVerif && lien != li) {
-				LienProbabiliste lie = (LienProbabiliste) li;
-				ActualLeaving += lie.getValue();
+		double ActualLeaving = newValue;
+		for (Lien lienAVerif : listeLiens) {
+			if (lienAVerif.getNoeuds()[0] == lien.getNoeuds()[0]) {
+				ActualLeaving += ((LienProbabiliste) lienAVerif).getValue();
 			}
 		}
-		ActualLeaving += newValue;
 		if (ActualLeaving > 1.0) {
 			throw new IllegalArgumentException("La somme des valeurs partant d'un noeud ne peut pas être supérieur à 1.0");
 		}
 		l.setValue(newValue);
 	}
 	
+	/**
+	 * Renvoie la liste des noeuds
+	 */
 	public ArrayList<Noeud> getListeNoeuds() {
 		return listeNoeuds;
 	}
 
+	/**
+	 * Renvoie la liste des liens
+	 */
 	public ArrayList<Lien> getListeLiens() {
 		return listeLiens;
 	}
@@ -227,7 +240,6 @@ public class GrapheProbabiliste extends Graphe {
 		if(graphe != null && graphe instanceof GrapheProbabiliste) {
 			this.listeLiens = ((GrapheProbabiliste) graphe).listeLiens;
 			this.listeNoeuds = ((GrapheProbabiliste) graphe).listeNoeuds;
-			this.nbLien = ((GrapheProbabiliste) graphe).nbLien;
 			this.nbNoeud = ((GrapheProbabiliste) graphe).nbNoeud;
 		}		
 	}
@@ -243,7 +255,6 @@ public class GrapheProbabiliste extends Graphe {
 	    for (Noeud noeud : this.listeNoeuds) {
 	      clone.listeNoeuds.add((Noeud) noeud.clone());
 	    }
-		clone.nbLien = this.nbLien;
 		clone.nbNoeud = this.nbNoeud;
 		return clone;
 	}
