@@ -31,6 +31,9 @@ public abstract class Graphe implements Serializable {
      * @param noeud1  Premier noeud à relier
      * @param noeud2  Second noeud à relier
      * @return le lien créé
+     * @throws IllegalArgumentException  quand un lien est créé entre 2 noeuds et qu'il y avait déjà un lien entre ces 2 noeuds
+     * 									 (si le graphe est orienté, renvoie l'exception seulement 
+     *                                    si le lien qui a entre les 2 est dans le même sens)
      */
     public abstract Lien creerLien(Noeud noeud1, Noeud noeud2);
     
@@ -66,6 +69,7 @@ public abstract class Graphe implements Serializable {
      * Renvoie le noeud correspondant au libelle saisi en argument
      * @param libelle  nom du noeud à rechercher
      * @return le noeud portant le nom du libelle
+     * @throws IllegalArgumentException  si le libelle ne correspond à aucun noeud
      */
     public abstract Noeud getNode(String libelle);
     
@@ -88,6 +92,9 @@ public abstract class Graphe implements Serializable {
      * @param lien  le lien à modifier
      * @param noeuds  les nouveaux noeuds que relie le lien
      * @param zoneDessin  la zone où se trouve le lien (permet l'actualisation de l'affichage)
+     * @throws IllegalArgumentException  si il y a déjà un lien entre ces 2 noeuds
+     * 								     (si le graphe est non orienté renvoie l'exception aussi 
+     *                                    si le lien qui veut être créé est une boucle)
      */
     public abstract void modifLien(Lien lien, Noeud[] noeuds, AnchorPane zoneDessin);
     
