@@ -106,6 +106,7 @@ public class GrapheOrientePondere extends Graphe {
                 }
             }
         }
+        reset();
         return null;
 	}
 

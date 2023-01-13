@@ -34,7 +34,7 @@
                       <MenuItem fx:id="nonOrienteButton" mnemonicParsing="false" onAction="#creerGrapheNonOriente" text="Graphe non orienté   (CTRL+N)" />
                         <MenuItem fx:id="orienteButton" mnemonicParsing="false" onAction="#creerGrapheOriente" text="Graphe orienté   (CTRL+R)" />
                         <MenuItem fx:id="orientePondereButton" mnemonicParsing="false" onAction="#creerGrapheOrientePondere" text="Graphe orienté pondéré   (CTRL+E)" />
-                        <MenuItem fx:id="probabilisteButton" mnemonicParsing="false" onAction="#creerGrapheProbabiliste" text="Graphe probabiliste   (CTRL+P))" />
+                        <MenuItem fx:id="probabilisteButton" mnemonicParsing="false" onAction="#creerGrapheProbabiliste" text="Graphe probabiliste   (CTRL+P)" />
                     </items>
                   </Menu>
               </items>
