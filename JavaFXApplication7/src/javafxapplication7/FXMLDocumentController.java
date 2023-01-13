@@ -145,7 +145,7 @@ public class FXMLDocumentController implements Initializable {
     
     // Graphe actuellement utilisé
     Graphe graphe;
-    
+      
     // Permet le stockage des noeuds à relier par un lien (maximum 2 noeuds)
     Noeud[] noeudARelier = new Noeud[2];
     
@@ -175,6 +175,12 @@ public class FXMLDocumentController implements Initializable {
     // Permet d'obtenir le dernier fichier sauvegarder
     File lastFile = null;
     
+    // Fichier de sauvegarde de l'état du graphe avant une action
+    File graphSave = new File("undo");
+    
+    // Fichier de sauvegarde de l'état du graphe après une action
+    File graphSave2 = new File("redo");
+    
     // titre par défaut du logiciel
     String title = "Logiciel d'édition et de traitement de graphes";
     
@@ -198,6 +204,8 @@ public class FXMLDocumentController implements Initializable {
     KeyCombination altNode = new KeyCodeCombination(KeyCode.N, KeyCombination.ALT_DOWN);
     KeyCombination altArrow = new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN);
     KeyCombination altSelection = new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN);
+    KeyCodeCombination controlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_ANY);
+    KeyCodeCombination controlY = new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_ANY);
     
     /* gère les raccourcis claviers */
     EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent>() {
@@ -245,6 +253,10 @@ public class FXMLDocumentController implements Initializable {
     	    	addLinkClicked(null);
     	    } else if (altSelection.match(keyEvent)) {
     	    	SelectClicked(null);
+    	    } else if (controlZ.match(keyEvent)) {
+    	    	undo();
+    	    } else if (controlY.match(keyEvent)) {
+    	    	redo();
     	    }
         }
     };
@@ -426,10 +438,12 @@ public class FXMLDocumentController implements Initializable {
      * @param positions positions X/Y de la souris
      */
     public void creerNoeud(double[] positions) {
+    	enregistrerEtat(graphSave.getName());
         Noeud nouveauNoeud = graphe.creerNoeud(positions);
         nouveauNoeud.dessiner(zoneDessin);
         // Ajout du noeud dans la comboBox listant tous les éléments présent sur l'interface
         listeElements.getItems().addAll(nouveauNoeud);
+        enregistrerEtat(graphSave2.getName());
     }
     
     /**
@@ -438,6 +452,7 @@ public class FXMLDocumentController implements Initializable {
      * @return true si le lien a pu être crée, false sinon
      */
     public boolean creerLien(double[] positions) {
+    	enregistrerEtat(graphSave.getName());
     	/* Permet de :
          * - Vérifier que l'élément sélectionner soit bien un noeud
          * - Ajouter ce noeud dans la liste des noeuds à relier. 
@@ -461,6 +476,7 @@ public class FXMLDocumentController implements Initializable {
                 previewedLine.setStartY(-100);
                 previewedLine.setEndX(-100);
                 previewedLine.setEndY(-100);
+                enregistrerEtat(graphSave2.getName());
         	} catch (Exception e) {
         		System.out.println(e);
         		return false;
@@ -608,6 +624,67 @@ public class FXMLDocumentController implements Initializable {
     	    }
     	});
     }
+
+    /**
+     * Change l'état du graphe
+     * @param nomDuFichier nom du fichier
+     */
+    public void setGraphe(String nomDuFichier) {
+    	try {
+    		if(graphSave.canRead() || graphSave2.canRead()) {
+    			FileInputStream fileIn = new FileInputStream(nomDuFichier);
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                this.graphe = (Graphe) in.readObject();
+                in.close();
+                fileIn.close();
+                zoneDessin.getChildren().clear();
+                listeElements.getItems().clear();
+                initialisation();
+            	// Suppression de tous les éléments restant sur la zone graphique et dans la liste déroulante
+            	zoneDessin.getChildren().clear();
+            	listeElements.getItems().clear();
+            	// Réinitialisation de l'application
+                initialisation();
+                aside.setVisible(true);
+                actualMode = 3;
+                // Dessin de tout les noeuds et liens du graphe ouvert
+                for (Noeud n : graphe.getListeNoeuds()) {
+                	n.dessiner(zoneDessin);
+                	listeElements.getItems().add(n);
+                }
+                for (Lien l : graphe.getListeLiens()) {
+                	l.dessiner(zoneDessin);
+                	listeElements.getItems().add(l);
+                }
+                /* Si le graphe est un graphe probabiliste 
+                 * -> lancement de toute les méthodes liés à ce dernier
+                 */
+                if (graphe instanceof GrapheProbabiliste) {
+                	setTraitement(true);
+                } else if (graphe instanceof GrapheOrientePondere) {
+                	setTraitement(false);
+                	valeurLien.setDisable(false);
+                } else {
+                	setTraitement(false);
+                }
+    		} 
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();        }
+    }
+    
+    /**
+     * Annule une action
+     */
+    public void undo() {
+    	setGraphe(graphSave.getName());
+    }
+    
+    /**
+     * Restaure une action
+     */
+    public void redo() {
+    	setGraphe(graphSave2.getName());
+    }
     
     /**
      * Met en gras l'élement sélectionné, permet au noeud sélectionné de changer de position
@@ -618,6 +695,13 @@ public class FXMLDocumentController implements Initializable {
      */
     void draggedNode(Node element, Object objectSelected, Noeud noeud) {
     	reset2();
+    	
+    	/* Lorsque l'on click sur le noeud */
+    	element.setOnMousePressed(envent ->{
+    		enregistrerEtat(graphSave.getName());
+    	});
+    	
+    	/* Lorsque qu'un drag and click est effectué */
     	element.setOnMouseDragged(event -> {
     		/* les positions du noeuds sont actualisé par rapport à la position de la souris */
     		RefreshStroke();
@@ -628,6 +712,11 @@ public class FXMLDocumentController implements Initializable {
             /* Actualise les positions des liens reliés au noeud par rapport à sa position */
             graphe.relocalisation();
     	});
+    	
+    	/* Lorsque l'on relâche le click souris */
+    	element.setOnMouseReleased(event ->{
+    		enregistrerEtat(graphSave2.getName());
+    	});
     }
     
     /**
@@ -636,6 +725,12 @@ public class FXMLDocumentController implements Initializable {
      * @param objectSelected l'élément sélectionné
      */
     void draggedLink(Node element, Lien objectSelected) {
+    	
+    	/* Lorsque l'on click sur le noeud */
+    	element.setOnMousePressed(envent ->{
+    		enregistrerEtat(graphSave.getName());
+    	});
+    	
     	// Drag
     	element.setOnMouseDragged(event -> {
     		/* Aperçu de la ligne en temps réel quand on déplace le lien */
@@ -664,12 +759,12 @@ public class FXMLDocumentController implements Initializable {
         				graphe.supprimerLien((Lien) objectSelected, zoneDessin, listeElements);
         				nouveauLien.dessiner(zoneDessin);
         				listeElements.getItems().addAll(nouveauLien);
+                        enregistrerEtat(graphSave2.getName());
         				reset2();
         			} catch (Exception e) {}
         		}
         	});
     	});
-    	
     }
     
     /**
@@ -876,6 +971,22 @@ public class FXMLDocumentController implements Initializable {
             aUneSauvegarde = true;
     	} catch (Exception e) {
     		System.err.println(e);
+    	}
+    }
+    
+    /**
+     * Enregistre l'état du graphe
+     * @param grapheAEnregistrer
+     */
+    void enregistrerEtat(String nomFichier) {
+    	try {
+    		FileOutputStream fos = new FileOutputStream(nomFichier	);
+    		ObjectOutputStream out = new ObjectOutputStream(fos);
+    		out.writeObject(graphe);
+    		out.close();
+            fos.close();
+    	} catch (IOException e) {
+            e.printStackTrace();
     	}
     }
     
