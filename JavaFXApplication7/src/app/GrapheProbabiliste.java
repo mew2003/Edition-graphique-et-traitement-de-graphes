@@ -109,6 +109,7 @@ public class GrapheProbabiliste extends Graphe {
                 }
             }
         }
+        reset();
         return null;
 	}
 

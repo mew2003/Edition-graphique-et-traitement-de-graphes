@@ -328,6 +328,7 @@ public class FXMLDocumentController implements Initializable {
     		initialisation();
     		enregistrerID.setDisable(false);
     		enregistrerSousID.setDisable(false);
+    		valeurLien.setText("0.0");
     		setTraitement(false);
     		factory = manager.creerFactory("GrapheNonOriente");
     		graphe = factory.creerGraphe();
@@ -344,6 +345,7 @@ public class FXMLDocumentController implements Initializable {
     		setTraitement(false);
     		enregistrerSousID.setDisable(false);
     		enregistrerID.setDisable(false);
+    		valeurLien.setText("0.0");
     		factory = manager.creerFactory("GrapheOriente");
     		graphe = factory.creerGraphe();
     		actualMode = 3;
@@ -1162,6 +1164,7 @@ public class FXMLDocumentController implements Initializable {
         		}
             } else if (link instanceof LienOrientePondere) {
             	LienOrientePondere lienORP = (LienOrientePondere) link;
+            	valeurLien.setText("" + lienORP.getValue());
             	graphe.reset();
             	try {
             		for(Shape shape : lienORP.getArc()) {
@@ -1173,6 +1176,7 @@ public class FXMLDocumentController implements Initializable {
         		}
             } else if(link instanceof LienProbabiliste) {
             	LienProbabiliste lienProba = (LienProbabiliste) link;
+            	valeurLien.setText("" + lienProba.getValue());
             	graphe.reset();
             	try {
             		for(Shape shape : lienProba.getArc()) {
@@ -1334,5 +1338,6 @@ public class FXMLDocumentController implements Initializable {
         aUneSauvegarge = true;
         enregistrerID.setDisable(false);
     	enregistrerSousID.setDisable(false);
+    	valeurLien.setText("0.0");
     }
 }
