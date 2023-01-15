@@ -633,16 +633,21 @@ public class FXMLDocumentController implements Initializable {
                 this.graphe = (Graphe) in.readObject();
                 in.close();
                 fileIn.close();
-                zoneDessin.getChildren().clear();
-                listeElements.getItems().clear();
-                initialisation();
             	// Suppression de tous les éléments restant sur la zone graphique et dans la liste déroulante
             	zoneDessin.getChildren().clear();
             	listeElements.getItems().clear();
             	// Réinitialisation de l'application
                 initialisation();
                 aside.setVisible(true);
+                // Mode sélectionner pour éviter les problème d'affichage
                 actualMode = 3;
+                // Pour éviter de voir la preview figé après avoir annuler 
+                previewedCircle.setCenterX(-100);
+                previewedCircle.setCenterY(-100);
+                previewedLine.setStartX(-100);
+                previewedLine.setStartY(-100);
+                previewedLine.setEndX(-100);
+                previewedLine.setEndY(-100);
                 // Dessin de tout les noeuds et liens du graphe ouvert
                 for (Noeud n : graphe.getListeNoeuds()) {
                 	n.dessiner(zoneDessin);
@@ -769,11 +774,13 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void modifNoeud(ActionEvent event) {
+    	enregistrerEtat(graphSave.getName());
         Noeud noeudAModif = (Noeud) selectedObject;
         double[] positions = {Double.parseDouble(posXNoeud.getText()), Double.parseDouble(posYNoeud.getText())};
         graphe.modifNomNoeud(noeudAModif, nomNoeud.getText());
         graphe.modifPos(noeudAModif, positions);
         graphe.modifRadius(noeudAModif, Double.parseDouble(radiusNoeud.getText()));
+        enregistrerEtat(graphSave2.getName());
     }
     
     /**
@@ -782,6 +789,7 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     void modifLien(ActionEvent event) {
+    	enregistrerEtat(graphSave.getName());
         Lien lienAModif = (Lien) selectedObject;
         String[] labelNoeudARelier = {
             noeud1Lien.getText(),
@@ -802,6 +810,7 @@ public class FXMLDocumentController implements Initializable {
             System.err.println(e);
         }
         lienAModif.actualiser();
+        enregistrerEtat(graphSave2.getName());
     }
     
     /**
@@ -809,12 +818,14 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     public void supprimerNoeud() {
+    	enregistrerEtat(graphSave.getName());
     	graphe.supprimerNoeud((Noeud) selectedObject, zoneDessin, listeElements);
     	listeElements.getSelectionModel().clearSelection();
         editionProprietesLien.setVisible(false);
         editionProprietesNoeud.setVisible(false);
         selectedObject = null;
         graphe.reset();
+        enregistrerEtat(graphSave2.getName());
     }
     
     /**
@@ -822,13 +833,15 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     public void supprimerLien() {
-        	graphe.supprimerLien((Lien) selectedObject, zoneDessin, listeElements);
-        	listeElements.getItems().remove(selectedObject);
-        	listeElements.getSelectionModel().clearSelection();
-            editionProprietesLien.setVisible(false);
-            editionProprietesNoeud.setVisible(false);
-            selectedObject = null;
-            graphe.reset();
+        enregistrerEtat(graphSave.getName());
+    	graphe.supprimerLien((Lien) selectedObject, zoneDessin, listeElements);
+    	listeElements.getItems().remove(selectedObject);
+    	listeElements.getSelectionModel().clearSelection();
+        editionProprietesLien.setVisible(false);
+        editionProprietesNoeud.setVisible(false);
+        selectedObject = null;
+        graphe.reset();
+        enregistrerEtat(graphSave2.getName());
     }
     
     /**
@@ -888,6 +901,7 @@ public class FXMLDocumentController implements Initializable {
      */
     void reset2() {
 		for (Node n : zoneDessin.getChildren()) {
+			n.setOnMousePressed(null);
 			n.setOnMouseDragged(null);
 			n.setOnMouseReleased(null);
 		}
