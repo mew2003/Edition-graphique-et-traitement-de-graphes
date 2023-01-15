@@ -173,7 +173,9 @@ public class GrapheProbabiliste extends Graphe {
     @Override
     public void reset() {
     	for (Noeud n : listeNoeuds) {
-    		n.getCircle().setStrokeWidth(1.0);
+    		if (n.getCircle() != null) {
+        		n.getCircle().setStrokeWidth(1.0);
+    		}
     	}
     	for (Lien l : listeLiens) {
     		LienProbabiliste li = (LienProbabiliste) l;
