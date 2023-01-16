@@ -798,7 +798,6 @@ public class FXMLDocumentController implements Initializable {
         try {
             Noeud n1 = graphe.getNode(labelNoeudARelier[0]);
             Noeud n2 = graphe.getNode(labelNoeudARelier[1]);
-            graphe.modifLien(lienAModif, new Noeud[] {n1, n2}, zoneDessin);
             if (graphe instanceof GrapheProbabiliste) {
             	GrapheProbabiliste g = (GrapheProbabiliste) graphe;
             	g.modifValeur(lienAModif, Double.parseDouble(valeurLien.getText()));
@@ -806,6 +805,7 @@ public class FXMLDocumentController implements Initializable {
             	GrapheOrientePondere g = (GrapheOrientePondere) graphe;
             	g.modifValeur(lienAModif, Double.parseDouble(valeurLien.getText()));
             }
+            graphe.modifLien(lienAModif, new Noeud[] {n1, n2}, zoneDessin);
         } catch (Exception e) {
             System.err.println(e);
         }

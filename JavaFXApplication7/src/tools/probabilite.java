@@ -290,6 +290,13 @@ public class probabilite {
 				}
 			}
 		}
+		for (int i = 0; i < groupeNoeud.size(); i++) {
+			System.out.print("Groupe : ");
+			for (int j = 0; j < groupeNoeud.get(i).length ; j++) {
+				System.out.print(groupeNoeud.get(i)[j] + " ");
+			}
+			System.out.println();
+		}
 		return groupeNoeud;
 	}
 	
