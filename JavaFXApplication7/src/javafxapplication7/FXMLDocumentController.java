@@ -302,7 +302,7 @@ public class FXMLDocumentController implements Initializable {
     		factory = manager.creerFactory("GrapheNonOriente");
     		initialisation();
     		graphe = factory.creerGraphe();
-    		Main.getStage().setTitle(title + " : " + graphe);
+    		Main.getStage().setTitle(title + " : " + graphe.toString());
     	}
     }
     @FXML
@@ -312,7 +312,7 @@ public class FXMLDocumentController implements Initializable {
     		factory = manager.creerFactory("GrapheOriente");
     		initialisation();
     		graphe = factory.creerGraphe();
-    		Main.getStage().setTitle(title + " : " + graphe);
+    		Main.getStage().setTitle(title + " : " + graphe.toString());
     	}
     }
     @FXML
@@ -323,7 +323,7 @@ public class FXMLDocumentController implements Initializable {
     		factory = manager.creerFactory("GrapheOrientePondere");
     		initialisation();
     		graphe = factory.creerGraphe();
-    		Main.getStage().setTitle(title + " : " + graphe);
+    		Main.getStage().setTitle(title + " : " + graphe.toString());
     	}
     }
     @FXML
@@ -333,7 +333,7 @@ public class FXMLDocumentController implements Initializable {
     		factory = manager.creerFactory("GrapheProbabiliste");
     		initialisation();
     		graphe = factory.creerGraphe();
-    		Main.getStage().setTitle(title + " : " + graphe);
+    		Main.getStage().setTitle(title + " : " + graphe.toString());
     	}
     }
     
