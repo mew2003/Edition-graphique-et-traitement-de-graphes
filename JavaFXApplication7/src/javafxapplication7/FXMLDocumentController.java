@@ -181,15 +181,15 @@ public class FXMLDocumentController implements Initializable {
     String title = "Logiciel d'édition et de traitement de graphes";
     
     /* création des combinaisons de touches pour tous les raccourcis clavier */
-    KeyCombination controlSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY);
-    KeyCombination controlSaveAs = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY, KeyCombination.SHIFT_ANY);
-    KeyCombination controlOpen = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_ANY);
-    KeyCombination controlDelete = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_ANY);
-    KeyCombination controlHelp = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_ANY);
-    KeyCombination controlNonOriente = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_ANY);
-    KeyCombination controlOriente = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_ANY);
-    KeyCombination controlOrientePondere = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_ANY);
-    KeyCombination controlProbabiliste = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_ANY);
+    KeyCombination controlSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+    KeyCombination controlSaveAs = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
+    KeyCombination controlOpen = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
+    KeyCombination controlDelete = new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN);
+    KeyCombination controlHelp = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN);
+    KeyCombination controlNonOriente = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+    KeyCombination controlOriente = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN);
+    KeyCombination controlOrientePondere = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
+    KeyCombination controlProbabiliste = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
     KeyCombination altVerification = new KeyCodeCombination(KeyCode.V, KeyCombination.ALT_DOWN);
     KeyCombination altTransition = new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN);
     KeyCombination altExistence = new KeyCodeCombination(KeyCode.E, KeyCombination.ALT_DOWN);
@@ -200,8 +200,8 @@ public class FXMLDocumentController implements Initializable {
     KeyCombination altNode = new KeyCodeCombination(KeyCode.N, KeyCombination.ALT_DOWN);
     KeyCombination altArrow = new KeyCodeCombination(KeyCode.A, KeyCombination.ALT_DOWN);
     KeyCombination altSelection = new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN);
-    KeyCodeCombination controlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_ANY);
-    KeyCodeCombination controlY = new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_ANY);
+    KeyCodeCombination controlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
+    KeyCodeCombination controlY = new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN);
     
     /* gère les raccourcis claviers */
     EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent>() {
