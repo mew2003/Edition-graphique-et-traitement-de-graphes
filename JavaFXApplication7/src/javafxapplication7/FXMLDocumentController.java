@@ -303,6 +303,8 @@ public class FXMLDocumentController implements Initializable {
     		initialisation();
     		graphe = factory.creerGraphe();
     		Main.getStage().setTitle(title + " : " + graphe.toString());
+    		graphSave.delete();
+    		graphSave2.delete();
     	}
     }
     @FXML
@@ -313,6 +315,8 @@ public class FXMLDocumentController implements Initializable {
     		initialisation();
     		graphe = factory.creerGraphe();
     		Main.getStage().setTitle(title + " : " + graphe.toString());
+    		graphSave.delete();
+    		graphSave2.delete();
     	}
     }
     @FXML
@@ -324,6 +328,8 @@ public class FXMLDocumentController implements Initializable {
     		initialisation();
     		graphe = factory.creerGraphe();
     		Main.getStage().setTitle(title + " : " + graphe.toString());
+    		graphSave.delete();
+    		graphSave2.delete();
     	}
     }
     @FXML
@@ -334,6 +340,8 @@ public class FXMLDocumentController implements Initializable {
     		initialisation();
     		graphe = factory.creerGraphe();
     		Main.getStage().setTitle(title + " : " + graphe.toString());
+    		graphSave.delete();
+    		graphSave2.delete();
     	}
     }
     
