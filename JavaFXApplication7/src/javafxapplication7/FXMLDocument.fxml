@@ -70,7 +70,7 @@
    <center>
       <ScrollPane prefHeight="441.0" prefWidth="537.0" BorderPane.alignment="CENTER">
         <content>
-            <AnchorPane fx:id="zoneDessin" minHeight="0.0" minWidth="0.0" onMouseClicked="#zoneDessinEvent" onMouseExited="#exitPreview" onMouseMoved="#preview" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: light-grey;" />
+            <AnchorPane fx:id="zoneDessin" minHeight="0.0" minWidth="0.0" onMouseClicked="#zoneDessinEvent" onMouseExited="#exitPreview" onMouseMoved="#preview" prefHeight="1080.0" prefWidth="1920.0"/>
         </content>
       </ScrollPane>
    </center>
