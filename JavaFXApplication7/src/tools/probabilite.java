@@ -92,7 +92,7 @@ public class probabilite {
 		alert.setTitle("Vérification du graphe");
 		alert.setHeaderText("Résultat : ");
 		// change le message de l'alerte en fonction de si le graphe est valide ou non
-		String text = estValide ? "Le graphe est valide !" : "Le graphe comporte des erreurs";
+		String text = estValide ? "Le graphe est valide !" : "Le graphe comporte au moins une erreur";
 		alert.setContentText(text);
 		alert.showAndWait();
 	}
@@ -400,7 +400,7 @@ public class probabilite {
     	
     	/* Si il y a des noeuds dans le graphe */
     	if (listeNoeuds.size() != 0) {
-         	dialog.setHeaderText("Testez l'existence d'un chemin entre 2 noeuds");
+         	dialog.setHeaderText("Testez l'existence d'un chemin entre 2 nœuds");
          	/* récupère la liste des noeuds et l'ajoute dans 2 comboBox */
     		comboBox1.getItems().addAll(listeNoeuds);
     		comboBox2.getItems().addAll(listeNoeuds);
@@ -461,9 +461,9 @@ public class probabilite {
     	if (noeud1 != null && noeud2 != null) {
     		/* vérifie l'existence d'un chemin entre ces 2 noeuds et set le texte à afficher en fonction du résultat */
     		if (existenceChemin(noeud1, noeud2, graphe)) {
-	        	result.setHeaderText("Il existe au moins un chemin entre ces 2 noeuds");
+	        	result.setHeaderText("Il existe au moins un chemin entre ces 2 nœuds");
 	        } else {
-	        	result.setHeaderText("Il n'y a pas de chemin entre ces 2 noeuds");
+	        	result.setHeaderText("Il n'y a pas de chemin entre ces 2 nœuds");
 	        }
     		/* permet de faire fonctionner la croix en créant un bouton de type close visible */
 	        result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
@@ -805,7 +805,7 @@ public class probabilite {
 			contentV.setStyle("-fx-padding: 50px 0px 0px 10px;");
 			contentV.setSpacing(10.0);
 			
-	     	dialog.setHeaderText("Testez la probabilité d'un chemin entre 2 noeuds en un certain nombre de transitions");
+	     	dialog.setHeaderText("Testez la probabilité d'un chemin entre 2 nœuds en un certain nombre de transitions");
 	     	/* récupère la liste des noeuds et l'ajoute dans 2 comboBox */
 			comboBox1.getItems().addAll(listeNoeuds);
 			comboBox2.getItems().addAll(listeNoeuds);
@@ -815,9 +815,9 @@ public class probabilite {
 	     	transitions.setMinWidth(150.0);
 	     	/* gère la taille et le texte des labels */
 	     	texteComboBox1.setMinWidth(150);
-	     	texteComboBox1.setText("Noeud de départ :");
+	     	texteComboBox1.setText("Nœud de départ :");
 	     	texteComboBox2.setMinWidth(150 );
-	     	texteComboBox2.setText("Noeud d'arrivée :");
+	     	texteComboBox2.setText("Nœud d'arrivée :");
 	     	texteTransition.setMinWidth(150);
 	     	texteTransition.setText("Nombre de transitions :");
 	     	
@@ -875,7 +875,7 @@ public class probabilite {
 	
 	/**
 	 * Affiche la fenêtre de résultat de la probabilité d'un chemin 
-	 * entre 2 noeud en un certain nombre de transitions
+	 * entre 2 noeuds en un certain nombre de transitions
 	 * @param noeud1  le premier noeud (le départ)
 	 * @param noeud2  le deuxième noeud (l'arrivée, peut être identique au premier)
 	 * @param nbTransitions  le nombre de transitions entré par l'utilisateur
@@ -894,7 +894,7 @@ public class probabilite {
     				             + " de passer du " + noeud1 + " au " + noeud2);
     	} else {
     		result.setTitle("Erreur");
-    		result.setHeaderText("Une des valeurs saisient est nulle ou invalide");
+    		result.setHeaderText("Une des valeurs saisies est nulle ou invalide");
     	}
     	/* permet de faire fonctionner la croix en créant un bouton de type close visible */
         result.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);

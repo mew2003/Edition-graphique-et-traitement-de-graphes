@@ -97,7 +97,7 @@ public class NoeudXOROriente extends Noeud implements Serializable {
     
     @Override
     public String toString() {
-        return "Noeud : " +  nom;
+        return "Nœud : " +  nom;
     }
     
     @Override
