@@ -922,7 +922,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void manuelUtilisation(ActionEvent event) {
         try {
-            Desktop.getDesktop().browse(new URI("https://zzcc.store/"));
+            Desktop.getDesktop().browse(new URI("https://drive.google.com/file/d/1c7ZyCAJWZMPLB5eMrz7G2Zr4UHACM7b5/view"));
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
